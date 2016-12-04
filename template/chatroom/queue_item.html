@@ -1,0 +1,18 @@
+<div id="queue-<%= user.id %>" class="panel panel-info animated fadeInUp">
+	
+	<div class="panel-body">
+		<b><%= user.name %> <i class="live-marker-<%= user.id %> fa fa-circle"></i></b>
+		<div>
+			<dd>
+			<dt>Software Engineer</dt>
+			<dt>Current Location: United Arab Emirates</dt>
+			<dt>Nationality: Indian</dt>
+			</dd>
+		</div>
+	</div>
+	<div class="panel-footer">
+		<button class="btn btn-default btn-sm">View CV</button>
+		<button data-user="<%= user.id %>" data-room="<%= room_id %>" class="inviteButton btn btn-success btn-sm">Invite</button>
+		<button  data-user="<%= user.id %>" data-room="<%= room_id %>"  class="rejectButton btn btn-danger btn-sm">Reject</button>
+	</div>
+</div>

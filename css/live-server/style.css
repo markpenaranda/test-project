@@ -1,0 +1,64 @@
+body {
+	font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 50px;
+	  padding-top: 70px;
+}
+
+body.chatroom{
+  padding: 20px;
+  font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+    padding-top: 70px;
+   // add prefixed versions too.
+}
+
+
+
+a {
+  color: #00B7FF;
+}
+
+.centered {
+	text-align: center;
+}
+
+.small-text {  font-size: 11px;  }
+
+.masthead {  font-size: 11px !important;   border-bottom: 1px solid #e0dddd; padding-top: 2.5px; padding-bottom: 2.5px;  }
+
+.content { margin-top: 10px; }
+
+.extend-hours {margin-top: 10px; margin-bottom:5px; }
+.extend-hours .item { display: inline-block; margin-right: 10px; }
+
+.profile-viewer iframe { border: 0px; }
+
+.queue-section { height: 500px; overflow: scroll;  }
+
+#candidate-interview { display:block; }
+fieldset {
+
+    border: 1px groove #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+            box-shadow:  0px 0px 0px 0px #000;
+}
+
+    legend {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+    }
+
+.list-inline label	{ margin-right: 5px;	 }
+.startInterviewButton { display: none;  }
+/*#scheduled {  display: none;  }
+#join {  display: block;  }
+#waiting {  display: none;  }
+#rescheduled {  display: none;  }
+#reject {  display: none;  }
+#missed {  display: none;  }*/
