@@ -4,7 +4,7 @@
 <script type="text/javascript" src="js/plugins.js"></script>
 <script type="text/javascript" src="js/plugins/adapter-latest.js"></script>
 <script type="text/javascript" src="js/plugins/peer.min.js"></script>
-<script type="text/javascript" src="http://liveserver.herokuapp.com/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://liveserver.herokuapp.com/socket.io/socket.io.js"></script>
 
 <!-- jQuery Cookie Plugin -->
 <script type="text/javascript" src="js/plugins/jquery.cookie.js"></script>
