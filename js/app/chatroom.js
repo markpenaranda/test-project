@@ -230,7 +230,7 @@ var candidateScreenManagement = (function($) {
       // TODO: add ajax to get the currentApplicant user details and as well as the candidate number.
       var user = { id: currentApplicant, name: 'John Doe' };
       getTemplate('live_candidate_details.html', function(render) {
-           var renderedhtml = render({user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
+           var renderedhtml = render({user: user, room_id: getCurrentRoom(), candidate_no: '001'});
            $("#liveCandidateDetails").append(renderedhtml);
        });
 
