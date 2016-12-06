@@ -4,9 +4,9 @@ $(document).ready(function(){
     var userId = $('#userId').val();
     var roomId = $('#roomId').val();
     socket.on('chatroom-' + roomId, function(msg){
-    	
+
         console.log(msg);
-        if(msg.user_id != userId) { 
+        if(msg.user_id != userId) {
         	message = new Message({
                 text: msg.message,
                 message_side: 'left'
@@ -37,18 +37,6 @@ $(document).ready(function(){
 
 
 
-	$('.send').on('click', function(){
-		var message = $('#message').val();
-		sendMessage(message);
-	})
-
-	$('#message').keypress(function(event){
-	    var keycode = (event.keyCode ? event.keyCode : event.which);
-	    if(keycode == '13'){
-	    	var message = $(this).val();
-	        sendMessage(message);
-	    }
-	});
 
 	sendMessage = function (text) {
             var $messages, message;
@@ -68,7 +56,7 @@ $(document).ready(function(){
             // socket.emit("chat message", JSON.stringify({message: text, user_id: userId}));
 
             $.get(window.liveServerUrl + '/chat/' + roomId , {message: text, user_id: userId}, function(data){
-            	
+
 	            message.draw();
             	return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
             });

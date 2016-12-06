@@ -60,11 +60,11 @@ function lapseTimer(startTime, display) {
 function totalTimer(startTime, display) {
     var timer = startTime, minutes, seconds;
     setInterval(function () {
-
-            if(timer > 3590) {
-                hours = parseInt((timer / 60)/60, 10);
+      if(!display.hasClass('pause')) {
+        if(timer > 3590) {
+          hours = parseInt((timer / 60)/60, 10);
           minutes = parseInt((timer / 60)%60, 10);
-            seconds = parseInt(timer % 60, 10);
+          seconds = parseInt(timer % 60, 10);
 
         }
         else {
@@ -83,6 +83,8 @@ function totalTimer(startTime, display) {
             timer = startTime;
 
         }
+      }
+
     }, 1000);
 }
 

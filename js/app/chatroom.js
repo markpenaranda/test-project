@@ -6,6 +6,7 @@ var candidateScreenManagement = (function($) {
     var pendingApplicant = 0;
     var timerStarted = false;
     var lapseTimerInterval;
+    var call;
 
     return {
         init: init
@@ -42,6 +43,9 @@ var candidateScreenManagement = (function($) {
          $(".startInterviewButton").on('click', startLapseTime);
          $(".startInterviewButton").on('click', startTotalUsedTime);
 
+         // Chat Functions
+         $('.send').on('click', sendChat);
+         $('#message').keypress(sendChatOnEnter);
 
     }
 
@@ -189,6 +193,13 @@ var candidateScreenManagement = (function($) {
         var link = location.origin + "/candidate.php";
         $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
             removeCandidate(userId);
+            currentApplicant = 0;
+            call.close();
+            $(".send").prop("disabled", true);
+            $(".messages").html('');
+            clearInterval(lapseTimerInterval);
+
+            pauseTimer();
             // TODO: Add AJAX here to record that the candidate has ended in the DB.
 
         });
@@ -222,7 +233,7 @@ var candidateScreenManagement = (function($) {
     	  var localVideo = document.getElementById('localVideo');
     	  localVideo.srcObject = stream;
 
-    	  var call = window.peer.call('openday-' + currentApplicant, stream);
+    	  call = window.peer.call('openday-' + currentApplicant, stream);
     	  call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
     	  	  remoteVideo.srcObject = remoteStream;
@@ -232,6 +243,23 @@ var candidateScreenManagement = (function($) {
     		  console.log('Failed to get local stream' ,err);
     	  });
 
+    }
+
+
+
+
+    function sendChat() {
+      var message = $('#message').val();
+      if(currentApplicant) {
+        sendMessage(message);
+      }
+    }
+
+    function sendChatOnEnter(event) {
+      var keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+          sendChat();
+      }
     }
 
     function startLapseTime() {
@@ -245,11 +273,17 @@ var candidateScreenManagement = (function($) {
 
     function startTotalUsedTime() {
       var time = jQuery('#initialTime').val();
+      var displayTotalUsedTime = $('#totalUsedTime');
+      displayTotalUsedTime.removeClass('pause');
       if(timerStarted === false) {
-        var displayTotalUsedTime = $('#totalUsedTime');
-        totalTimer(time, displayTotalUsedTime);
+        totalTimer(time, displayTotalUsedTime, pauseTimer);
         timerStarted = true;
       }
+    }
+
+    function pauseTimer() {
+        var displayTotalUsedTime = $('#totalUsedTime');
+        displayTotalUsedTime.addClass('pause');
     }
 
 

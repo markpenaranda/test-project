@@ -2,6 +2,7 @@ var candidateScreenManagement = (function($) {
     var timer;
     var templates = [],
         baseTemplateUrl = 'template/candidate/';
+    var onInterview = false;
 
     return {
         init: init
@@ -19,6 +20,10 @@ var candidateScreenManagement = (function($) {
 
         // Join Button
         $("#waitingDiv").on('click','#joinInterview', activateCandidateInterview);
+
+        // Chat Functions
+        $('.send').on('click', sendChat);
+        $('#message').keypress(sendChatOnEnter);
     }
 
 
@@ -38,6 +43,7 @@ var candidateScreenManagement = (function($) {
              }
 
              if(data.tag == "end") {
+                onInterview = false;
                 activateEndUnderscoreTemplate();
              }
         }
@@ -82,6 +88,7 @@ var candidateScreenManagement = (function($) {
     }
 
     function activateCandidateInterview() {
+        onInterview = true;
         $.get(window.liveServerUrl + "/room/" + getCurrentRoom() + "/accept", {user_id: getCurrentUser(), candidate_no: getCandidateNo()}, function(){
             $("#room-details").fadeOut();
             $("#waitingDiv").fadeOut();
@@ -132,6 +139,20 @@ var candidateScreenManagement = (function($) {
                        $("#waitingDiv").fadeIn();
                        $("#candidate-interview").fadeOut();
        });
+   }
+
+   function sendChat() {
+     var message = $('#message').val();
+     if(onInterview) {
+       sendMessage(message);
+     }
+   }
+
+   function sendChatOnEnter(event) {
+     var keycode = (event.keyCode ? event.keyCode : event.which);
+     if(keycode == '13'){
+         sendChat();
+     }
    }
 
 })($);
