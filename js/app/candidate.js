@@ -16,11 +16,11 @@ var candidateScreenManagement = (function($) {
 
     // Event Handler
     function addEventHandlers() {
-        
+
         // Join Button
         $("#waitingDiv").on('click','#joinInterview', activateCandidateInterview);
     }
-    
+
 
     // Socket IO
 
@@ -35,6 +35,10 @@ var candidateScreenManagement = (function($) {
              }
              if(data.tag == "reject") {
                 activateRejectUnderscoreTemplate();
+             }
+
+             if(data.tag == "end") {
+                activateEndUnderscoreTemplate();
              }
         }
 
@@ -83,14 +87,14 @@ var candidateScreenManagement = (function($) {
             $("#waitingDiv").fadeOut();
             $("#candidate-interview").fadeIn();
         });
-        
-        
+
+
     }
 
 
 
     function activateScheduledUnderscoreTemplate() {
-        // Do ajax stuff here 
+        // Do ajax stuff here
         getTemplate('scheduled.html', function(render) {
                         var renderedhtml = render();
                         $("#candidate-interview").fadeOut();
@@ -99,22 +103,36 @@ var candidateScreenManagement = (function($) {
     }
 
     function activateJoinUnderscoreTemplate() {
-        // Do ajax stuff here 
+        // Do ajax stuff here
+        var company_name = "XYZ Company";
         getTemplate('join.html', function(render) {
-                        var renderedhtml = render();
+                        var renderedhtml = render({company_name : company_name});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
     }
-    
+
      function activateRejectUnderscoreTemplate() {
-        // Do ajax stuff here 
+        // Do ajax stuff here
+        var company_name = "XYZ Company";
         getTemplate('reject.html', function(render) {
-                        var renderedhtml = render();
+                        var renderedhtml = render({company_name : company_name});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
     }
+
+    function activateEndUnderscoreTemplate() {
+       // Do ajax stuff here
+       var company_name = "XYZ Company";
+       getTemplate('end.html', function(render) {
+                       var renderedhtml = render({company_name : company_name});
+                       $("#waitingDiv").html(renderedhtml);
+                       $("#room-details").fadeIn();
+                       $("#waitingDiv").fadeIn();
+                       $("#candidate-interview").fadeOut();
+       });
+   }
 
 })($);
 $(candidateScreenManagement.init);

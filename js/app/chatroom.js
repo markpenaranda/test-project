@@ -4,6 +4,8 @@ var candidateScreenManagement = (function($) {
         baseTemplateUrl = 'template/chatroom/';
     var currentApplicant = 0;
     var pendingApplicant = 0;
+    var timerStarted = false;
+    var lapseTimerInterval;
 
     return {
         init: init
@@ -20,17 +22,29 @@ var candidateScreenManagement = (function($) {
 
     // Event Handler
     function addEventHandlers() {
-      
+
         // Invite Candidate
         $("#queue-item").on('click', ".inviteButton",inviteCandidate);
 
-        // Reject Candidate 
+        // Reject Candidate
          $("#queue-item").on('click',".rejectButton", rejectCandidate);
+
+         // End Interview
+         $("#queue-item").on('click',".endButton", endCandidate);
 
         // Extend Hours Compute Total Price
          $("#extend-hours-input").on('keyup', computeTotalPrice);
+
+         // Start Interview Button
+         $('.startInterviewButton').on('click', startVideoCall);
+
+         // Start Lapse timer
+         $(".startInterviewButton").on('click', startLapseTime);
+         $(".startInterviewButton").on('click', startTotalUsedTime);
+
+
     }
-    
+
 
     // Socket IO
 
@@ -39,7 +53,6 @@ var candidateScreenManagement = (function($) {
         // Notifications
         window.socket.on("room-" + getCurrentRoom(), function(data){
 
-         console.log('here');
          if(data.tag == "accept" && data.user_id == pendingApplicant) {
                 $(".waitingButton").fadeOut();
                 $(".startInterviewButton").fadeIn();
@@ -49,8 +62,8 @@ var candidateScreenManagement = (function($) {
             addCandidate(data.user_id);
 
          }
-       
-        
+
+
 
         });
     }
@@ -72,7 +85,7 @@ var candidateScreenManagement = (function($) {
 
     function renderNecessaryTemplate () {
         // TODO: Do ajax stuff here and activate the necessary template
-     
+
     }
 
 
@@ -96,7 +109,7 @@ var candidateScreenManagement = (function($) {
     }
 
 
-    // Queue Functions 
+    // Queue Functions
 
     function loadCandidateQueue() {
       /* Do an ajax to get the sorted active candidates from the DB */
@@ -104,7 +117,7 @@ var candidateScreenManagement = (function($) {
 
     }
 
-    /* Add Candidate in the Queue 
+    /* Add Candidate in the Queue
        param applicantId - user id of the applicant/candidate
     */
 
@@ -118,7 +131,7 @@ var candidateScreenManagement = (function($) {
         });
     }
 
-    /* Remove Candidate in the Queue List 
+    /* Remove Candidate in the Queue List
        param applicantId - user id of the applicant/candidate
     */
     function removeCandidate(applicantId) {
@@ -127,7 +140,7 @@ var candidateScreenManagement = (function($) {
       $("#queue-" + applicantId).remove();
     }
 
-  
+
 
     function inviteCandidate() {
         var userId = $(this).data('user');
@@ -136,7 +149,7 @@ var candidateScreenManagement = (function($) {
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
         }
-        var link = location.origin + "/candidate";
+        var link = location.origin + "/candidate.php";
 
         /* Before Running code below do an ajax to update the server that the candidate has been invited */
         $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "invite", message: message, link: link}, function (data){
@@ -148,16 +161,35 @@ var candidateScreenManagement = (function($) {
 
 
     function rejectCandidate() {
+        var cf = confirm("Are you sure you want to reject this candidate?");
+        if(!cf) { return false; }
         var userId = $(this).data('user');
         var roomId = $(this).data('room');
         var message = "Sorry your application has been rejected";
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
         }
-        var link = location.origin + "/candidate";
+        var link = location.origin + "/candidate.php";
         $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "reject", message: message, link: link}, function (data){
             removeCandidate(userId);
             // TODO: Add AJAX here to record that the candidate has been rejected in the DB.
+
+        });
+    }
+
+    function endCandidate() {
+        var cf = confirm("Are you sure you want to end this interview?");
+        if(!cf) { return false; }
+        var userId = $(this).data('user');
+        var roomId = $(this).data('room');
+        var message = "Your interview has ended";
+        if (!location.origin) {
+           location.origin = location.protocol + "//" + location.host;
+        }
+        var link = location.origin + "/candidate.php";
+        $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
+            removeCandidate(userId);
+            // TODO: Add AJAX here to record that the candidate has ended in the DB.
 
         });
     }
@@ -174,9 +206,53 @@ var candidateScreenManagement = (function($) {
 
     }
 
+    function startVideoCall() {
+      currentApplicant = pendingApplicant;
+      // var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+      // Update Elements
+      $(".invite-button-" + currentApplicant).prop( "disabled", true );
+      $(".invite-button-" + currentApplicant).html("Interviewing");
+
+      $(".reject-button-" + currentApplicant).hide();
+
+      $(".end-button-" + currentApplicant).show();
+
+      // WebRTC
+    	navigator.getUserMedia({video: true, audio: true}, function(stream) {
+    	  var localVideo = document.getElementById('localVideo');
+    	  localVideo.srcObject = stream;
+
+    	  var call = window.peer.call('openday-' + currentApplicant, stream);
+    	  call.on('stream', function(remoteStream) {
+    	      var remoteVideo = document.getElementById('remoteVideo');
+    	  	  remoteVideo.srcObject = remoteStream;
+    	      $("#remoteVideo").css("width", "100%");
+    		  });
+    	   }, function(err) {
+    		  console.log('Failed to get local stream' ,err);
+    	  });
+
+    }
+
+    function startLapseTime() {
+      var time = 60 * 60 * 0;
+      var display = $('#lapseTime');
+      if(timerStarted) {
+        clearInterval(lapseTimerInterval);
+      }
+      lapseTimerInterval = lapseTimer(time, display);
+    }
+
+    function startTotalUsedTime() {
+      var time = jQuery('#initialTime').val();
+      if(timerStarted === false) {
+        var displayTotalUsedTime = $('#totalUsedTime');
+        totalTimer(time, displayTotalUsedTime);
+        timerStarted = true;
+      }
+    }
 
 
- 
 
 })($);
 $(candidateScreenManagement.init);
