@@ -56,7 +56,7 @@ var candidateScreenManagement = (function($) {
 
         // Notifications
         window.socket.on("room-" + getCurrentRoom(), function(data){
-
+         updateListNumber();
          if(data.tag == "accept" && data.user_id == pendingApplicant) {
                 $(".waitingButton").fadeOut();
                 $(".startInterviewButton").fadeIn();
@@ -219,7 +219,6 @@ var candidateScreenManagement = (function($) {
 
     function startVideoCall() {
       currentApplicant = pendingApplicant;
-      // var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
       // Update Elements
       $(".invite-button-" + currentApplicant).prop( "disabled", true );
       $(".invite-button-" + currentApplicant).html("Interviewing");
@@ -227,6 +226,13 @@ var candidateScreenManagement = (function($) {
       $(".reject-button-" + currentApplicant).hide();
 
       $(".end-button-" + currentApplicant).show();
+
+      // TODO: add ajax to get the currentApplicant user details and as well as the candidate number.
+      var user = { id: currentApplicant, name: 'John Doe' };
+      getTemplate('live_candidate_details.html', function(render) {
+           var renderedhtml = render({user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
+           $("#liveCandidateDetails").append(renderedhtml);
+       });
 
       // WebRTC
     	navigator.getUserMedia({video: true, audio: true}, function(stream) {
@@ -284,6 +290,17 @@ var candidateScreenManagement = (function($) {
     function pauseTimer() {
         var displayTotalUsedTime = $('#totalUsedTime');
         displayTotalUsedTime.addClass('pause');
+    }
+
+    function updateListNumber() {
+        /* TODO: ajax to manipulate the ff.
+          1. check in with scheduled
+          2. total not yet check in with schedule
+          3. waiting list
+        **/
+        $("#checkInWithSchedule").html(20);
+        $("#notCheckInWithSchedule").html(20);
+        $("#waitingListCount").html(5);
     }
 
 

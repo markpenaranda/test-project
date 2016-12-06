@@ -49,9 +49,9 @@
 						</p>
 					</div>
 					<div class="col-md-3 small-text">
-						<div><span>Total Check-in with Schedule: <b>20</b></span></div>
-						<div><span>Total Not Yet Check-in with Schedule: <b>20</b></span></div>
-						<div><span>Total Waiting List: <b>5</b></span></div>
+						<div><span>Total Check-in with Schedule: <b id="checkInWithSchedule">20</b></span></div>
+						<div><span>Total Not Yet Check-in with Schedule: <b id="notCheckInWithSchedule">20</b></span></div>
+						<div><span>Total Waiting List: <b id="waitingListCount">5</b></span></div>
 
 					</div>
 					<div class="col-md-2">
@@ -63,7 +63,7 @@
 				<!-- Video Camera -->
 				<div class="col-md-4 centered">
 					<h4>Mariot Food and Beverage Bound to Qatar</h4>
-					<span>Candidate 001: John Doe <i class="fa fa-circle text-success"></i></span>
+					<span id="liveCandidateDetails"></span>
 					<div style="margin-top: 5px; width: 100%; height: 280px; position: relative; background-color: black;">
 					<video id="remoteVideo" autoplay style="width: : 100% !important; position:absolute; left: 0; top:0"></video>
 				<video id="localVideo" autoplay muted style="height: 100px; position:absolute; right: 0; bottom:0"></video>
@@ -90,7 +90,7 @@
 				</div>
 			</div>
 				<div class="chat">
-					
+
 				<div class="chat_window">
 
 					<ul class="messages">
