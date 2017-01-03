@@ -1,0 +1,72 @@
+<ul class="professional_experience_ul animated fadeIn open_day_list_main_ul">
+							<li>
+								<h4><%= data.event_name %></h4>
+							</li>
+							<li>
+								<ul class="professional_exp_details_ul open_day_list_ul">
+									<li>
+										<div class="row">
+											<div class="col-lg-3">
+												<p class="label_p">Date</p>
+												<h6>
+													<i class="fa fa-calendar" aria-hidden="true"></i>
+													<%= data.event_date %>
+												</h6>
+											</div>
+											<div class="col-lg-3">
+												<p class="label_p">Time Range From</p>
+												<h6>
+													<i class="fa fa-clock-o" aria-hidden="true"></i>
+													8:00 AM - 1:00 PM
+												</h6>
+											</div>
+											<div class="col-lg-3">
+												<p class="label_p">Time Interval Per Candidate</p>
+												<h6>
+													<i class="fa fa-user" aria-hidden="true"></i>
+													<%= data.time_interval_per_candidate %> minutes
+												</h6>
+											</div>
+											<div class="col-lg-3">
+												<p class="label_p">Recruiter In-charge</p>
+												<h6>
+													<i class="fa fa-user" aria-hidden="true"></i>										
+													Maria Pilar Mendoza
+												</h6>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="col-lg-6">
+												<p class="label_p">Link to Job Post's</p>
+												<ul class="openday_list_inner_ul">
+												<% _.each(data.jobs, function(i) { %> 
+													<li>
+														<h6>
+															<i class="fa fa-suitcase" aria-hidden="true"></i>
+															<%= i.job_title %>
+															<a href="">(View Job Details)</a>
+														</h6>
+													</li>
+												<% }) %>
+												</ul>
+											</div>
+											<div class="col-lg-6">
+												<p class="label_p">Open Day Interview Link</p>
+												<h6>
+													<i class="fa fa-link" aria-hidden="true"></i>											
+													jobsglobal.com/events/xxxxxxxxx
+												</h6>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<h2>Description</h2>
+								<p class="description_p">
+									<%= data.introduction %>
+								</p>
+							</li>
+						</ul>

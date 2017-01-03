@@ -3,6 +3,8 @@
 
 $container = $app->getContainer();
 
+date_default_timezone_set($container->get('settings')['timezone']);
+
 // view renderer
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
@@ -47,6 +49,15 @@ $container['ResourcesController'] = function($c) {
     return new \App\Controllers\ResourcesController($c->get('Resources'));
 };
 
+$container['OpenDayController'] = function($c) {
+    return new \App\Controllers\OpenDayController(
+      $c->get('OpenDay'),
+      $c->get('OpenDayService'),
+      $c->get('CreateOpenDayValidation'),
+      $c->get('UpdateOpenDayValidation')
+    );
+};
+
 // -----------------------------------------------------------------------------
 // Model factories
 // -----------------------------------------------------------------------------
@@ -55,8 +66,56 @@ $container['Exam'] = function ($container) {
     return new App\Models\Exam($container->get('db'));
 };
 
+$container['User'] = function ($container) {
+    return new App\Models\User($container->get('db'));
+};
+
 $container['Resources'] = function ($container) {
     return new App\Models\Resources($container->get('db'));
+};
+
+$container['OpenDay'] = function($container) {
+  return new App\Models\OpenDay($container->get('db'));
+};
+$container['OpenDayTime'] = function($container) {
+  return new App\Models\OpenDayTime($container->get('db'));
+};
+$container['OpenDayTimeBreakdown'] = function($container) {
+  return new App\Models\OpenDayTimeBreakdown($container->get('db'));
+};
+$container['OpenDayJobs'] = function($container) {
+  return new App\Models\OpenDayJobs($container->get('db'));
+};
+
+$container['OpenDayAttendees'] = function($container) {
+  return new App\Models\OpenDayAttendees($container->get('db'));
+};
+
+// -----------------------------------------------------------------------------
+// Services factories
+// -----------------------------------------------------------------------------
+$container['OpenDayService'] = function($container) {
+  return new App\Services\OpenDayService(
+    $container->get('OpenDay'),
+    $container->get('OpenDayTime'),
+    $container->get('OpenDayTimeBreakdown'),
+    $container->get('OpenDayJobs'),
+    $container->get('OpenDayAttendees'),
+    $container->get('User')
+
+  );
+};
+
+
+// -----------------------------------------------------------------------------
+// Validation factories
+// -----------------------------------------------------------------------------
+$container['CreateOpenDayValidation'] = function($container) {
+  return new App\Validations\CreateOpenDayValidation();
+};
+
+$container['UpdateOpenDayValidation'] = function($container) {
+  return new App\Validations\UpdateOpenDayValidation();
 };
 
 // -----------------------------------------------------------------------------

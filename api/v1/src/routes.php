@@ -16,6 +16,21 @@ $app->group('/user', function () {
 
 });
 
+
+$app->group('/openday', function(){
+	$this->map(['GET'], '', 'OpenDayController:index');
+	$this->map(['GET'], '/search', 'OpenDayController:search');
+	$this->map(['GET'], '/my', 'OpenDayController:myOpenDay');
+	$this->map(['POST'], '', 'OpenDayController:store');
+	$this->group('/{openday_id}', function() {
+			$this->map(['GET'], '/candidates', 'OpenDayController:candidates');
+			$this->map(['GET'], '', 'OpenDayController:show');
+			$this->map(['POST'], '/join', 'OpenDayController:join');
+			$this->map(['PUT'], '', 'OpenDayController:update');
+		
+	});
+});
+
 $app->group('/validate', function () {
 	$this->post('/email', 'ExamController:checkIfEmailAvailableUser');
 });
@@ -23,8 +38,8 @@ $app->group('/validate', function () {
 $app->group('/resources', function () {
 
 	$this->group('/industry', function() {
-		$this->map(['GET'] ,'', 'ResourcesController:getAllIndustry');	
-		$this->map(['GET'] ,'/{industry_id:[0-9]+}', 'ResourcesController:getAllIndustry');	
+		$this->map(['GET'] ,'', 'ResourcesController:getAllIndustry');
+		$this->map(['GET'] ,'/{industry_id:[0-9]+}', 'ResourcesController:getAllIndustry');
 	});
 
 	$this->group('/country', function() {

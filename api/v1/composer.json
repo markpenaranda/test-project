@@ -23,7 +23,8 @@
         "tuupola/cors-middleware": "^0.5.1",
         "palanik/corsslim": "dev-slim3",
         "fpdo/fluentpdo": "dev-master",
-        "phpmailer/phpmailer": "5.2.4"
+        "phpmailer/phpmailer": "5.2.4",
+        "respect/validation": "^1.1"
     },
 
     "require-dev": {

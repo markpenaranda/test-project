@@ -18,7 +18,7 @@ class Resources {
     public function getAllIndustry($industry_id = null) {
 
         $whereClause = (!empty($industry_id)) ? "AND industry_id = $industry_id " : null;
-  
+
         try {
             $sql = "
                 SELECT
@@ -31,9 +31,9 @@ class Resources {
                 ORDER BY
                     industry
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -59,9 +59,9 @@ class Resources {
                 ORDER BY
                     nicename
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -87,9 +87,9 @@ class Resources {
                 ORDER BY
                     a.name
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -111,9 +111,9 @@ class Resources {
                 ORDER BY
                     a.name
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -141,7 +141,7 @@ class Resources {
             ";
 
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -167,9 +167,9 @@ class Resources {
                 ORDER BY
                     state
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -199,7 +199,7 @@ class Resources {
             ";
 
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -212,7 +212,7 @@ class Resources {
     public function getAllCurrency($currency_id = null) {
 
         $whereClause = (!empty($currency_id)) ? "AND currency_id = $currency_id " : null;
-  
+
         try {
             $sql = "
                 SELECT
@@ -225,9 +225,9 @@ class Resources {
                 ORDER BY
                     currency_code
             ";
-            
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -241,14 +241,14 @@ class Resources {
     public function getEmployerSize() {
         try {
             $sql = "
-                SELECT 
+                SELECT
                     employer_size_id, employer_size
                 FROM
                     i_zconnected_employer_size
-            ";  
-            
+            ";
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -261,14 +261,14 @@ class Resources {
     public function getEmployerType() {
         try {
             $sql = "
-                SELECT 
+                SELECT
                     employer_type_id, employer_type
                 FROM
                     i_zconnected_employer_type
-            ";  
-            
+            ";
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -281,14 +281,14 @@ class Resources {
     public function getEmployerStatus() {
         try {
             $sql = "
-                SELECT 
+                SELECT
                     employer_status_id, employer_status
                 FROM
                     i_zconnected_employer_status
-            ";  
-            
+            ";
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -301,14 +301,14 @@ class Resources {
     public function getPostStatus() {
         try {
             $sql = "
-                SELECT 
+                SELECT
                     post_status_id, post_status_name
                 FROM
                     i_zconnected_post_status
-            ";  
-            
+            ";
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -321,12 +321,16 @@ class Resources {
     public function getFilterJob() {
 
         try {
+            // $sql = "
+            //     SELECT filter_job_id, filter_name
+            //     FROM i_zconnected_filter_job ";
+
             $sql = "
-                SELECT filter_job_id, filter_name 
-                FROM i_zconnected_filter_job ";
-                
+              SELECT job_post_id, job_title from i_job_post;
+            ";
+
             $statement = $this->db->prepare($sql);
-            
+
             $statement->execute();
             $statement->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -336,4 +340,6 @@ class Resources {
             return $e;
         }
     }
+
+
 }

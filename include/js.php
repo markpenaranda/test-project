@@ -1,6 +1,10 @@
 <!-- External JavaScripts
 ============================================= -->
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/components/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="js/components/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="js/components/datepair.min.js"></script>
+<script type="text/javascript" src="js/components/jquery.datepair.min.js"></script>
 <script type="text/javascript" src="js/plugins.js"></script>
 <script type="text/javascript" src="js/plugins/adapter-latest.js"></script>
 <script type="text/javascript" src="js/plugins/peer.min.js"></script>

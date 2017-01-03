@@ -19,9 +19,12 @@ return [
         // Database
         'db' => [
             'host' => 'localhost', // To change port, just add it afterwards like localhost:8889
-            'dbname' => 'exam', // DB name or SQLite path
+            'dbname' => 'openday', // DB name or SQLite path
             'username' => 'root',
             'password' => ''
-        ]
+        ],
+
+        // Timezone
+        'timezone' => 'UTC'
     ],
 ];

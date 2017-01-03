@@ -45,7 +45,27 @@ class ResourcesController {
 		);
 
 		return $response->withStatus(200)->withJson($output);
-		
+
+	}
+
+
+	public function getAllEmploymentType($request, $response, $args) {
+
+		$query	= $this->resource->getAllEmploymentType();
+
+		if(empty($query)) {
+			return $response->withStatus(200)->withJson(array(
+				'success'	=> false
+			));
+		}
+
+		$output = array(
+			'success'	=> true,
+			'data'		=> $query
+		);
+
+		return $response->withStatus(200)->withJson($output);
+
 	}
 
 	public function getAllCountry($request, $response, $args) {
@@ -133,7 +153,7 @@ class ResourcesController {
 	public function getAllCurrency($request, $response, $args) {
 
 		$currency_id = (!empty($args['currency_id']) ? $args['currency_id'] : null);
-		
+
 		$query 	  = $this->resource->getAllCurrency($currency_id);
 
 		if(empty($query)) {
@@ -152,7 +172,7 @@ class ResourcesController {
 
 
 	public function getEmployerSize($request, $response, $args) {
-		
+
 		$result = $this->resource->getEmployerSize();
 
 		if(empty($result)) {
@@ -171,7 +191,7 @@ class ResourcesController {
 
 
 	public function getEmployerType($request, $response, $args) {
-		
+
 		$result = $this->resource->getEmployerType();
 
 		if(empty($result)) {
@@ -189,7 +209,7 @@ class ResourcesController {
 	}
 
 	public function getEmployerStatus($request, $response, $args) {
-		
+
 		$result = $this->resource->getEmployerStatus();
 
 		if(empty($result)) {
@@ -345,7 +365,7 @@ class ResourcesController {
     }
 
 	public function getPostStatus($request, $response, $args) {
-		
+
 		$result = $this->resource->getPostStatus();
 
 		if(empty($result)) {

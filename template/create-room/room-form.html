@@ -1,0 +1,71 @@
+<div class="row room-form">
+  <div class="col-lg-6 col-sm-6 col-xs-12">
+    <li>
+      <p>Event Name</p>
+      <input type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name">
+    </li>
+    <li>
+      <p>Date</p>
+      <input type="text" name="event[<%= room_number %>]['date']" id="eventDate" class="col-lg-4 datepicker" placeholder="Select Date">
+      <div class="col-lg-1">
+        <a class="openday_add_more_btn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+      </div>
+    </li>
+    <li>
+      <p>Time Interval Per Candidate</p>
+      <input type="text" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
+    </li>
+    <li>
+      <p>Link to Job Post's </p>
+      <ul class="wrapper_gender_ul">
+        <li>
+          <ul class="gender_ul">
+            <li>
+              <input  class="job-type-radio-<%= room_number %>" name="job-type-<%= room_number %>" value="full-time" type="radio">
+              <p>Full-Time</p>
+            </li>
+            <li>
+              <input class="job-type-radio-<%= room_number %>" name="job-type-<%= room_number %>" value="part-time" type="radio">
+              <p>Part-Time</p>
+            </li>
+            <li>
+              <input class="job-type-radio-<%= room_number %>" name="job-type-<%= room_number %>" value="temporary" type="radio">
+              <p>Temporary</p>
+            </li>
+          </ul>
+        </li>
+        <li>
+        <group id="jobSelect">
+
+
+         </group>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Open Day Interview Link</p>
+      <a href="#" class="intrvw_link_a">
+        jobsglobal.com/events/xxxxxxxxx
+      </a>
+    </li>
+  </div>
+  <div class="col-lg-6 col-sm-6 col-xs-12">
+    <li>
+      <p>Time Range From</p>
+      <ul id="timeRangeList" class="col-lg-9 time_range_ul">
+
+
+      </ul>
+    </li>
+    <li>
+      <p>Introduction</p>
+      <textarea name="event[<%= room_number %>]['introduction']" class="col-lg-9" placeholder="Type Description"></textarea>
+    </li>
+    <li>
+      <p>Recruiter In-charge</p>
+      <select class="col-lg-4">
+        <option>XXXXXXX</option>
+      </select>
+    </li>
+  </div>
+</div>

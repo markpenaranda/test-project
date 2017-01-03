@@ -3,14 +3,15 @@
 
 <!-- Stylesheets
 ============================================= -->
-<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-<link rel="stylesheet" href="css/dark.css" type="text/css" />
-<link rel="stylesheet" href="css/font-icons.css" type="text/css" />
+<link rel="stylesheet" href="css/hover-min.css" type="text/css" />
 <link rel="stylesheet" href="css/font-awesome/css/font-awesome.css" type="text/css" />
 <link rel="stylesheet" href="css/animate.css" type="text/css" />
 <link rel="stylesheet" href="css/font-awesome/css/font-awesome.css" type="text/css" />
 <link rel="stylesheet" href="css/components/animate.css" type="text/css" />
+<link rel="stylesheet" href="css/components/bootstrap-datepicker.min.css" type="text/css" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/raymund_styles.css" type="text/css" />
 
 <!-- Bootstrap Data Table Plugin -->
 
@@ -24,4 +25,4 @@
 
 <link rel="stylesheet" type="text/css" href="css/live-server/chat.css">
 <link rel="stylesheet" type="text/css" href="css/live-server/navbar.css">
-<link rel="stylesheet" type="text/css" href="css/live-server/style.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/live-server/style.css"> -->
