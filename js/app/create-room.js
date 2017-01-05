@@ -3,7 +3,7 @@ var createRoomScreenManagement = (function($) {
     var baseTemplateUrl = 'template/create-room/';
     var templates = [];
     var numberOfRooms = 0;
-    var apiUrl = '/api/v1/public';
+    var apiUrl = 'http://api-openday.herokuapp.com/';
     var dataStore = [];
 
     return {

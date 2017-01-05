@@ -18,10 +18,10 @@ return [
 
         // Database
         'db' => [
-            'host' => 'direct.drafthoops.com', // To change port, just add it afterwards like localhost:8889
+            'host' => 'localhost', // To change port, just add it afterwards like localhost:8889
             'dbname' => 'openday', // DB name or SQLite path
             'username' => 'root',
-            'password' => 'drafthoops'
+            'password' => 'openday'
         ],
 
         // Timezone
