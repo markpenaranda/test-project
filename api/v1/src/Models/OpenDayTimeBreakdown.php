@@ -1,20 +1,44 @@
 <?php
 namespace App\Models;
 
-class OpenDayTimeBreakdown extends BaseModel
+use PDO;
+class OpenDayTimeBreakdown
 {
+  public function __construct(PDO $db)
+  {
+    $this->db = $db;
+  }
   protected $tableName = "i_openday_time_breakdown";
-  // Indicate columns that can be explicitly filter via REST CALL.
-  protected $filterable = ['openday_id', 'scheduled_user_id'];
 
-  // Visible columns in REST
-  protected $visible = ['time_breakdown_id','openday_id','time_start', 'time_end', 'is_filled', 'date_filled'];
+  public function create ($inputArray) {
+    try {
 
-  // Timestamp
-  protected $updated_at = "date_updated";
+      $columns = array_keys($inputArray);
+      $tableColumn = implode(",", $columns);
+      $prepCol = $columns;
+      array_walk($prepCol, function(&$item) { $item = ':'.$item; });
+      $tablePrepCol = implode(",", $prepCol);
 
-  // Soft Delete
-  public $softDelete = "is_deleted";
+      $values = array_values($inputArray);
 
+      $insertSqlCommand = "
+        INSERT INTO bla$this->tableName ($tableColumn) VALUES ($tablePrepCol);
+        ";
+
+      $statement = $this->db->prepare($insertSqlCommand);
+      foreach ($inputArray as $key => $value) {
+        $statement->bindValue(':' . $key, $value);
+      }
+
+      $statement->execute();
+
+      return true;
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+      throw $e;
+
+    }
+  }
 
 }

@@ -21,6 +21,8 @@ $app->group('/openday', function(){
 	$this->map(['GET'], '', 'OpenDayController:index');
 	$this->map(['GET'], '/search', 'OpenDayController:search');
 	$this->map(['GET'], '/my', 'OpenDayController:myOpenDay');
+	$this->map(['GET'], '/current-rate', 'OpenDayController:currentRate');
+	$this->map(['GET'], '/compute-total-hrs', 'OpenDayController:computeTotalHour');
 	$this->map(['POST'], '', 'OpenDayController:store');
 	$this->group('/{openday_id}', function() {
 			$this->map(['GET'], '/candidates', 'OpenDayController:candidates');

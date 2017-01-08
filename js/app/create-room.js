@@ -17,6 +17,10 @@ var createRoomScreenManagement = (function($) {
         addEventHandlers();
     }
 
+    function getCurrentUserId() {
+        return $("#userId").val();
+    }
+
     // Get Template
     function getTemplate(templateName, callback) {
         if (!templates[templateName]) {
@@ -179,7 +183,9 @@ var createRoomScreenManagement = (function($) {
 
     function proceedToCheckout() {
       $(".room-list").fadeOut();
-
+      console.log(dataStore[0].timerange[0].start);
+      var interval = countDifference(dataStore[0].timerange[0].start, dataStore[0].timerange[0].end);
+      console.log(interval);
       getTemplate('checkout-form.html', function(render){
           var html = render();
           $("#interviewPostFormContainer").fadeOut();
@@ -189,6 +195,13 @@ var createRoomScreenManagement = (function($) {
       });
 
 
+    }
+
+    function countDifference(start, end) {
+        var start = new Date('2012/10/09 '+ start);
+        var end = new Date('2012/10/09 '+ end);
+        diffMs = (end-start);
+        return Math.round((diffMs % 86400000) / 3600000);
     }
 
 
@@ -206,6 +219,7 @@ var createRoomScreenManagement = (function($) {
     function submit() {
       for (var i = 0; i < dataStore.length; i++) {
         var data = dataStore[i];
+        data.created_by_user_id = getCurrentUserId();
         $.post(apiUrl + "/openday", data, function(res) {
 
         });

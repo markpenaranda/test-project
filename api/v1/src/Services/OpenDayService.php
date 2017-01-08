@@ -10,6 +10,7 @@ use App\Models\User;
 
 class OpenDayService
 {
+  protected $currentRatePerHour = "100"; // USD
   private $openday, $opendayTime;
 
   public function __construct(
@@ -33,6 +34,8 @@ class OpenDayService
   {
       $createArray['openday_id'] = substr(uniqid(), 0, 8);
       $createArray['event_date'] = date("Y-m-d", strtotime($createArray['event_date']));
+      $createArray['rate_per_hour'] = $this->currentRatePerHour;
+      $createArray['amount'] = (float) $this->computeTotalHours($timeRange, $createArray['time_interval_per_candidate']) * $this->currentRatePerHour;
 
       $opendayId = $this->openday->create($createArray);
 
@@ -57,6 +60,8 @@ class OpenDayService
       if($opendayTime['start_time'] != $startTime || $opendayTime['end_time'] != $endTime) {
           $this->opendayTimeBreakdown->delete(['openday_id' => $opendayId], false);
           foreach ($timeBreakDown as $segment) {
+
+            $from_time = strtotime("2008-12-13 10:21:00");
             $this->opendayTimeBreakdown->create([
               'openday_id' => $opendayId,
               'time_start' => $segment['start'],
@@ -127,6 +132,32 @@ class OpenDayService
 
   }
 
+  public function getCurrentRatePerHour()
+  {
+      return $this->currentRatePerHour;
+  }
+
+
+  public function computeTotalHours(array $timeRange, $timeInterval) 
+  { 
+     $breakdownCount = 0;
+     foreach ($timeRange as $range) {
+        $timeBreakDown = $this->createSplitTimeArray(
+          $range['start'],
+          $range['end'],
+          $timeInterval
+        );
+
+        $breakdownCount += count($timeBreakDown);
+
+     }
+
+     $totalMinutes = $breakdownCount * $timeInterval;
+     $totalHours = $totalMinutes/60;
+
+     return $totalHours;
+
+  }
 
   /* Private Methods */
 
@@ -152,6 +183,8 @@ class OpenDayService
 
     return $timeArray;
   }
+
+
 
   private function saveTimeBreakdown(array $timeRange, $timeInterval, $opendayId)
   {

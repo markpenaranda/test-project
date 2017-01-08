@@ -7,6 +7,15 @@
 	</head>
 
 	<body class="inside">
+
+	
+  <!-- MUST DECLARE HERE THE FF -->
+      <!-- User ID -->
+      <input type="hidden" id="userId" value="05582c0b47a4aab16bcd">
+
+
+  <!-- END MUST DECLARE HERE THE FF -->
+
     <?php
       include 'include/business-navigation.php';
     ?>

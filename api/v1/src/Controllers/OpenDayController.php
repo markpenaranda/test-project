@@ -41,10 +41,10 @@ class OpenDayController extends BaseController
 
    public function show($request, $response, $args)
    {
-      $item = $this->openDayResource->filter(['openday_id' => $args['openday_id']])->get(1);
+      $item = $this->openDayResource->getById($args['openday_id']);
       if($item) {
-        $item['time_breakdown'] = $this->openDayService->getTimeBreakDown($item['openday_id']);
-        $item['jobs'] = $this->openDayService->getJobs($item['openday_id']);
+        $item['time_breakdown'] = $this->openDayResource->getTimeBreakDownByOpendayId($item['openday_id']);
+        $item['jobs'] = $this->openDayResource->getJobsByOpendayId($item['openday_id']);
 
         return $response->withStatus(200)->withJson($item);
       }
@@ -65,14 +65,14 @@ class OpenDayController extends BaseController
         'time_interval_per_candidate',
         'introduction',
         'in_charge_user_id',
-        'rate_per_hour'
+        'rate_per_hour',
+        'created_by_user_id'
       ]);
 
       $jobs = Request::get($request, "jobs");
       $timeRange = Request::get($request, "timerange");
 
-      $openday = $this->openDayService->create($createParams, $timeRange, $jobs);
-
+      $openday = $this->openDayResource->create($createParams, $timeRange, $jobs);
       return $response->withStatus(200)->withJson($openday);
    }
 
@@ -111,7 +111,7 @@ class OpenDayController extends BaseController
      $timeStart       = $request->getParam('time_start');
      $timeEnd       = $request->getParam('time_end');
      $coverLetter       = $request->getParam('cover_letter');
-     
+
      $result = $this->openDayService->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
      if($result) {
        return $response->withStatus(200)->withJson($result);
@@ -123,7 +123,7 @@ class OpenDayController extends BaseController
    {
      $search = $request->getParam("q");
 
-     $result = $this->openDayService->search($search);
+     $result = $this->openDayResource->search($search);
 
      return $response->withStatus(200)->withJson($result);
 
@@ -148,8 +148,26 @@ class OpenDayController extends BaseController
 
       $items = $this->openDayService->getCandidates($opendayId, $isScheduled);
 
-      
+
       return $response->withStatus(200)->withJson($items);
+   }
+
+   public function currentRate($request, $response, $args)
+   {
+      $rate = $this->openDayService->getCurrentRatePerHour();
+
+      return $response->withStatus(200)->withJson($rate);
+   }
+
+   public function computeTotalHour($request, $response)
+   {
+      $timeRange = Request::get($request, "timerange");
+      $interval = Request::get($request, "time_interval");
+      var_dump($timeRange);
+
+      $totalHrs =  $this->openDayService->computeTotalHours($timeRange, $interval);
+
+      return $response->withStatus(200)->withJson($totalHrs);
    }
 
 
