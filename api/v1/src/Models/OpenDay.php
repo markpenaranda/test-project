@@ -139,8 +139,131 @@ class OpenDay
     }
   }
 
+  public function join(
+    $openDayId, 
+    $userId, 
+    $coverLetter, 
+    $timeBreakdownId, 
+    $timeStart, 
+    $timeEnd)
+  {
 
+     $user  = $this->getUserById($userId);
+     $isScheduled = (boolean) $timeBreakDownId;
+     $timeStart = date("H:i:s", strtotime($timeStart));
+     $timeEnd = date("H:i:s", strtotime($timeEnd));
 
+     $this->db->beginTransaction();
+     try {
+       $joinStatement = $this->prepareInsertStatement("i_openday_attendees", [
+        'openday_id'    =>    $opendayId,
+        'user_id'       =>    $userId,
+        'cover_letter'  =>    $coverLetter,
+        'is_scheduled'  =>    $isScheduled,
+        'schedule_time_start' => $timeStart,
+        'schedule_time_end' => $timeEnd,
+        'email' => $user['primary_email'],
+        'cv' => $user['cv'],
+        'phone' => $user['primary_mobile']
+        ]);
+
+        $joinStatement->execute();
+
+        if($isScheduled) {
+          $updateTimeBreakDownStatement = $this->prepareUpdateStatement("i_openday_time_breakdown", $timeBreakdownId, [
+            'scheduled_user_id' => $userId,
+            'is_filled'         => true,
+            'date_filled'       => date('Y-m-d H:i:s'),
+            'date_updated'      => date('Y-m-d H:i:s')
+          ]);
+
+          $updateTimeBreakDownStatement->execute();
+        }
+       
+        $this->db->commit();
+        return true;
+     }
+     catch(PDOEXception $e) {
+       $this->rollBack();
+       return $e;
+     }    
+  }
+
+  public function getOpendayByAttendeeUserId($userId, $status) 
+  {
+    $sql = "
+      SELECT * FROM i_openday_attendees as attendees
+      JOIN i_openday as openday on openday.openday_id = attendees.openday_id
+      WHERE attendees.user_id = '$userId'
+      AND attendees.status = '$status'
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+
+  }
+
+  public function getSuggestedUsersByOpendayId($opendayId)
+  {
+    $jobs = $this->getJobsByOpendayId($opendayId);
+    $q = "";
+    foreach($jobs as $job) {
+      $q .= " " . $job['job_title'];
+    }
+    try {
+      $sql = '
+        SELECT * FROM 
+        i_users_object_data WHERE 
+        MATCH ( personal_info ) 
+        AGAINST ("{$q}" IN BOOLEAN MODE);
+      ';
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
+
+  public function getCandidates($opendayId, $isScheduled) {
+    $sql = "
+      SELECT * FROM i_openday_attendees as attendees
+      JOIN i_users as user on attendees.user_id = users.user_id
+      WHERE attendees.openday_id = '$opendayId'
+      AND attendees.is_scheduled = '$isScheduled '
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
   // Private Functions
 
   private function prepareInsertStatement($tableName, $createArray)
@@ -199,6 +322,31 @@ class OpenDay
     return $pdoStatement;
 }
 
+private function prepareUpdateStatement ($tableName, $id, $updateArray) 
+{
+       $setSQL = [];
+      foreach ($updateArray as $key => $value) {
+        array_push($setSQL, "$key = :$key");
+      }
+      $setSQL = implode(",", $setSQL);
+
+      $whereSQL = [];
+      foreach ($whereArray as $key => $value) {
+        array_push($whereSQL, "$key = :$key");
+      }
+      $whereSQL = implode(",", $whereSQL);
+
+      $updateSqlCommand = "UPDATE $this->tableName SET $setSQL where $whereSQL;";
+
+      $statement = $this->db->prepare($updateSqlCommand);
+      foreach ($whereArray as $key => $value) {
+        $statement->bindValue(':' . $key . "", $value);
+      }
+      foreach ($updateArray as $key => $value) {
+        $statement->bindValue(':' . $key, $value);
+      }
+      return $statement; 
+}
   private function createSplitTimeArray($startTime, $endTime, $split)
   {
     $startTime = date("H:i", strtotime($startTime));
@@ -304,7 +452,22 @@ class OpenDay
     }
   }
 
+  private function getUserById($userId)
+  {
+    try {
+      $sql = "
+        SELECT * FROM i_users where user_id = '$userId' limit 1
+      ";
 
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      return $statement->fetch();
+
+    } 
+    catch(PDOException $e) {
+      return $e;
+    }
+  }
 
   
 

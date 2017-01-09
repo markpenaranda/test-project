@@ -105,14 +105,14 @@ class OpenDayController extends BaseController
 
    public function join($request, $response, $args)
    {
+     $opendayId       = $args['openday_id'];
      $userId          = $request->getParam('user_id');
      $timeBreakdownId = $request->getParam('openday_time_breakdown_id');
-     $opendayId       = $args['openday_id'];
      $timeStart       = $request->getParam('time_start');
-     $timeEnd       = $request->getParam('time_end');
-     $coverLetter       = $request->getParam('cover_letter');
+     $timeEnd         = $request->getParam('time_end');
+     $coverLetter     = $request->getParam('cover_letter');
 
-     $result = $this->openDayService->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
+     $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
      if($result) {
        return $response->withStatus(200)->withJson($result);
      }
@@ -135,10 +135,19 @@ class OpenDayController extends BaseController
       $userId = $request->getParam("user_id");
 
 
-      $items = $this->openDayService->getMyOpenday($userId, $status);
+      $items = $this->openDayResource->getOpendayByAttendeeUserId($userId, $status);
 
       return $response->withStatus(200)->withJson($items);
 
+   }
+
+   public function suggestedUsers($request, $response, $args)
+   {
+     $opendayId       = $args['openday_id'];
+
+     $items = $this->openDayResouce->getSuggestedUsersByOpendayId($opendayId);
+
+     return $response->withStatus(200)->withJson($items);
    }
 
    public function candidates($request, $response, $args)
@@ -146,7 +155,7 @@ class OpenDayController extends BaseController
       $isScheduled     = $request->getParam('is_scheduled');
       $opendayId       = $args['openday_id'];
 
-      $items = $this->openDayService->getCandidates($opendayId, $isScheduled);
+      $items = $this->openDayResource->getCandidates($opendayId, $isScheduled);
 
 
       return $response->withStatus(200)->withJson($items);

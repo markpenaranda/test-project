@@ -26,6 +26,7 @@ $app->group('/openday', function(){
 	$this->map(['POST'], '', 'OpenDayController:store');
 	$this->group('/{openday_id}', function() {
 			$this->map(['GET'], '/candidates', 'OpenDayController:candidates');
+			$this->map(['GET'], '/suggested', 'OpenDayController:suggestedUsers');
 			$this->map(['GET'], '', 'OpenDayController:show');
 			$this->map(['POST'], '/join', 'OpenDayController:join');
 			$this->map(['PUT'], '', 'OpenDayController:update');

@@ -114,7 +114,7 @@ class OpenDayService
      return true;
   }
 
-    public function search($query)
+  public function search($query)
   {
     return $this->openday->fullTextSearch($query, ['event_name', 'introduction']);
   }
