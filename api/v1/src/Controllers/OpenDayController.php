@@ -109,6 +109,10 @@ class OpenDayController extends BaseController
      $timeEnd         = $request->getParam('time_end');
      $coverLetter     = $request->getParam('cover_letter');
 
+     $timeBreakdown = $this->openDayResouce->getTimeBreakdown($timeBreakdownId);
+     if($timeBreakdown['is_filled' == 1]) {
+       return $response->withStatus(400);
+     }
      $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
      if($result) {
        return $response->withStatus(200)->withJson($result);

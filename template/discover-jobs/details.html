@@ -2,10 +2,10 @@
   <h1 class="jg-script-text jg-green"><%= data.event_name %></h1>
   <div class="row jg-border-btm jg-btm-indent jg-mar-btm">
     <div class="col-sm-8 jg-btm-indent">
-      <h3 class="jg-no-margin jg-orange">XYZ Corporation - Dubai, UAE</h3>
-      <p class="jg-bold jg-mar-top jg-grey">Posted : 2 days ago</p>
+      <h3 class="jg-no-margin jg-orange"><%= data.page_name %> - Dubai, UAE</h3>
+      <p class="jg-bold jg-mar-top jg-grey">Posted : <%=  created_at %></p>
       <!-- <p class="jg-bold ">Salary: 		12,000 AED</p> -->
-      <p class="jg-bold ">Valid Until: 	January 1, 2017 | 8:00 AM - 6:00 PM</p>
+      <p class="jg-bold ">Valid Until: 	<%= event_date %>| <%= start_time %> - <%= end_time %> </p>
     </div>
     <div class="col-sm-4">
       <div class="row jg-mar-btm">
@@ -51,7 +51,7 @@
         <div class="col-sm-9">
           <ul class="jg-available-sched-list">
             <% _.each(data.time_breakdown, function(i){  %>
-            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= i.time_start %>-<%= i.time_end %></li>
+            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= moment(data.event_date + ' ' +i.time_start).format('hh:mmA') %>-<%= moment(data.event_date + ' ' +i.time_end).format('hh:mmA') %></li>
             <% }) %>
           </ul>
         </div>
@@ -82,14 +82,14 @@
                 <div class="well centered">
                   <center>
                   <h6>Schedule Online Interview</h6>
-                  <%= data.event_date %><br>
+                  <%= moment(data.event_date).format("MMM D YYYY") %><br>
                   <span id="timeBreakdownStart"></span>-<span id="timeBreakdownEnd"></span>
                     
                   </center>
                 </div>
               </div>
             </div>
-            <p>Your completee profile will be included with your application.</p>
+            <p>Your complete profile will be included with your application.</p>
             <hr>
             <div id="joinForm" class="form-group">
               <label>Introduction</label>

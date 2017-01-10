@@ -60,7 +60,7 @@
 						<div id="resultsContainer" style="display:none;" class="jg-opendayonline-eventcallresult-container">
 							<div class="row">
 								<div class="col-sm-3">
-									<h4 class="jg-resultdate jg-center">January 1, 2017</h4>
+									<!--<h4 class="jg-resultdate jg-center">January 1, 2017</h4>-->
 									<h4><span id="numberOfResults"></span> Results</h4>
 									<ul id="resultsUl" class="jg-opendayonline-eventcallresult-list">
 

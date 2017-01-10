@@ -68,6 +68,7 @@ var discoverJobsManagement = (function($) {
 
               $("#numberOfResults").html(res.length);
               loadResults(res);
+              $(".jg-load-on-scroll ").fadeOut();
           });
       }
     }
@@ -77,9 +78,9 @@ var discoverJobsManagement = (function($) {
 
         for (var i = 0; i < results.length; i++) {
           var result = results[i];
-
+          var event_date = moment(results[i].event_date).format("MMMM D YYYY");
           getTemplate("results.html", function(render){
-            var html = render({ data: result });
+            var html = render({ data: result, event_date: event_date });
             $("#resultsUl").append(html);
           });
         }
@@ -94,9 +95,18 @@ var discoverJobsManagement = (function($) {
     function loadDetails(id) {
 
       $.get(apiUrl + "/openday/" + id, function(res){
-
+        console.log(res);
+        var created = moment(res.date_created).fromNow();
+        var event_date = moment(res.event_date).format("MMMM D YYYY");
+         var start_time = moment("2013-02-08 " + res.start_time).format("hh:mmA");
+         var end_time = moment("2013-02-08 " + res.end_time).format("hh:mmA");
+        // console.log(created);
         getTemplate("details.html", function(render){
-          var html = render({ data: res });
+          var html = render({ data: res, created_at: created, 
+                              event_date: event_date, 
+                              start_time:  start_time,
+                              end_time: end_time
+                          });
           $("#resultDetails").html(html);
         });
       });
@@ -115,8 +125,9 @@ var discoverJobsManagement = (function($) {
       $(".jg-btn-join").addClass("btn-success");
       $(".jg-btn-join").addClass("jg-btn");
 
-      $("#timeBreakdownStart").html(selectedSchedule.data("start"));
-      $("#timeBreakdownEnd").html(selectedSchedule.data("end"));
+      $("#timeBreakdownStart").html(moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA"));
+      $("#timeBreakdownEnd").html(moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA"));
+
 
     }
 

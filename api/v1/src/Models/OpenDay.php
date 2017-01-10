@@ -143,7 +143,7 @@ class OpenDay
   }
 
   public function join(
-    $openDayId, 
+    $opendayId, 
     $userId, 
     $coverLetter, 
     $timeBreakdownId, 
@@ -152,10 +152,10 @@ class OpenDay
   {
 
      $user  = $this->getUserById($userId);
-     $isScheduled = (boolean) $timeBreakDownId;
+     $isScheduled = (boolean) $timeBreakdownId;
      $timeStart = date("H:i:s", strtotime($timeStart));
      $timeEnd = date("H:i:s", strtotime($timeEnd));
-
+  
      $this->db->beginTransaction();
      try {
        $joinStatement = $this->prepareInsertStatement("i_openday_attendees", [
@@ -167,15 +167,17 @@ class OpenDay
         'schedule_time_end' => $timeEnd,
         'email' => $user['primary_email'],
         'cv' => $user['cv'],
-        'phone' => $user['primary_mobile']
+        'phone' => $user['primary_mobile'],
+        'date_joined' => date("Y-m-d H:i:s")
         ]);
 
         $joinStatement->execute();
 
         if($isScheduled) {
-          $updateTimeBreakDownStatement = $this->prepareUpdateStatement("i_openday_time_breakdown", $timeBreakdownId, [
+          
+          $updateTimeBreakDownStatement = $this->prepareUpdateStatement("i_openday_time_breakdown", [ "time_breakdown_id" => $timeBreakdownId], [
             'scheduled_user_id' => $userId,
-            'is_filled'         => true,
+            'is_filled'         => 1,
             'date_filled'       => date('Y-m-d H:i:s'),
             'date_updated'      => date('Y-m-d H:i:s')
           ]);
@@ -288,6 +290,27 @@ class OpenDay
       return $e;
     }
   }
+
+  public function getTimeBreakdown($timeBreakdownId)
+  {
+    $sql = "
+      SELECT * FROM i_openday_time_breakdown 
+      WHERE time_breakdown_id = '$timeBreakdownId'
+      LIMIT 1
+    ";
+    try {
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $timeBreakdown = $statement->fetch();
+
+      return $timeBreakdown;
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
+
+  }
   // Private Functions
 
   private function prepareInsertStatement($tableName, $createArray)
@@ -346,7 +369,7 @@ class OpenDay
     return $pdoStatement;
 }
 
-private function prepareUpdateStatement ($tableName, $id, $updateArray) 
+private function prepareUpdateStatement ($tableName, $whereArray, $updateArray) 
 {
        $setSQL = [];
       foreach ($updateArray as $key => $value) {
@@ -360,7 +383,7 @@ private function prepareUpdateStatement ($tableName, $id, $updateArray)
       }
       $whereSQL = implode(",", $whereSQL);
 
-      $updateSqlCommand = "UPDATE $this->tableName SET $setSQL where $whereSQL;";
+      $updateSqlCommand = "UPDATE $tableName SET $setSQL where $whereSQL;";
 
       $statement = $this->db->prepare($updateSqlCommand);
       foreach ($whereArray as $key => $value) {
@@ -411,6 +434,8 @@ private function prepareUpdateStatement ($tableName, $id, $updateArray)
      return $totalHours;
 
   }
+
+
 
 
   private function buildSaveTimeBreakDownData(array $timeRange, $timeInterval, $opendayId)
