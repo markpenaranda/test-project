@@ -36,18 +36,101 @@ class OpenDay
       $inputArray['page_id'] = $page['page_id'];
       $timeInterval = $inputArray['time_interval_per_candidate'];
 
-     $opendayInsertStatement = $this->prepareInsertStatement("i_openday",$inputArray);
+      $sqlInsert = "
+          INSERT INTO i_openday (
+            `openday_id`,
+            `event_name`,
+            `event_date`,
+            `time_interval_per_candidate`,
+            `introduction`,
+            `in_charge_user_id`,
+            `rate_per_hour`,
+            `created_by_user_id`,
+            `amount`,
+            `date_created`,
+            `date_updated`,
+            `page_id`
+          )
+          VALUES (
+            '$opendayId',
+            '". $inputArray['event_name'] ."',
+            '". $inputArray['event_date'] ."',
+            '". $inputArray['time_interval_per_candidate'] ."',
+            '". $inputArray['introduction'] ."',
+            '". $inputArray['in_charge_user_id'] ."',
+            '". $inputArray['rate_per_hour'] ."',
+            '". $inputArray['created_by_user_id'] ."',
+            '". $inputArray['amount'] ."',
+            '". $inputArray['date_created'] ."',
+            '". $inputArray['date_updated'] ."',
+            '". $inputArray['page_id'] ."'
+           
+          )
+        ";
 
+     $opendayInsertStatement  = $this->db->prepare($sqlInsert);
+
+     // Time Breakdown
      $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
-     $opendayTimeBreakDownStatement = $this->prepareMultiInsertStatement("i_openday_time_breakdown", $timeBreakDownData);
-
+  
+     $timeBreakDownRowsSQL = array();
+    $timeBreakDownToBind = array();
+    $timeBreakDownColumnNames = array_keys($timeBreakDownData[0]);
+    foreach($timeBreakDownData as $arrayIndex => $row){
+        $params = array();
+        foreach($row as $columnName => $columnValue){
+            $param = ":" . $columnName . $arrayIndex;
+            $params[] = $param;
+            $timeBreakDownToBind[$param] = $columnValue; 
+        }
+        $timeBreakDownRowsSQL[] = "(" . implode(", ", $params) . ")";
+    }
+    $timeBreakDownSql = "INSERT INTO i_openday_link_job (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsjobsSQL);
+    $opendayTimeBreakDownStatement = $this->db->prepare($sql);
+    foreach($timeBreakDownToBind as $param => $val){
+        $opendayTimeBreakDownStatement->bindValue($param, $val);
+    }
+     // Openday Link Jobs
      $jobsData = $this->buildJobsData($jobs, $inputArray['openday_id']);
-     $opendayJobsStatement = $this->prepareMultiInsertStatement("i_openday_link_job", $jobsData);
 
+     $jobsRowsSQL = array();
+    $jobsToBind = array();
+    $jobsColumnNames = array_keys($jobsData[0]);
+    foreach($jobsData as $arrayIndex => $row){
+        $params = array();
+        foreach($row as $columnName => $columnValue){
+            $param = ":" . $columnName . $arrayIndex;
+            $params[] = $param;
+            $jobsToBind[$param] = $columnValue; 
+        }
+        $jobsRowsSQL[] = "(" . implode(", ", $params) . ")";
+    }
+    $jobsSql = "INSERT INTO i_openday_link_job (" . implode(", ", $jobsColumnNames) . ") VALUES " . implode(", ", $jobsRowsjobsSQL);
+    $opendayJobsStatement = $this->db->prepare($sql);
+    foreach($jobsToBind as $param => $val){
+        $opendayJobsStatement->bindValue($param, $val);
+    }
+
+     
+     // Openday Time
      $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id']);
-     $opendayTimeStatement = $this->prepareInsertStatement("i_openday_time", $timeData);
+     $opendayTimeInsertSql = "
+          INSERT INTO i_openday_time (
+            `openday_id`,
+            `start_time`,
+            `end_time`,
+          )
+          VALUES (
+            '". $timeData['start_time'] ."',
+            '". $timeData['end_time'] ."',
+          )
+        ";
+
+    $opendayTimeStatement = $this->db->prepare($opendayTimeInsertSql);
 
     
+
+
      $opendayInsertStatement->execute();
      $opendayTimeBreakDownStatement->execute();
      $opendayJobsStatement->execute();
@@ -158,18 +241,35 @@ class OpenDay
   
      $this->db->beginTransaction();
      try {
-       $joinStatement = $this->prepareInsertStatement("i_openday_attendees", [
-        'openday_id'    =>    $opendayId,
-        'user_id'       =>    $userId,
-        'cover_letter'  =>    $coverLetter,
-        'is_scheduled'  =>    $isScheduled,
-        'schedule_time_start' => $timeStart,
-        'schedule_time_end' => $timeEnd,
-        'email' => $user['primary_email'],
-        'cv' => $user['cv'],
-        'phone' => $user['primary_mobile'],
-        'date_joined' => date("Y-m-d H:i:s")
-        ]);
+      
+        $sql = "
+          INSERT INTO i_openday_attendees (
+            `openday_id`,
+            `user_id`,
+            `cover_letter`,
+            `is_scheduled`,
+            `scheduled_time_start`,
+            `scheduled_time_end`,
+            `email`,
+            `cv`,
+            `phone`,
+            `date_joined`
+          )
+          VALUES (
+            '$opendayId',
+            '$userId',
+            '$coverLetter',
+            '$isScheduled',
+            '$timeStart',
+            '$timeEnd',
+            '". $user['primary_email'] ."',
+            '". $user['cv'] ."',
+            '". $user['primary_mobile'] ."',
+            NOW()
+          )
+        ";
+
+        $joinStatement = $this->db->prepare($sql);
 
         $joinStatement->execute();
 
@@ -313,87 +413,6 @@ class OpenDay
   }
   // Private Functions
 
-  private function prepareInsertStatement($tableName, $createArray)
-  {
-      $columns = array_keys($createArray);
-      $tableColumn = implode(",", $columns);
-      $prepCol = $columns;
-      array_walk($prepCol, function(&$item) { $item = ':'.$item; });
-      $tablePrepCol = implode(",", $prepCol);
-
-      $values = array_values($createArray);
-
-      $insertSqlCommand = "INSERT INTO $tableName ($tableColumn) VALUES ($tablePrepCol);";
-      $statement = $this->db->prepare($insertSqlCommand);
-      foreach ($createArray as $key => $value) {
-        $statement->bindValue(':' . $key, $value);
-      }
-
-      return $statement;
-  }
-
-  function prepareMultiInsertStatement($tableName, $data){
-    
-    //Will contain SQL snippets.
-    $rowsSQL = array();
- 
-    //Will contain the values that we need to bind.
-    $toBind = array();
-    
-    //Get a list of column names to use in the SQL statement.
-    $columnNames = array_keys($data[0]);
- 
-    //Loop through our $data array.
-    foreach($data as $arrayIndex => $row){
-        $params = array();
-        foreach($row as $columnName => $columnValue){
-            $param = ":" . $columnName . $arrayIndex;
-            $params[] = $param;
-            $toBind[$param] = $columnValue; 
-        }
-        $rowsSQL[] = "(" . implode(", ", $params) . ")";
-    }
-    
-    //Construct our SQL statement
-    $sql = "INSERT INTO $tableName (" . implode(", ", $columnNames) . ") VALUES " . implode(", ", $rowsSQL);
- 
-    //Prepare our PDO statement.
-    $pdoStatement = $this->db->prepare($sql);
- 
-    //Bind our values.
-    foreach($toBind as $param => $val){
-        $pdoStatement->bindValue($param, $val);
-    }
-    
-    //Execute our statement (i.e. insert the data).
-    return $pdoStatement;
-}
-
-private function prepareUpdateStatement ($tableName, $whereArray, $updateArray) 
-{
-       $setSQL = [];
-      foreach ($updateArray as $key => $value) {
-        array_push($setSQL, "$key = :$key");
-      }
-      $setSQL = implode(",", $setSQL);
-
-      $whereSQL = [];
-      foreach ($whereArray as $key => $value) {
-        array_push($whereSQL, "$key = :$key");
-      }
-      $whereSQL = implode(",", $whereSQL);
-
-      $updateSqlCommand = "UPDATE $tableName SET $setSQL where $whereSQL;";
-
-      $statement = $this->db->prepare($updateSqlCommand);
-      foreach ($whereArray as $key => $value) {
-        $statement->bindValue(':' . $key . "", $value);
-      }
-      foreach ($updateArray as $key => $value) {
-        $statement->bindValue(':' . $key, $value);
-      }
-      return $statement; 
-}
   private function createSplitTimeArray($startTime, $endTime, $split)
   {
     $startTime = date("H:i", strtotime($startTime));
