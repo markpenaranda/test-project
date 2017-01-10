@@ -52,7 +52,6 @@ $container['ResourcesController'] = function($c) {
 $container['OpenDayController'] = function($c) {
     return new \App\Controllers\OpenDayController(
       $c->get('OpenDay'),
-      $c->get('OpenDayService'),
       $c->get('CreateOpenDayValidation'),
       $c->get('UpdateOpenDayValidation')
     );
@@ -91,20 +90,7 @@ $container['OpenDayAttendees'] = function($container) {
   return new App\Models\OpenDayAttendees($container->get('db'));
 };
 
-// -----------------------------------------------------------------------------
-// Services factories
-// -----------------------------------------------------------------------------
-$container['OpenDayService'] = function($container) {
-  return new App\Services\OpenDayService(
-    $container->get('OpenDay'),
-    $container->get('OpenDayTime'),
-    $container->get('OpenDayTimeBreakdown'),
-    $container->get('OpenDayJobs'),
-    $container->get('OpenDayAttendees'),
-    $container->get('User')
 
-  );
-};
 
 
 // -----------------------------------------------------------------------------

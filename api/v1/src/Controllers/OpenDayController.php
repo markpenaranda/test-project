@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\OpenDay;
 use App\Validations\CreateOpenDayValidation;
 use App\Validations\UpdateOpenDayValidation;
-use App\Services\OpenDayService;
 use App\Helpers\Request;
 
 /**
@@ -15,17 +14,15 @@ use App\Helpers\Request;
 
 class OpenDayController extends BaseController
 {
-   public $openDayResouce, $openDayService, $createOpenDayValidation;
+   public $openDayResouce, $createOpenDayValidation;
 
    public function __construct(
         OpenDay $openDayResource,
-        OpenDayService $openDayService,
         CreateOpenDayValidation $createOpenDayValidation,
         UpdateOpenDayValidation $updateOpenDayValidation
    ){
 
       $this->openDayResource = $openDayResource;
-      $this->openDayService  = $openDayService;
       $this->createOpenDayValidation  = $createOpenDayValidation;
       $this->updateOpenDayValidation  = $updateOpenDayValidation;
    }
@@ -161,9 +158,16 @@ class OpenDayController extends BaseController
       return $response->withStatus(200)->withJson($items);
    }
 
+   public function createdOpenday($request, $response, $args) 
+   {
+     $userId = $request->getParam('user_id');
+     $items = $this->openDayResource->getOpendayByCreatedByUserId($userId);
+     return $response->withStatus(200)->withJson($items);
+   }
+
    public function currentRate($request, $response, $args)
    {
-      $rate = $this->openDayService->getCurrentRatePerHour();
+      $rate = $this->openDayResource->getCurrentRatePerHour();
 
       return $response->withStatus(200)->withJson($rate);
    }
@@ -174,7 +178,7 @@ class OpenDayController extends BaseController
       $interval = Request::get($request, "time_interval");
       var_dump($timeRange);
 
-      $totalHrs =  $this->openDayService->computeTotalHours($timeRange, $interval);
+      $totalHrs =  $this->openDayResource->computeTotalHours($timeRange, $interval);
 
       return $response->withStatus(200)->withJson($totalHrs);
    }

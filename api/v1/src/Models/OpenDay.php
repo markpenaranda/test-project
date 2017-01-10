@@ -17,6 +17,9 @@ class OpenDay
   }
 
  
+  public function getCurrentRatePerHour() {
+    return $this->currentRatePerHour;
+  }
 
   public function create($inputArray, $timeRange, $jobs)
   {
@@ -264,6 +267,27 @@ class OpenDay
       return $e;
     }
   }
+
+  public function getOpendayByCreatedByUserId ($userId)
+  {
+    $sql = "
+      SELECT * FROM i_openday WHERE created_by_user_id = '$userId'
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
   // Private Functions
 
   private function prepareInsertStatement($tableName, $createArray)
@@ -367,7 +391,7 @@ private function prepareUpdateStatement ($tableName, $id, $updateArray)
     return $timeArray;
   }
 
-  private function computeTotalHours(array $timeRange, $timeInterval)
+  public function computeTotalHours(array $timeRange, $timeInterval)
   {
      $breakdownCount = 0;
      foreach ($timeRange as $range) {
