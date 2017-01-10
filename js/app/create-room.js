@@ -63,6 +63,7 @@ var createRoomScreenManagement = (function($) {
       addForm();
       addNewJob();
       addTimeRange();
+      loadResponsibleUserOption();
     }
 
 
@@ -102,6 +103,18 @@ var createRoomScreenManagement = (function($) {
 
     function removeJob() {
       $(this).parent().parent().remove();
+    }
+
+    function loadResponsibleUserOption() {
+      var userId = getCurrentUserId();
+      $.get(apiUrl + '/users/' + userId + '/workmates', function(res) {
+          for(var x = 0; x < res.length; x++) {
+              var user = res[x];
+              var html = "<option class='in-charge-option-"+ (numberOfRooms - 1) +"' value='" + user.user_id + "'>"+ user.name +"</option>";
+              $("#in-charge-" + (numberOfRooms - 1)).append(html);
+          }
+      });
+
     }
 
 
@@ -149,7 +162,8 @@ var createRoomScreenManagement = (function($) {
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
         var date = $("input[name='event\\["+ i +"\\]\\[\\'date\\'\\]").val();
         var interval = $("input[name='event\\["+ i +"\\]\\[\\'time_interval\\'\\]").val();
-
+        var in_charge_user_id = $("select[name='event\\["+ i +"\\]\\[\\'in_charge_user_id\\'\\]").val();
+        var in_charge_name = $(".in-charge-option-"+i+":selected").html();
         var job_type = $(".job-type-radio-"+ i + ":checked").val();
         var jobs = $("select[name^='jobs["+ i  +"]']").map(function(){  var item = JSON.parse($(this).val()); return item.id;}).get();
         var jobNames = $("select[name^='jobs["+ i  +"]']").map(function(){  var item = JSON.parse($(this).val()); return item.name;}).get();
@@ -163,7 +177,9 @@ var createRoomScreenManagement = (function($) {
           "jobNames": jobNames,
           "job_type": job_type,
           "timerange": timerange,
-          "introduction": introduction
+          "introduction": introduction,
+          "in_charge_user_id": in_charge_user_id,
+          "in_charge_name": in_charge_name
         };
 
         dataStore.push(data);

@@ -57,6 +57,12 @@ $container['OpenDayController'] = function($c) {
     );
 };
 
+$container['UserController'] = function($c) {
+    return new \App\Controllers\UserController(
+      $c->get('User')
+    );
+};
+
 // -----------------------------------------------------------------------------
 // Model factories
 // -----------------------------------------------------------------------------

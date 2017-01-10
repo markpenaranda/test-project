@@ -4,21 +4,67 @@ namespace App\Models;
 
 use PDO;
 
-class User extends BaseModel
+class User 
 {
-    protected $tableName = "i_users";
-    // Indicate columns that can be explicitly filter via REST CALL.
-    protected $filterable = ['user_id', 'username', 'primary_email', 'primary_mobile', 'cv'];
-   
-    // Visible columns in REST
-    protected $visible = ['user_id', 'username', 'name', 'primary_email', 'first_name', 'middle_name', 'last_name', 'primary_mobile', 'cv'];
+    protected $db;
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
+    }
 
-    // Timestamp Columns
-    protected $created_at = "date_created";
-    protected $updated_at = "date_updated";
+    public function getUsersByPageId($pageId) 
+    {
+        try {
+            $sql = "
+                SELECT * from i_page_connection as c
+                JOIN i_users as u on u.user_id = c.user_id
+                WHERE c.page_id = '$pageId'
+            ";
+            $statement = $this->db->prepare($sql);
 
-    // Indicate the column for softDelete;
-    public $softDelete = "is_deleted";
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
 
+            return $statement->fetchAll();
 
+        } catch(PDOException $e) {
+            return $e;
+        }
+    }
+
+    public function getUserById($userId)
+    {
+        try {
+            $sql = "
+                SELECT * from i_users 
+                WHERE i_users.user_id = '$userId'
+            ";
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetch();
+
+        } catch(PDOException $e) {
+            return $e;
+        }
+    }
+
+    public function getUserPageId($userId)
+    {
+        try {
+        $sql = "
+            SELECT page_id FROM i_page_connection where user_id = '$userId' limit 1
+        ";
+
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        return $statement->fetch();
+
+        } 
+        catch(PDOException $e) {
+        return $e;
+        }
+    }
 }

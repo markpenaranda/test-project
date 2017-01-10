@@ -52,7 +52,7 @@ class OpenDay
             `page_id`
           )
           VALUES (
-            '$opendayId',
+             '". $inputArray['openday_id'] ."',
             '". $inputArray['event_name'] ."',
             '". $inputArray['event_date'] ."',
             '". $inputArray['time_interval_per_candidate'] ."',
@@ -72,8 +72,8 @@ class OpenDay
 
      // Time Breakdown
      $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
-  
-     $timeBreakDownRowsSQL = array();
+   
+    $timeBreakDownRowsSQL = array();
     $timeBreakDownToBind = array();
     $timeBreakDownColumnNames = array_keys($timeBreakDownData[0]);
     foreach($timeBreakDownData as $arrayIndex => $row){
@@ -85,8 +85,9 @@ class OpenDay
         }
         $timeBreakDownRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
-    $timeBreakDownSql = "INSERT INTO i_openday_link_job (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsjobsSQL);
-    $opendayTimeBreakDownStatement = $this->db->prepare($sql);
+    $timeBreakDownSql = "INSERT INTO i_openday_time_breakdown (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsSQL);
+  
+    $opendayTimeBreakDownStatement = $this->db->prepare($timeBreakDownSql);
     foreach($timeBreakDownToBind as $param => $val){
         $opendayTimeBreakDownStatement->bindValue($param, $val);
     }
@@ -105,8 +106,8 @@ class OpenDay
         }
         $jobsRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
-    $jobsSql = "INSERT INTO i_openday_link_job (" . implode(", ", $jobsColumnNames) . ") VALUES " . implode(", ", $jobsRowsjobsSQL);
-    $opendayJobsStatement = $this->db->prepare($sql);
+    $jobsSql = "INSERT INTO i_openday_link_job (" . implode(", ", $jobsColumnNames) . ") VALUES " . implode(", ", $jobsRowsSQL);
+    $opendayJobsStatement = $this->db->prepare($jobsSql);
     foreach($jobsToBind as $param => $val){
         $opendayJobsStatement->bindValue($param, $val);
     }
@@ -118,11 +119,12 @@ class OpenDay
           INSERT INTO i_openday_time (
             `openday_id`,
             `start_time`,
-            `end_time`,
+            `end_time`
           )
           VALUES (
+            '". $timeData['openday_id']  ."',
             '". $timeData['start_time'] ."',
-            '". $timeData['end_time'] ."',
+            '". $timeData['end_time'] ."'
           )
         ";
 
@@ -151,9 +153,10 @@ class OpenDay
     try {
 
       $sql = "
-        SELECT openday.*, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time FROM i_openday as openday 
+        SELECT openday.*, in_charge.name as in_charge_name, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time FROM i_openday as openday 
         JOIN i_page as page on page.page_id = openday.page_id 
         JOIN i_openday_time as openday_time on openday_time.openday_id = openday.openday_id 
+        JOIN i_users as in_charge on in_charge.user_id = openday.in_charge_user_id
         WHERE openday.openday_id = '$opendayId' limit 1;
       ";
       $statement = $this->db->prepare($sql);

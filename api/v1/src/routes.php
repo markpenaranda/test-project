@@ -5,13 +5,10 @@
 // -----------------------------------------------------------------------------
 
 
-$app->group('/user', function () {
-	$this->map(['GET'], '', 'ExamController:getAllUser');
-	$this->map(['POST'], '', 'ExamController:insertUser');
-	$this->map(['PUT'], '', 'ExamController:updateUser');
-	$this->group('/{user_id:[0-9]+}', function() {
-		$this->map(['GET'], '', 'ExamController:getAllUser');
-		$this->map(['DELETE'], '', 'ExamController:deleteUser');
+$app->group('/users', function () {
+	$this->group('/{user_id}', function() {
+		$this->map(['GET'], '', 'UserController:show');
+		$this->map(['GET'], '/workmates', 'UserController:getUserBySamePage');
 	});
 
 });
