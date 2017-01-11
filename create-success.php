@@ -47,13 +47,13 @@
 							</li>
                             <li>
                                 <div class="row">
-                                    <div id="suggestedCandidatesDiv" class="col-md-4">
+                                    <div id="suggestedCandidatesDiv" class="col-md-3">
                                         <ul id="resultsUl" class="jg-opendayonline-eventcallresult-list">
 
                                         </ul>
                                     </div>
-                                    <div class="col-md-8">
-
+                                    <div class="col-md-9 suggested-candidate-detail">
+                                        <p class="centered-info"><i class="fa fa-search fa-fw"></i>Click 'View Details' to review Candidates.</p>
                                     </div>
                                 </div>
                             </li>

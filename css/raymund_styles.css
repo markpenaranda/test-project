@@ -311,6 +311,7 @@ CV - Criteria
 	background-color: #D50009;
     border-bottom: 5px solid #9E0B0B;
 }
+
 .jg-btn:hover {
 	background-color: #009762;
     border-bottom: 5px solid #00C17E;
@@ -2162,3 +2163,19 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
 		width: 40%!important;
 	}
 }
+
+.suggested-candidate-detail {
+    height: 400px;
+    position: relative;
+    text-align: center;
+}
+
+.centered-info {
+	color: grey;
+    font-size: 18px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) }
