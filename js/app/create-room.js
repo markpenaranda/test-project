@@ -83,6 +83,13 @@ var createRoomScreenManagement = (function($) {
           $('.datepicker').datepicker();
           $('.ui-timepicker-select').addClass('col-lg-12');
           ++numberOfRooms;
+
+          $.validate({
+    modules : 'location, date, security, file',
+    onModulesLoaded : function() {
+      $('#country').suggestCountry();
+    }
+  });
       });
     }
 
@@ -158,6 +165,7 @@ var createRoomScreenManagement = (function($) {
 
     function preview() {
       // $(".room-form").fadeOut();
+  
       for (var i = 0; i < numberOfRooms; i++) {
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
         var date = $("input[name='event\\["+ i +"\\]\\[\\'date\\'\\]").val();
@@ -182,6 +190,8 @@ var createRoomScreenManagement = (function($) {
           "in_charge_name": in_charge_name
         };
 
+        
+
         dataStore.push(data);
 
         getTemplate('room-list.html', function(render){
@@ -197,27 +207,51 @@ var createRoomScreenManagement = (function($) {
       }
     }
 
+
+
     function proceedToCheckout() {
       $(".room-list").fadeOut();
       console.log(dataStore[0].timerange[0].start);
-      var interval = countDifference(dataStore[0].timerange[0].start, dataStore[0].timerange[0].end);
-      console.log(interval);
-      getTemplate('checkout-form.html', function(render){
-          var html = render();
-          $("#interviewPostFormContainer").fadeOut();
-          $('#mainCreateRoomRow').prepend(html);
-          $("#continue").fadeOut();
-          $("#submit").fadeIn();
-      });
+      totalHours = 0;
+      for(var x=0; x < dataStore.length; x++) {
+        var data = dataStore[x];
+        for(var y=0; y < data.timerange.length; y++) {
+          var timerange = data.timerange[y];
+          var diff = countDifference(timerange.start, timerange.end);
+          totalHours += diff;
+        }
+
+      }
+
+      $.get(apiUrl + '/openday/current-rate', function(rate) {
+        var rate = parseInt(rate);
+        var totalPrize = rate * totalHours;
+        getTemplate('checkout-form.html', function(render){
+            var html = render({
+              total_hours: totalHours,
+              rate: rate,
+              total_prize: totalPrize
+            });
+            $("#interviewPostFormContainer").fadeOut();
+            $('#mainCreateRoomRow').prepend(html);
+            $("#continue").fadeOut();
+            $("#submit").fadeIn();
+        });
+
+      })
 
 
     }
 
     function countDifference(start, end) {
-        var start = new Date('2012/10/09 '+ start);
-        var end = new Date('2012/10/09 '+ end);
-        diffMs = (end-start);
-        return Math.round((diffMs % 86400000) / 3600000);
+        var totalHours = 0;
+        var start = moment('2012-10-09 ' + start, "YYYY-MM-DD h:mma");
+        var end = moment('2012-10-09 ' + end, "YYYY-MM-DD h:mma");
+
+        var difference = end.diff(start, 'minutes');
+        totalHours = (difference/60);
+
+        return totalHours;
     }
 
 

@@ -2,18 +2,18 @@
   <div class="col-lg-6 col-sm-6 col-xs-12">
     <li>
       <p>Event Name</p>
-      <input type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name">
+      <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name">
     </li>
     <li>
       <p>Date</p>
-      <input type="text" name="event[<%= room_number %>]['date']" id="eventDate" class="col-lg-4 datepicker" placeholder="Select Date">
+      <input type="text" data-validation="date" data-validation-format="mm/dd/yyyy" name="event[<%= room_number %>]['date']" id="eventDate" class="col-lg-4 datepicker" placeholder="Select Date">
       <div class="col-lg-1">
         <a class="openday_add_more_btn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
       </div>
     </li>
     <li>
       <p>Time Interval Per Candidate</p>
-      <input type="text" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
+      <input data-validation="number" type="text" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
     </li>
     <li>
       <p>Link to Job Post's </p>
@@ -59,11 +59,11 @@
     </li>
     <li>
       <p>Introduction</p>
-      <textarea name="event[<%= room_number %>]['introduction']" class="col-lg-9" placeholder="Type Description"></textarea>
+      <textarea data-validation="required" name="event[<%= room_number %>]['introduction']" class="col-lg-9" placeholder="Type Description"></textarea>
     </li>
     <li>
       <p>Recruiter In-charge</p>
-      <select name="event[<%= room_number %>]['in_charge_user_id']" id="in-charge-<%= room_number %>"  class="col-lg-4">
+      <select  data-validation="required" name="event[<%= room_number %>]['in_charge_user_id']" id="in-charge-<%= room_number %>"  class="col-lg-4">
         
       </select>
     </li>

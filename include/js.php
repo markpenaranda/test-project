@@ -12,6 +12,7 @@
 
 <!-- jQuery Cookie Plugin -->
 <script type="text/javascript" src="js/plugins/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/plugins/jquery.form-validator.min.js"></script>
 <script type="text/javascript" src="js/plugins/moment.js"></script>
 <script type="text/javascript" src="js/plugins/moment-with-locales.js"></script>
 
