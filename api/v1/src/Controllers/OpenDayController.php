@@ -145,8 +145,8 @@ class OpenDayController extends BaseController
    public function suggestedUsers($request, $response, $args)
    {
      $opendayId       = $args['openday_id'];
-
-     $items = $this->openDayResouce->getSuggestedUsersByOpendayId($opendayId);
+    
+     $items = $this->openDayResource->getSuggestedUsersByOpendayId($opendayId);
 
      return $response->withStatus(200)->withJson($items);
    }

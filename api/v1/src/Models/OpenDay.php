@@ -329,12 +329,13 @@ class OpenDay
     foreach($jobs as $job) {
       $q .= " " . $job['job_title'];
     }
+   
     try {
       $sql = '
         SELECT * FROM 
         i_users_object_data WHERE 
         MATCH ( personal_info ) 
-        AGAINST ("{$q}" IN BOOLEAN MODE);
+        AGAINST ("' . $q . '" IN BOOLEAN MODE);
       ';
       $statement = $this->db->prepare($sql);
 
