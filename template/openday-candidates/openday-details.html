@@ -10,14 +10,14 @@
 												<p class="label_p">Date</p>
 												<h6>
 													<i class="fa fa-calendar" aria-hidden="true"></i>
-													<%= data.event_date %>
+													<%=  moment(data.event_date).format("MMM D YYYY")  %>
 												</h6>
 											</div>
 											<div class="col-lg-3">
 												<p class="label_p">Time Range From</p>
 												<h6>
 													<i class="fa fa-clock-o" aria-hidden="true"></i>
-													8:00 AM - 1:00 PM
+													<%= moment(data.event_date + " " + data.start_time).format("hh:mmA") %> - <%= moment(data.event_date + " " + data.end_time).format("hh:mmA") %> 
 												</h6>
 											</div>
 											<div class="col-lg-3">
@@ -31,7 +31,7 @@
 												<p class="label_p">Recruiter In-charge</p>
 												<h6>
 													<i class="fa fa-user" aria-hidden="true"></i>										
-													Maria Pilar Mendoza
+													<%= data.in_charge_name %>
 												</h6>
 											</div>
 										</div>

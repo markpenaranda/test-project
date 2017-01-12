@@ -36,11 +36,35 @@ var opendayCandidatesScreenManagement = (function($) {
     // Event Handler
     function addEventHandlers() {
         $("#candidateList").on('click', '.view_btn', viewCV);
+
+        $("#opendayList").on('change', viewOpenday);
     }
 
     function initialTemplate() {
-      loadOpendayDetails();
+      loadOpendayList();
       loadScheduledCandidates();
+    }
+
+    function getCurrentUserId() {
+        return $("#userId").val();
+    }
+
+    function loadOpendayList() {
+        $.get(apiUrl + '/openday/created?user_id=' + getCurrentUserId(), function(results) {
+            for(var x = 0; x < results.length; x++) {
+                var event = results[x];
+                var html  = "<option value='" + event.openday_id  +"'>"+ event.event_name +"</option>";
+                $("#opendayList").append(html);
+            }
+        });
+    }
+
+    function viewOpenday() {
+        var opendayId = $(this).val();
+        $("#opendayId").val(opendayId);
+        loadOpendayDetails();
+        loadScheduledCandidates();
+        
     }
 
     function loadOpendayDetails() {
@@ -58,11 +82,18 @@ var opendayCandidatesScreenManagement = (function($) {
 
     function loadScheduledCandidates() {
         var opendayId = $("#opendayId").val();
+        
          $("#candidateList").html("");
         $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=1', function(res){
+            console.log(res);
+            if(res.length > 0) {
+                $(".no-results").fadeOut();
+            }
+            else {
+                $(".no-results").fadeIn();
+            }
               for (var i = 0; i < res.length; i++) {
                   
-
                   result = JSON.parse(res[i].personal_info);
                   time = res[i];
                   getTemplate("item.html", function(render){

@@ -1,16 +1,15 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-		<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css" type="text/css" />
-		<link rel="stylesheet" href="css/hover-min.css" type="text/css" />
-		<link rel="stylesheet" href="css/style.css" type="text/css" />
-	</head>
+     <?php include 'include/css.php'; ?>
+    </head>
+
 
 	<body class="inside">
 
     <!-- MUST DECLARE HERE THE FF -->
       <!-- Openday ID -->
       <input type="hidden" id="opendayId" value="<?php echo $_GET['openday_id'] ?>">
+      <input type="hidden" id="userId" value="05582c0b47a4aab16bcd">
 
 
   	<!-- END MUST DECLARE HERE THE FF -->
@@ -32,13 +31,23 @@
 				</div>
 			</div>
 			<div class="container">
+				<ul class="list-unstyled">
+							<li>
+								<div class="form-group">
+									<label>Select Openday Event</label>
+									<select id="opendayList" class="form-control">
+										<option>-- SELECT OPENDAY EVENT --</option>
+									</select>
+								</div>
+							</li>
+				</ul>
 				<div class="col-lg-12 col-sm-12 col-xs-12">
 					<div id="opendayDetails" class="row">
 						
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-4 col-sm-4 col-xs-12">
+					<div  class="col-lg-4 col-sm-4 col-xs-12">
 						<ul class="interview_list_right_div">
 							<li>
 								<div class="reg-select-container apply-select-container">
@@ -49,17 +58,23 @@
 									<span class="arrow" aria-hidden="true"></span>
 								</div>
 							</li>
-						
+							<div class="no-results" style="min-height:200px;">
+									<p class="centered-info">
+										No Results
+									</p>
+							</div>
 						</ul>
+						
 						<ul id="candidateList" class="interview_list_right_ul">
 							
 							
 						</ul>
 					</div>
 					<div class="col-lg-8 col-sm-8 col-xs-12">
-						<div id="opendayProfile" class="openday_profile_view_wrapper">
-							
+						<div style="min-height:500px;" id="opendayProfile" class="openday_profile_view_wrapper">
+							<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View CV' to review candidates.</p>
 						</div>
+						
 					</div>
 				</div>
 			</div>

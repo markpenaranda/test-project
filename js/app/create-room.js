@@ -271,7 +271,7 @@ var createRoomScreenManagement = (function($) {
         var data = dataStore[i];
         data.created_by_user_id = getCurrentUserId();
         $.post(apiUrl + "/openday", data, function(res) {
-
+          document.location = "create-success.php?openday=" + res;
         });
       }
 

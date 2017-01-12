@@ -354,7 +354,7 @@ class OpenDay
   public function getCandidates($opendayId, $isScheduled) {
     $sql = "
       SELECT * FROM i_openday_attendees as attendees
-      JOIN i_users as user on attendees.user_id = users.user_id
+      JOIN i_users_object_data as user on attendees.user_id = user.user_id
       WHERE attendees.openday_id = '$opendayId'
       AND attendees.is_scheduled = '$isScheduled '
     ";
