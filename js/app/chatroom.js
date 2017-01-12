@@ -142,7 +142,7 @@ var candidateScreenManagement = (function($) {
        getTemplate('queue_item.html', function(render) {
             
 
-            var renderedhtml = render({user_id: candidate.user_id, user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
+            var renderedhtml = render({data : candidate, user_id: candidate.user_id, user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
             $("#queue-item").append(renderedhtml);
         });
     }
