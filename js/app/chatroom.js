@@ -6,6 +6,7 @@ var candidateScreenManagement = (function($) {
     var pendingApplicant = 0;
     var timerStarted = false;
     var lapseTimerInterval;
+    var apiUrl = '/api/v1/public/index.php';
     var call;
 
     return {
@@ -46,6 +47,8 @@ var candidateScreenManagement = (function($) {
          // Chat Functions
          $('.send').on('click', sendChat);
          $('#message').keypress(sendChatOnEnter);
+
+         $("#scheduleFilter").on('change', loadCandidateQueue);
 
     }
 
@@ -117,7 +120,15 @@ var candidateScreenManagement = (function($) {
 
     function loadCandidateQueue() {
       /* Do an ajax to get the sorted active candidates from the DB */
-      addCandidate(2);
+      var opendayId = getCurrentRoom();
+       $("#queue-item").html('');
+      var is_scheduled = $("#scheduleFilter").val();
+      $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
+        for (var i = 0; i < res.length; i++) {
+          var candidate = res[i]
+          addCandidate(candidate);
+        }
+      });
 
     }
 
@@ -125,12 +136,13 @@ var candidateScreenManagement = (function($) {
        param applicantId - user id of the applicant/candidate
     */
 
-    function addCandidate(applicantId) {
-      /* Do AJAX Stuff here to get the user details and candidate detail */
-       var user = { id: applicantId, name: 'Jane Doe' };
+    function addCandidate(candidate) {
+       var user = JSON.parse(candidate.personal_info);
        var candidate_no = 1;
        getTemplate('queue_item.html', function(render) {
-            var renderedhtml = render({user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
+            
+
+            var renderedhtml = render({user_id: candidate.user_id, user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
             $("#queue-item").append(renderedhtml);
         });
     }
@@ -149,6 +161,8 @@ var candidateScreenManagement = (function($) {
     function inviteCandidate() {
         var userId = $(this).data('user');
         var roomId = $(this).data('room');
+        console.log(userId);
+        console.log(roomId);
         var message = "Your interview is now ready";
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
@@ -256,8 +270,10 @@ var candidateScreenManagement = (function($) {
 
     function sendChat() {
       var message = $('#message').val();
+
       if(currentApplicant) {
         sendMessage(message);
+        $("#message").val('');
       }
     }
 

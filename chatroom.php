@@ -19,7 +19,7 @@
 
 			<!-- MUST DECLARE HERE THE FF -->
 			<!--  ROOM ID -->
-			<input type="hidden" id="roomId" value="1">
+			<input type="hidden" id="roomId" value="<?php echo $_GET['openday'] ?>">
 			<!-- Current User/Admin Id -->
 			<input type="hidden" id="userId" value="1">
 			<!-- Applicant Id -->

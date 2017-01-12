@@ -27,9 +27,9 @@
 
   <!-- MUST DECLARE HERE THE FF -->
       <!--  ROOM ID -->
-      <input type="hidden" id="roomId" value="1">
+      <input type="hidden" id="roomId" value="<?php echo $_GET['openday']; ?>">
       <!-- User ID -->
-      <input type="hidden" id="userId" value="2">
+      <input type="hidden" id="userId" value="1d5828aaf4687d05d1ae">
       <!-- Applicant's Initial Hour(s) -->
       <input type="hidden" id="initialTime" value="0">
 

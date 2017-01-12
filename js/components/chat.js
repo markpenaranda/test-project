@@ -24,7 +24,12 @@ $(document).ready(function(){
         this.draw = function (_this) {
             return function () {
                 var $message;
-                $message = $($('.message_template').clone().html());
+                if(_this.message_side == "left") {
+                    $message = $($('#reciever_template').clone().html());
+                }
+                else {
+                    $message = $($('.message_template').clone().html());
+                }
                 $message.addClass(_this.message_side).find('.text').html(_this.text);
                 $('.messages').append($message);
                 return setTimeout(function () {
