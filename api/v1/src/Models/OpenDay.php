@@ -302,6 +302,8 @@ class OpenDay
     $sql = "
       SELECT * FROM i_openday_attendees as attendees
       JOIN i_openday as openday on openday.openday_id = attendees.openday_id
+      JOIN i_page as page on page.page_id = openday.page_id
+      JOIN i_openday_time as time on openday.openday_id = time.openday_id
       WHERE attendees.user_id = '$userId'
       AND attendees.status = '$status'
     ";

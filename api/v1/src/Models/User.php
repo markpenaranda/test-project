@@ -37,6 +37,7 @@ class User
         try {
             $sql = "
                 SELECT * from i_users 
+                JOIN i_country on i_users.nationality = i_country.country_id
                 WHERE i_users.user_id = '$userId'
             ";
             $statement = $this->db->prepare($sql);

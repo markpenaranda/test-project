@@ -50,10 +50,18 @@ var discoverJobsManagement = (function($) {
     }
 
     function initialTemplate() {
-
+      loadAccountInfo();
     }
 
 
+    function loadAccountInfo() {
+      $.get(apiUrl + "/users/" + getCurrentUserId(), function(user) {
+          getTemplate("account-info.html", function(render){
+            var html = render({ data: user });
+            $("#accountInfo").html(html);
+          });
+      });
+    }
 
     function searchEvent() {
       $(".loading-results").fadeIn();
@@ -171,8 +179,8 @@ var discoverJobsManagement = (function($) {
     }
 
 
-    function getCurrentUser() {
-
+    function getCurrentUserId() {
+      return $("#userId").val();
     }
 
 

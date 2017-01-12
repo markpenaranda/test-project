@@ -32,13 +32,8 @@
 					<div class="row">
 						<div class="jg-opendayonline-advancedsearch-container">
 							<div class="row">
-								<div class="col-sm-3 jg-btm-indent">
-									<div class="jg-accnt-info">
-										<img src="http://fs1.jobsglobal.us/tree/e47/02fc3ee3c7e4584421f2bc43a.png" class="img-responsive">
-										<h1 class="jg-script-text">Khian Smile</h1>
-										<p class="jg-no-margin">Software Engineer / HKJ Corp</p>
-										<p class="jg-no-margin">United Arab Emirates</p>
-									</div>
+								<div id="accountInfo" class="col-sm-3 jg-btm-indent">
+									
 								</div>
 								<div class="col-sm-9">
 									<div class="jg-advancedsearch-form">
