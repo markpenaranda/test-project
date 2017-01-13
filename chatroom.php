@@ -15,8 +15,6 @@
 			<?php
 				include 'include/navigation.php';
 			?>
-
-
 			<!-- MUST DECLARE HERE THE FF -->
 			<!--  ROOM ID -->
 			<input type="hidden" id="roomId" value="<?php echo $_GET['openday'] ?>">
@@ -27,9 +25,6 @@
 			<!-- Applicant's Initial Hour(s) -->
 			<input type="hidden" id="initialTime" value="0">
 			<!-- END MUST DECLATE HERE THE FF -->
-
-
-
 			<div class="masthead">
 				<div class="row">
 					<div class="col-md-5">
@@ -52,7 +47,6 @@
 						<div><span>Total Check-in with Schedule: <b id="checkInWithSchedule">20</b></span></div>
 						<div><span>Total Not Yet Check-in with Schedule: <b id="notCheckInWithSchedule">20</b></span></div>
 						<div><span>Total Waiting List: <b id="waitingListCount">5</b></span></div>
-
 					</div>
 					<div class="col-md-2">
 						<button class="btn btn-danger">Stop Adding Queue</button>
@@ -67,7 +61,6 @@
 					<div style="margin-top: 5px; width: 100%; height: 280px; position: relative; background-color: black;">
 					<video id="remoteVideo" autoplay style="width: : 100% !important; position:absolute; left: 0; top:0"></video>
 				<video id="localVideo" autoplay muted style="height: 100px; position:absolute; right: 0; bottom:0"></video>
-
 			</div>
 		</div>
 		<!-- End Video Camera -->
@@ -89,15 +82,13 @@
 					<p><button class="btn btn-success btn-sm" data-target="#extendMoreModal" data-toggle="modal">Extend More</button></p>
 				</div>
 			</div>
-				<div class="chat">
-
+			<div class="chat">
 				<div class="chat_window">
-
 					<ul class="messages">
 					</ul>
 					<div class="bottom_wrapper clearfix"><div class="message_input_wrapper"><input class="message_input" placeholder="Type your message here..."  id="message" /></div><div class="send_message"><div class="icon"></div><div class="text send">Send</div></div></div></div><div class="message_template"><li class="message"><div class="text_wrapper"><div class="text"></div></div></li></div>
 				</div>
-		</div>
+			</div>
 			<!-- End 2nd Column -->
 			<!-- 3rd Column -->
 			<div class="col-md-3 queue-section">
@@ -108,7 +99,6 @@
 					</select>
 				</div>
 				<div id="queue-item">
-
 				</div>
 			</div>
 			<!-- End 3rd Column -->
@@ -116,7 +106,6 @@
 			<div class="modal fade" id="startInterviewModal" tabindex="-1" role="dialog" data-backdrop="static" >
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
-
 						<div class="modal-body">
 							<p>Click the start button to start the interview&hellip;</p>
 						</div>
@@ -145,7 +134,6 @@
 											<span>=</span>
 											<span>$<span id="totalPrice">0</span></span>
 										</p>
-
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -155,7 +143,7 @@
 									</div><!-- /.modal-dialog -->
 									</div><!-- /.modal -->
 									<!-- Invite Loading -->
-					<!-- Modal -->
+									<!-- Modal -->
 									<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" data-backdrop="static" >
 										<div class="modal-dialog" role="document">
 											<div class="modal-content">
@@ -176,7 +164,6 @@
 												</div><!-- /.modal -->
 												<!-- END -->
 												</div><!-- #wrapper end -->
-
 												<?php
 													include 'include/js.php';
 												?>

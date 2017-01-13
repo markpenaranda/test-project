@@ -3,6 +3,7 @@ var candidateScreenManagement = (function($) {
     var templates = [],
         baseTemplateUrl = 'template/candidate/';
     var onInterview = false;
+    var apiUrl = '/api/v1/public/index.php';
 
     return {
         init: init
@@ -66,6 +67,16 @@ var candidateScreenManagement = (function($) {
         }
     }
 
+
+    function loadOpendayDetail() {
+        $.get(apiUrl + '/openday/' + getCurrentRoom(), function(openday){
+            getTemplate('openday-detail.html',function(render) {
+                var html = render({data: openday});
+                $("#opendayDetails").html(html);
+            });
+        });
+    }
+
     function getCurrentUser() {
         var userId = $('#userId').val();
         return userId;
@@ -85,12 +96,13 @@ var candidateScreenManagement = (function($) {
     function renderNecessaryTemplate () {
         // Do ajax stuff here and activate the necessary template
         activateScheduledUnderscoreTemplate();
+        loadOpendayDetail();
     }
 
     function activateCandidateInterview() {
         onInterview = true;
         $.get(window.liveServerUrl + "/room/" + getCurrentRoom() + "/accept", {user_id: getCurrentUser(), candidate_no: getCandidateNo()}, function(){
-            $("#room-details").fadeOut();
+            $("#opendayDetails").fadeOut();
             $("#waitingDiv").fadeOut();
             $("#candidate-interview").fadeIn();
         });
@@ -135,7 +147,7 @@ var candidateScreenManagement = (function($) {
        getTemplate('end.html', function(render) {
                        var renderedhtml = render({company_name : company_name});
                        $("#waitingDiv").html(renderedhtml);
-                       $("#room-details").fadeIn();
+                       $("#opendayDetails").fadeIn();
                        $("#waitingDiv").fadeIn();
                        $("#candidate-interview").fadeOut();
        });
@@ -145,6 +157,7 @@ var candidateScreenManagement = (function($) {
      var message = $('#message').val();
      if(onInterview) {
        sendMessage(message);
+       $("#message").val('');
      }
    }
 
