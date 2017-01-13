@@ -36,6 +36,7 @@ var opendayCandidatesScreenManagement = (function($) {
     // Event Handler
     function addEventHandlers() {
         $("#candidateList").on('click', '.view_btn', viewCV);
+        $("#candidateList").on('click', '.reject_btn', rejectCandidate);
 
         $("#opendayList").on('change', viewOpenday);
     }
@@ -115,6 +116,17 @@ var opendayCandidatesScreenManagement = (function($) {
               
       
 
+    }
+
+    function rejectCandidate() {
+        var conf = confirm("Are you sure you want to reject this candidate?");
+        if(!conf) return false;
+        var userId = $(this).data('id');
+        var opendayId = $("#opendayId").val();
+
+        $.post(apiUrl + '/openday/' + opendayId + '/reject', { user_id: userId }, function(res) {
+            $("#candidate-" + userId).remove();
+        });
     }
 
    

@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="container">
-				<div id="candidate-interview" class="row">
+				<div style="display: none;" id="candidate-interview" class="row">
 					<div class="col-lg-6 col-sm-4 col-xs-12 col-lg-offset-3">
 						<div class="openday_interview_green_wrapper">
 							<div class="row">

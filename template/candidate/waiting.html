@@ -1,4 +1,4 @@
- <div id="waiting" class="col-md-8 col-md-offset-2 centered">
+<!--  <div id="waiting" class="col-md-8 col-md-offset-2 centered">
         <p class="lead">Your Schedule Online Interview:</p>
         <p>January 1, 2017</p>
         <p class="lead">You are on Waiting List</p>
@@ -6,4 +6,30 @@
         <p class="lead">Thank you for your patience.</p>
         <p class="pull-left">Waiting List: <span class="waiting-list-count">20</span> Candidates</p>
         <p class="pull-right">On Going Interview: Candidate No. <span class="ongoing-interview-number">20</span></p>
-      </div>
+ </div>
+ -->
+ <ul id="waiting" class="join_openday_ul">
+	<li>
+		<h1>
+			<i class="fa fa-calendar" aria-hidden="true"></i>
+			Your Schedule Online Interview:
+		</h1>
+	</li>
+	<li>
+		<h6><%= moment(data.event_date).format("MMM DD YYYY") %></h6>
+	</li>
+	<li>
+		<h1>You are on Waiting List</h1>
+		<h1>Candidate No. : 002</h1>
+	</li>
+	<li>
+		<h2>
+			Thank you for your patience.
+		</h2>
+	</li>
+	
+	<li>
+		<h6><span>Waiting List :</span> 29 Candidates</h6>
+		<h6>On Going Interview: Candidate No. <span class="ongoing-interview-number">20</span</h6>
+	</li>
+</ul>

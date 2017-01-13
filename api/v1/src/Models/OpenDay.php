@@ -251,8 +251,8 @@ class OpenDay
             `user_id`,
             `cover_letter`,
             `is_scheduled`,
-            `scheduled_time_start`,
-            `scheduled_time_end`,
+            `schedule_time_start`,
+            `schedule_time_end`,
             `email`,
             `cv`,
             `phone`,
@@ -271,19 +271,23 @@ class OpenDay
             NOW()
           )
         ";
-
         $joinStatement = $this->db->prepare($sql);
 
         $joinStatement->execute();
 
         if($isScheduled) {
           
-          $updateTimeBreakDownStatement = $this->prepareUpdateStatement("i_openday_time_breakdown", [ "time_breakdown_id" => $timeBreakdownId], [
-            'scheduled_user_id' => $userId,
-            'is_filled'         => 1,
-            'date_filled'       => date('Y-m-d H:i:s'),
-            'date_updated'      => date('Y-m-d H:i:s')
-          ]);
+       
+          $updateTimeBreakDownSql = "
+            UPDATE i_openday_time_breakdown
+            SET scheduled_user_id = '$userId',
+            is_filled = 1,
+            date_filled = NOW(),
+            date_updated = NOW()
+            WHERE time_breakdown_id = '$timeBreakdownId'
+          ";          
+
+          $updateTimeBreakDownStatement = $this->db->prepare($updateTimeBreakDownSql);
 
           $updateTimeBreakDownStatement->execute();
         }
@@ -359,6 +363,7 @@ class OpenDay
       JOIN i_users_object_data as user on attendees.user_id = user.user_id
       WHERE attendees.openday_id = '$opendayId'
       AND attendees.is_scheduled = '$isScheduled '
+      AND attendees.status < 2
     ";
     try {
 
@@ -417,6 +422,73 @@ class OpenDay
     }
 
   }
+
+
+  public function getSchedule($opendayId, $userId)
+  {
+    $sql = "
+      SELECT * FROM i_openday_attendees as attendees
+      JOIN i_openday as openday on openday.openday_id = attendees.openday_id
+      JOIN i_page as page on page.page_id = openday.page_id
+      JOIN i_openday_time as time on openday.openday_id = time.openday_id
+      WHERE attendees.user_id = '$userId'
+      AND attendees.openday_id = '$opendayId'
+      LIMIT 1
+    ";
+
+    try {
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+
+      return $schedule;
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
+  }
+
+  public function rejectCandidate($opendayId, $userId)
+  {
+    $updateAttendeeSql = "
+      UPDATE i_openday_attendees
+      SET status = '3'
+      WHERE openday_id = '$opendayId'
+      AND user_id = '$userId'
+    ";
+
+    $updateTimeBreakDownSql = "
+      UPDATE i_openday_time_breakdown
+      SET scheduled_user_id = NULL,
+      is_filled = 0
+      WHERE openday_id = '$opendayId'
+      AND scheduled_user_id = '$userId'
+    ";
+
+    $this->db->beginTransaction();
+    try {
+        $updateAttendee = $this->db->prepare($updateAttendeeSql);
+
+        $updateTimeBreakDown = $this->db->prepare($updateTimeBreakDownSql);
+
+        $updateAttendee->execute();
+        $updateTimeBreakDown->execute();
+
+        $this->db->commit();
+
+        return true;
+
+    }
+    catch(PDOException $e) {
+      $this->db->rollback();
+
+      return false;
+    }
+
+
+  }
+
   // Private Functions
 
   private function createSplitTimeArray($startTime, $endTime, $split)
@@ -542,6 +614,7 @@ class OpenDay
       return $e;
     }
   }
+
 
   
 

@@ -4,6 +4,7 @@ var candidateScreenManagement = (function($) {
         baseTemplateUrl = 'template/candidate/';
     var onInterview = false;
     var apiUrl = '/api/v1/public/index.php';
+    var openday = null;
 
     return {
         init: init
@@ -11,9 +12,10 @@ var candidateScreenManagement = (function($) {
 
     // Init
     function init() {
-        renderNecessaryTemplate();
+        loadOpendayDetail();
         socketIOEventHandlers();
         addEventHandlers();
+        renderNecessaryTemplate();
     }
 
     // Event Handler
@@ -69,10 +71,12 @@ var candidateScreenManagement = (function($) {
 
 
     function loadOpendayDetail() {
-        $.get(apiUrl + '/openday/' + getCurrentRoom(), function(openday){
+        $.get(apiUrl + '/openday/' + getCurrentRoom(), function(opendayRes){
+            openday = opendayRes;
             getTemplate('openday-detail.html',function(render) {
                 var html = render({data: openday});
                 $("#opendayDetails").html(html);
+
             });
         });
     }
@@ -94,10 +98,31 @@ var candidateScreenManagement = (function($) {
 
 
     function renderNecessaryTemplate () {
-        // Do ajax stuff here and activate the necessary template
-        activateScheduledUnderscoreTemplate();
-        loadOpendayDetail();
+          var opendayId = $("#roomId").val();
+          var userId = $("#userId").val();
+
+          $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
+            var scheduleStatus = (schedule.status === '1');
+            var isScheduled = (schedule.is_scheduled === '1');
+            // Waiting and Scheduled
+            if(scheduleStatus && isScheduled) {
+                activateScheduledUnderscoreTemplate(schedule);
+            }
+
+            // Waiting not Scheduled
+             if(scheduleStatus && !isScheduled) {
+                activateWaitingListUnderscoreTemplate(schedule);
+            }
+
+            // Interviewing
+            // if() {
+
+            // }
+
+          });
+     
     }
+
 
     function activateCandidateInterview() {
         onInterview = true;
@@ -111,18 +136,26 @@ var candidateScreenManagement = (function($) {
     }
 
 
-
-    function activateScheduledUnderscoreTemplate() {
-        // Do ajax stuff here
-        getTemplate('scheduled.html', function(render) {
-                        var renderedhtml = render();
+    function activateWaitingListUnderscoreTemplate(schedule) {
+       
+        getTemplate('waiting.html', function(render) {
+                        var renderedhtml = render({data:schedule});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
     }
 
-    function activateJoinUnderscoreTemplate() {
-        // Do ajax stuff here
+    function activateScheduledUnderscoreTemplate(schedule) {
+       
+        getTemplate('scheduled.html', function(render) {
+                        var renderedhtml = render({data:schedule});
+                        $("#candidate-interview").fadeOut();
+                        $("#waitingDiv").html(renderedhtml);
+        });
+    }
+
+    function activateJoinUnderscoreTemplate(schedule) {
+       
         var company_name = "XYZ Company";
         getTemplate('join.html', function(render) {
                         var renderedhtml = render({company_name : company_name});
@@ -131,8 +164,8 @@ var candidateScreenManagement = (function($) {
         });
     }
 
-     function activateRejectUnderscoreTemplate() {
-        // Do ajax stuff here
+     function activateRejectUnderscoreTemplate(schedule) {
+       
         var company_name = "XYZ Company";
         getTemplate('reject.html', function(render) {
                         var renderedhtml = render({company_name : company_name});
@@ -141,8 +174,8 @@ var candidateScreenManagement = (function($) {
         });
     }
 
-    function activateEndUnderscoreTemplate() {
-       // Do ajax stuff here
+    function activateEndUnderscoreTemplate(schedule) {
+      
        var company_name = "XYZ Company";
        getTemplate('end.html', function(render) {
                        var renderedhtml = render({company_name : company_name});

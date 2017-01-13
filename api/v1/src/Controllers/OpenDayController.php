@@ -109,8 +109,8 @@ class OpenDayController extends BaseController
      $timeEnd         = $request->getParam('time_end');
      $coverLetter     = $request->getParam('cover_letter');
 
-     $timeBreakdown = $this->openDayResouce->getTimeBreakdown($timeBreakdownId);
-     if($timeBreakdown['is_filled' == 1]) {
+     $timeBreakdown = $this->openDayResource->getTimeBreakdown($timeBreakdownId);
+     if($timeBreakdown['is_filled'] == 1) {
        return $response->withStatus(400);
      }
      $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
@@ -185,6 +185,31 @@ class OpenDayController extends BaseController
       $totalHrs =  $this->openDayResource->computeTotalHours($timeRange, $interval);
 
       return $response->withStatus(200)->withJson($totalHrs);
+   }
+
+   public function schedule($request, $response, $args)
+   {
+      $userId     = $request->getParam('user_id');
+      $opendayId  = $args['openday_id'];
+
+      $schedule = $this->openDayResource->getSchedule($opendayId, $userId);
+
+      return $response->withStatus(200)->withJson($schedule);
+
+   }
+
+   public function rejectCandidate($request, $response, $args) 
+   {
+      $opendayId = $args['openday_id'];
+      $userId    = $request->getParam('user_id');
+
+       $saved = $this->openDayResource->rejectCandidate($opendayId, $userId);
+
+       if($saved) {
+        return $response->withStatus(200);
+       }
+
+       return $response->withStatus(400);
    }
 
 

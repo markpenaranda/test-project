@@ -12,7 +12,7 @@
 			<h3><i class="fa fa-clock-o" aria-hidden="true"></i><%= moment(data.event_date + " " + data.start_time).format("hh:mmA") %>-<%= moment(data.event_date + " " + data.end_time).format("hh:mmA") %></h3>
 		</li>
 		<li>
-			<a href='job_post.php?j=' target="_blank" class="hvr-shutter-out-horizontal">View Job</a>
+			<a href='interview.php?openday=<%= data.openday_id %>' target="_blank" class="hvr-shutter-out-horizontal">View Job</a>
 		</li>
 	</ul>
 </li>

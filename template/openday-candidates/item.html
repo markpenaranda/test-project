@@ -1,4 +1,4 @@
-<li>
+<li id="candidate-<%= time.user_id %>">
 								<div class="col-lg-3 col-sm-3 col-xs-12">
 									<div class="row">
 										<img src="http://fs1.jobsglobal.us/tree/e47/02fc3ee3c7e4584421f2bc43a.png">
@@ -34,11 +34,11 @@
 									<div class="row">
 										<ul class="interview_list_btn_ul">
 											<li>
-												<button class="view_btn">View CV</button>
+												<button data-id="<%= time.user_id %>" class="view_btn">View CV</button>
 											</li>
 											
 											<li>
-												<button class="end_btn">Reject</button>
+												<button data-id="<%= time.user_id %>" class="reject_btn end_btn">Reject</button>
 											</li>
 										</ul>
 									</div>
