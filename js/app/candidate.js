@@ -102,16 +102,22 @@ var candidateScreenManagement = (function($) {
           var userId = $("#userId").val();
 
           $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
-            var scheduleStatus = (schedule.status === '1');
+            var scheduleStatus = parseInt(schedule.status);
             var isScheduled = (schedule.is_scheduled === '1');
             // Waiting and Scheduled
-            if(scheduleStatus && isScheduled) {
+            if(scheduleStatus == 1 && isScheduled) {
                 activateScheduledUnderscoreTemplate(schedule);
             }
 
             // Waiting not Scheduled
-             if(scheduleStatus && !isScheduled) {
+             if(scheduleStatus == 1 && !isScheduled) {
                 activateWaitingListUnderscoreTemplate(schedule);
+            }
+
+            // Reject
+
+            if(scheduleStatus == 3) {
+                activateRejectUnderscoreTemplate(schedule);
             }
 
             // Interviewing
@@ -166,9 +172,8 @@ var candidateScreenManagement = (function($) {
 
      function activateRejectUnderscoreTemplate(schedule) {
        
-        var company_name = "XYZ Company";
         getTemplate('reject.html', function(render) {
-                        var renderedhtml = render({company_name : company_name});
+                        var renderedhtml = render({openday : openday});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });

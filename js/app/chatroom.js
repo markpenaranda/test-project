@@ -188,11 +188,13 @@ var candidateScreenManagement = (function($) {
            location.origin = location.protocol + "//" + location.host;
         }
         var link = location.origin + "/candidate.php";
-        $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "reject", message: message, link: link}, function (data){
-            removeCandidate(userId);
-            // TODO: Add AJAX here to record that the candidate has been rejected in the DB.
-
+        $.post(apiUrl + '/openday/' + roomId + '/reject', { user_id: userId }, function(res) {
+           $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "reject", message: message, link: link}, function (data){
+              removeCandidate(userId);
+              $("#candidate-" + userId).remove();
+            });
         });
+        
     }
 
     function endCandidate() {

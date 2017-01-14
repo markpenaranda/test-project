@@ -7,6 +7,7 @@ var discoverJobsManagement = (function($) {
     var dataStore = [];
     var selectedSchedule = null;
     var selectedOpendayId = null;
+    var accountInfo = null;
     return {
         init: init
     };
@@ -56,6 +57,7 @@ var discoverJobsManagement = (function($) {
 
     function loadAccountInfo() {
       $.get(apiUrl + "/users/" + getCurrentUserId(), function(user) {
+          accountInfo = user;
           getTemplate("account-info.html", function(render){
             var html = render({ data: user });
             $("#accountInfo").html(html);
@@ -110,7 +112,8 @@ var discoverJobsManagement = (function($) {
          var end_time = moment("2013-02-08 " + res.end_time).format("hh:mmA");
         // console.log(created);
         getTemplate("details.html", function(render){
-          var html = render({ data: res, created_at: created, 
+          var html = render({ user: accountInfo,
+                              data: res, created_at: created, 
                               event_date: event_date, 
                               start_time:  start_time,
                               end_time: end_time
