@@ -2181,3 +2181,6 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%) }
+
+
+.disabled { background: grey !important;  }

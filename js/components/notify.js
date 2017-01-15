@@ -66,10 +66,11 @@ var current_user = [];
 
 window.socket.on("user-update", function(data){
     var new_data = []
-
+    window.online_user = [];
       for (var i = data.length - 1; i >= 0; i--) {
         var user = data[i];
         new_data.push(user.userId);
+        window.online_user.push(user.userId);
       }
     
       // present in new *This will activated as online
@@ -77,7 +78,7 @@ window.socket.on("user-update", function(data){
       for (var i = new_data.length - 1; i >= 0; i--) {
         var nd = new_data[i];
         if(!isInArray(nd, current_user)) {
-          $(".live-marker-" + nd).addClass("text-success"); 
+          $(".live-marker-" + nd).addClass("online"); 
         }
         
       }
@@ -88,7 +89,7 @@ window.socket.on("user-update", function(data){
         var cu = current_user[i];
         if (!isInArray(cu, new_data)) {
            new_off.push(cu); 
-           $(".live-marker-" + cu).removeClass("text-success");  
+           $(".live-marker-" + cu).removeClass("online");  
         }
         
       }

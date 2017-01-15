@@ -489,6 +489,136 @@ class OpenDay
 
   }
 
+  public function stopQueue($opendayId)
+  {
+    $sql = "
+      UPDATE i_openday
+      SET stopped_adding_queue = 1
+      WHERE openday_id = '$opendayId'
+    ";
+
+    $this->db->beginTransaction();
+
+    try {
+      $updateStatement = $this->db->prepare($sql);
+
+      $updateStatement->execute();
+
+
+      $this->db->commit();
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+    }
+
+
+
+  }
+
+   public function endInterview($opendayId, $userId)
+  {
+    $sql = "
+      UPDATE i_openday_attendees
+      SET status = 2
+      WHERE openday_id = '$opendayId'
+      AND user_id = '$userId'
+    ";
+
+    $this->db->beginTransaction();
+
+    try {
+      $updateStatement = $this->db->prepare($sql);
+
+      $updateStatement->execute();
+
+
+      $this->db->commit();
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+    }
+
+
+
+  }
+
+  public function getListofCandidateId($opendayId, $status, $scheduled) 
+  {
+    $sql = "
+      SELECT user_id 
+      FROM  i_openday_attendees
+      WHERE openday_id = '$opendayId'
+      AND is_scheduled = '$scheduled'
+      AND status  < 2
+    ";
+
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
+
+  public function setInterviewing($opendayId, $userId)
+  {
+
+    $sql = "
+      UPDATE i_openday_attendees
+      SET status = 0
+      WHERE openday_id = '$opendayId'
+      AND user_id = '$userId'
+    ";
+
+    $this->db->beginTransaction();
+
+    try {
+      $updateStatement = $this->db->prepare($sql);
+
+      $updateStatement->execute();
+
+
+      $this->db->commit();
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+    }
+
+  }
+
+  public function liveOpenday() 
+  {
+    $sql = "
+      SELECT * FROM i_openday as openday 
+      JOIN i_openday_time as o_time on o_time.openday_id = openday.openday_id
+      WHERE o_time.start_time <= NOW() and openday.event_date = CURDATE()
+    ";
+
+     try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+
+
+  }
   // Private Functions
 
   private function createSplitTimeArray($startTime, $endTime, $split)
@@ -614,6 +744,7 @@ class OpenDay
       return $e;
     }
   }
+
 
 
   

@@ -188,6 +188,8 @@
   display: none;
 }
 
+.online {  color: #83c954 !important; }
+
 /* Responsive */
 
 /*@media (min-width: 720px) {

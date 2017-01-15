@@ -32,12 +32,12 @@
 				</div>
 			</div>
 			<div class="container">
-				<div style="display: none;" id="candidate-interview" class="row">
+				<div id="candidate-interview" class="row">
 					<div class="col-lg-6 col-sm-4 col-xs-12 col-lg-offset-3">
 						<div class="openday_interview_green_wrapper">
 							<div class="row">
 								<div class="col-lg-12 col-sm-12 col-xs-12">
-									<h1 class="opnday_candidate_name">Candidate 001 : John Doe</h1>
+									<h1 class="companyName opnday_candidate_name"></h1>
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div  style="margin-top: 5px; width: 100%; background-color: black; position:relative; height: 350px;">

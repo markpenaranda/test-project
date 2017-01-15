@@ -5612,7 +5612,7 @@ h1.about_header {
 }
 
 .interview_list_right_inner_ul li h6 i {
-  color: #83c954;
+  /*color: #83c954;*/
   font-size: 12px;
   margin-left: 5px;
 }
@@ -6817,7 +6817,9 @@ body.front {
 
 .centered {  text-align: center;  }
 
+.stop_queue_btn_disabled { background: grey !important;  }
 
+.online { color: #83c954 !important; }
 
 
 /* employer landing page ends here */

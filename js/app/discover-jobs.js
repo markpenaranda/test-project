@@ -157,13 +157,26 @@ var discoverJobsManagement = (function($) {
         time_end: selectedSchedule.data('end')
       }
 
-      $.post(apiUrl + '/openday/' + opendayId + '/join', data, function(res){
+  
+
+
+      $.ajax({
+        url: apiUrl + '/openday/' + opendayId + '/join',
+        data: data,
+        type: 'post',
+        success: function(res){
           $(this).find(".loading").fadeOut();
           $("#joinSuccess").fadeIn();
           $("#joinForm").fadeOut();
+          $("#joinSubmit").fadeOut();
          
-         
-      });
+        },
+        error:  function (error) {
+          $("#joinError").fadeIn();
+            $("#joinForm").fadeOut();
+             $("#joinSubmit").fadeOut();
+        }
+        });
 
     }
 

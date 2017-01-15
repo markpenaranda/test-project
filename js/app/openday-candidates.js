@@ -108,11 +108,13 @@ var opendayCandidatesScreenManagement = (function($) {
 
     function viewCV() {
         var userId = $(this).data('id');
-
+        $.get(apiUrl + '/users/' + userId, function(result) {
           getTemplate("profile.html", function(render){
             var html = render({ data: result, time: time });
             $("#opendayProfile").html(html);
           });
+            
+        })
               
       
 

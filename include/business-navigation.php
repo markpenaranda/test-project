@@ -38,6 +38,7 @@
 							          <ul style="background-color: #242424; text-align: left;" class="dropdown-menu">
 							            <li><a href="/create-room.php">Create Open Day</a></li>
 							            <li><a href="/openday-candidates.php">Candidates Per Open Day</a></li>
+							            <li><a href="/room.php">Live Open Day</a></li>
 
 							          </ul>
 							        </li>

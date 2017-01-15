@@ -105,13 +105,21 @@
                 
               </center>
             </div>
+            <div id="joinError" style="display:none;" class="centered alert alert-danger alert-error">
+              <center>
+                <h1>Error!</h1>
+                <span class="alerticon"><i class="fa fa-cross"></i></span>
+                <p>We're having problem in processing your request. Make sure that you haven't submitted any application for this particular event.</p>
+                
+              </center>
+            </div>
             <div class="alert alert-info">
               <p>Note: Please be online 15 minutes before your schedule online interview, being late will be place on the waiting list and will have less chance to be interviewed.</p>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" id="closeJoinModal" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button id="joinSubmit" type="button" class="btn btn-success jg-btn pull-right"><i class="fa fa-rotate-right fa-spinner fa-fw loading"></i>Send Application</button>
+            <button id="joinSubmit" type="button" class="btn btn-success jg-btn pull-right"><i  style="display:none;" class="fa fa-rotate-right fa-spinner fa-spin fa-fw loading"></i>Send Application</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

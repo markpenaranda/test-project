@@ -1,9 +1,6 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-		<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css" type="text/css" />
-		<link rel="stylesheet" href="css/hover-min.css" type="text/css" />
-		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<?php include 'include/css.php'; ?>
 	</head>
 
 	<body class="inside">
@@ -45,8 +42,8 @@
 									</li>
 									<li class="col-lg-3">
 										<div class="row">
-											<select>
-												<option>India</option>
+											<select id="createdList">
+												<option>SELECT FROM ALREADY CREATED EVENTS</option>
 											</select>
 										</div>
 									</li>
@@ -58,7 +55,7 @@
 								<button id="cancel" class="hvr-underline-reveal">cancel</button>
 							</li>
 							<li>
-								<button id="preview" class="hvr-underline-reveal">preview</button>
+								<button id="preview" disabled="true" class="hvr-underline-reveal disabled">preview</button>
 								<button id="continue" style="display:none;" class="hvr-underline-reveal">Continue</button>
 								<button id="submit" style="display:none;" class="hvr-underline-reveal">Checkout and Publish</button>
 							</li>

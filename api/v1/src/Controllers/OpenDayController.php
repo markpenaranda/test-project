@@ -56,18 +56,20 @@ class OpenDayController extends BaseController
        return  $response->withStatus(400)->withJson($this->createOpenDayValidation->errors);
      }
 
-      $createParams = Request::only($request, [
-        'event_name',
-        'event_date',
-        'time_interval_per_candidate',
-        'introduction',
-        'in_charge_user_id',
-        'rate_per_hour',
-        'created_by_user_id'
-      ]);
+    
 
-      $jobs = Request::get($request, "jobs");
-      $timeRange = Request::get($request, "timerange");
+      $createParams = array(
+        'event_name' => $request->getParam('event_name'),
+        'event_date' => $request->getParam('event_date'),
+        'time_interval_per_candidate' => $request->getParam('time_interval_per_candidate'),
+        'introduction' => $request->getParam('introduction'),
+        'in_charge_user_id' => $request->getParam('in_charge_user_id'),
+        'rate_per_hour' => $request->getParam('rate_per_hour'),
+        'created_by_user_id' => $request->getParam('created_by_user_id')
+      );
+
+      $jobs      = $request->getParam('jobs');
+      $timeRange = $request->getParam("timerange");
 
       $openday = $this->openDayResource->create($createParams, $timeRange, $jobs);
       return $response->withStatus(200)->withJson($openday);
@@ -79,14 +81,17 @@ class OpenDayController extends BaseController
      if(!$isValid) {
        return  $response->withStatus(400)->withJson($this->createOpenDayValidation->errors);
      }
-     $updateParams = Request::only($request, [
-       'event_name',
-       'event_date',
-       'time_interval_per_candidate',
-       'introduction',
-       'in_charge_user_id',
-       'rate_per_hour'
-     ]);
+    
+
+     $updateParams = array(
+        'event_name' => $request->getParam('event_name'),
+        'event_date' => $request->getParam('event_date'),
+        'time_interval_per_candidate' => $request->getParam('time_interval_per_candidate'),
+        'introduction' => $request->getParam('introduction'),
+        'in_charge_user_id' => $request->getParam('in_charge_user_id'),
+        'rate_per_hour' => $request->getParam('rate_per_hour')
+      );
+
      $startTime = date("H:i", strtotime($request->getParam('start_time')));
      $endTime = date("H:i", strtotime($request->getParam('end_time')));
 
@@ -178,8 +183,8 @@ class OpenDayController extends BaseController
 
    public function computeTotalHour($request, $response)
    {
-      $timeRange = Request::get($request, "timerange");
-      $interval = Request::get($request, "time_interval");
+      $timeRange = $request->getParam('timerange')
+      $interval = $request->getParam('time_interval');
       var_dump($timeRange);
 
       $totalHrs =  $this->openDayResource->computeTotalHours($timeRange, $interval);
@@ -212,6 +217,59 @@ class OpenDayController extends BaseController
        return $response->withStatus(400);
    }
 
+   public function stopQueue($request, $response, $args)
+   {
+      $opendayId = $args['openday_id'];
 
+      $this->openDayResource->stopQueue($opendayId);
+
+      return $response->withStatus(200);
+
+   }
+
+   public function endInterview($request, $response, $args)
+   {
+      $opendayId = $args['openday_id'];
+      $userId    = $request->getParam('user_id');
+
+      $this->openDayResource->endInterview($opendayId, $userId);
+   }
+
+   public function getListOfCandidateId($request, $response, $args)
+   {
+     $opendayId = $args['openday_id'];
+     $status    = $request->getParam('status'); 
+
+
+     $scheduled = $this->openDayResource->getListOfCandidateId($opendayId, $status, 1);
+
+    $scheduled = array_column($scheduled, 'user_id');
+     $notScheduled = $this->openDayResource->getListOfCandidateId($opendayId, $status, 0);
+      $notScheduled = array_column($notScheduled, 'user_id');
+     $items = array(
+        'scheduled' => $scheduled,
+        'notScheduled' => $notScheduled
+      );
+
+     return $response->withStatus(200)->withJson($items);
+
+   }
+
+   public function setInterviewing($request, $response, $args)
+   {
+     $opendayId = $args['openday_id'];
+     $userId    = $request->getParam('user_id'); 
+
+     $this->openDayResource->setInterviewing($opendayId, $userId);
+
+   }
+
+   public function getLiveOpenday($request, $response, $args) 
+   {
+      $items = $this->openDayResource->liveOpenday();
+
+      return $response->withStatus(200)->withJson($items);
+
+   }
 
 }

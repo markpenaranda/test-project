@@ -76,7 +76,7 @@ var candidateScreenManagement = (function($) {
             getTemplate('openday-detail.html',function(render) {
                 var html = render({data: openday});
                 $("#opendayDetails").html(html);
-
+                $(".companyName").html(openday.page_name);
             });
         });
     }
@@ -120,10 +120,16 @@ var candidateScreenManagement = (function($) {
                 activateRejectUnderscoreTemplate(schedule);
             }
 
-            // Interviewing
-            // if() {
+            // End
 
-            // }
+            if(scheduleStatus == 2) {
+                activateEndUnderscoreTemplate(schedule);
+            }
+
+            // Interviewing
+            if(scheduleStatus == 0) {
+                activateJoinUnderscoreTemplate(schedule);
+            }
 
           });
      
@@ -162,9 +168,9 @@ var candidateScreenManagement = (function($) {
 
     function activateJoinUnderscoreTemplate(schedule) {
        
-        var company_name = "XYZ Company";
+ 
         getTemplate('join.html', function(render) {
-                        var renderedhtml = render({company_name : company_name});
+                        var renderedhtml = render({schedule: schedule, openday: openday});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
@@ -181,9 +187,9 @@ var candidateScreenManagement = (function($) {
 
     function activateEndUnderscoreTemplate(schedule) {
       
-       var company_name = "XYZ Company";
+      
        getTemplate('end.html', function(render) {
-                       var renderedhtml = render({company_name : company_name});
+                       var renderedhtml = render({openday: openday, company_name : company_name});
                        $("#waitingDiv").html(renderedhtml);
                        $("#opendayDetails").fadeIn();
                        $("#waitingDiv").fadeIn();

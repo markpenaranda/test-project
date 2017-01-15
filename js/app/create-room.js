@@ -57,6 +57,8 @@ var createRoomScreenManagement = (function($) {
 
       $("#cancel").on('click', backToTop);
 
+      $("#interviewPostFormContainer").on("keyup", "input", validate);
+
     }
 
     function initialTemplate() {
@@ -64,8 +66,38 @@ var createRoomScreenManagement = (function($) {
       addNewJob();
       addTimeRange();
       loadResponsibleUserOption();
+      loadPastCreated();
     }
 
+    function loadPastCreated() {
+
+      $.get(apiUrl + '/openday/created?user_id='+ getCurrentUserId(), function(res) {
+          console.log(res);
+          for (var i = 0; i < res.length; i++) {
+            
+            var html = "<option value='"+ res[i].openday_id +"'>"+ res[i].event_name +"</option>"
+            $("#createdList").append(html);
+          }
+      });
+    }
+
+    function validate() {
+            console.log($(this).val());
+      var empty = false;
+        $('input').each(function() {
+            if ($(this).val() == '') {
+                empty = true;
+            }
+        });
+
+        if (empty) {
+            $('#preview').attr('disabled', 'disabled'); 
+            $('#preview').addClass('disabled'); 
+        } else {
+            $('#preview').removeAttr('disabled'); 
+            $('#preview').removeClass('disabled'); 
+        }
+    }
 
     function addForm() {
       getTemplate('room-form.html', function(render){
@@ -84,12 +116,7 @@ var createRoomScreenManagement = (function($) {
           $('.ui-timepicker-select').addClass('col-lg-12');
           ++numberOfRooms;
 
-          $.validate({
-    modules : 'location, date, security, file',
-    onModulesLoaded : function() {
-      $('#country').suggestCountry();
-    }
-  });
+       
       });
     }
 

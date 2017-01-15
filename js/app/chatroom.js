@@ -8,6 +8,9 @@ var candidateScreenManagement = (function($) {
     var lapseTimerInterval;
     var apiUrl = '/api/v1/public/index.php';
     var call;
+    var online_user = [];
+    var openday;
+    var liveOpenday = [];
 
     return {
         init: init
@@ -15,10 +18,19 @@ var candidateScreenManagement = (function($) {
 
     // Init
     function init() {
-        loadCandidateQueue();
         addEventHandlers();
-        renderNecessaryTemplate();
-        socketIOEventHandlers();
+        loadLiveOpenday(function(results) {
+          var opendayId = $("#roomId").val();
+          if(opendayId == "") {
+            $("#roomId").val(results[0].openday_id);
+          }
+          loadCandidateQueue();
+          renderNecessaryTemplate();
+          socketIOEventHandlers();
+          
+        });
+       
+
 
     }
 
@@ -33,6 +45,10 @@ var candidateScreenManagement = (function($) {
 
          // End Interview
          $("#queue-item").on('click',".endButton", endCandidate);
+
+         // View Profile
+         $("#queue-item").on('click',".viewButton", viewProfile);
+
 
         // Extend Hours Compute Total Price
          $("#extend-hours-input").on('keyup', computeTotalPrice);
@@ -50,6 +66,19 @@ var candidateScreenManagement = (function($) {
 
          $("#scheduleFilter").on('change', loadCandidateQueue);
 
+
+         // Stop Adding Queue 
+         $(".stop_queue_btn").on('click', stopAddingQueue);
+
+
+         $(".extend_more_btn").on('click', showExtendMore);
+         $(".close_extend_more_btn").on('click', closeExtendMore);
+
+         $("#numberOfHours").on('keyup', calculateAmount);
+
+         $("#liveOpendaySelect").on('change', changeOpenday);
+
+
     }
 
 
@@ -59,7 +88,7 @@ var candidateScreenManagement = (function($) {
 
         // Notifications
         window.socket.on("room-" + getCurrentRoom(), function(data){
-         updateListNumber();
+      
          if(data.tag == "accept" && data.user_id == pendingApplicant) {
                 $(".waitingButton").fadeOut();
                 $(".startInterviewButton").fadeIn();
@@ -73,6 +102,26 @@ var candidateScreenManagement = (function($) {
 
 
         });
+
+        window.socket.on("user-update", function(data){ 
+
+            online_user = [];
+            for (var i = data.length - 1; i >= 0; i--) {
+              var user = data[i];
+              online_user.push(user.userId);
+            }
+            updateListNumber();
+        });
+    }
+
+    function updateOnlineMarker() {
+
+      for (var i = online_user.length - 1; i >= 0; i--) {
+        var nd = online_user[i];
+          $(".live-marker-" + nd).addClass("online"); 
+          console.log("inserted");
+      }
+
     }
 
     // Get Template
@@ -92,11 +141,44 @@ var candidateScreenManagement = (function($) {
 
     function renderNecessaryTemplate () {
         // TODO: Do ajax stuff here and activate the necessary template
+        var opendayId = $("#roomId").val();
+        loadOpenday(opendayId);
+    }
+
+    function loadLiveOpenday(callback) {
+      $.get(apiUrl + '/openday/live', function(results){
+        liveOpenday = results;
+        for (var i = 0; i < results.length; i++) {
+          var op = results[i];
+          var html = "<option value='"+ op.openday_id +"'>" + op.event_name + "</option>";
+          $("#liveOpendaySelect").append(html);
+        }
+        callback(results);
+      });
 
     }
 
+    function changeOpenday() {
+
+          $("#roomId").val($(this).val());
+          loadCandidateQueue();
+          renderNecessaryTemplate();
+          socketIOEventHandlers();
+
+    }
 
     // Getters and Setters
+
+    function loadOpenday(opendayId) {
+      $.get(apiUrl + '/openday/' + opendayId, function(res) {
+        if(res.stopped_adding_queue == "1") {
+          $(".stop_queue_btn").addClass("disabled");
+        }
+
+        openday = res;
+        startTotalUsedTime();
+      });
+    }
 
     function getCurrentUser() {
         var userId = $('#userId').val();
@@ -121,15 +203,17 @@ var candidateScreenManagement = (function($) {
     function loadCandidateQueue() {
       /* Do an ajax to get the sorted active candidates from the DB */
       var opendayId = getCurrentRoom();
-       $("#queue-item").html('');
+       $("#queue-item").html("");
       var is_scheduled = $("#scheduleFilter").val();
+
       $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
+       
         for (var i = 0; i < res.length; i++) {
+       
           var candidate = res[i]
           addCandidate(candidate);
         }
       });
-
     }
 
     /* Add Candidate in the Queue
@@ -152,7 +236,7 @@ var candidateScreenManagement = (function($) {
     */
     function removeCandidate(applicantId) {
       /* Do AJAX Stuff here to remove the candidate from the DB. */
-      console.log($("#queue-" + applicantId));
+      // console.log($("#queue-" + applicantId));
       $("#queue-" + applicantId).remove();
     }
 
@@ -161,19 +245,20 @@ var candidateScreenManagement = (function($) {
     function inviteCandidate() {
         var userId = $(this).data('user');
         var roomId = $(this).data('room');
-        console.log(userId);
-        console.log(roomId);
+       
         var message = "Your interview is now ready";
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
         }
-        var link = location.origin + "/candidate.php";
+        var link = location.origin + "/interview.php?openday=" + roomId;
 
-        /* Before Running code below do an ajax to update the server that the candidate has been invited */
-        $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "invite", message: message, link: link}, function (data){
-            $("#inviteModal").modal("show");
-            pendingApplicant = userId;
-        });
+        $.post(apiUrl + '/openday/' + roomId + '/set-interviewing', { user_id: userId }, function(res){
+            $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "invite", message: message, link: link}, function (data){
+                $("#inviteModal").modal("show");
+                pendingApplicant = userId;
+            });
+
+        })
 
     }
 
@@ -207,18 +292,21 @@ var candidateScreenManagement = (function($) {
            location.origin = location.protocol + "//" + location.host;
         }
         var link = location.origin + "/candidate.php";
-        $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
-            removeCandidate(userId);
-            currentApplicant = 0;
-            call.close();
-            $(".send").prop("disabled", true);
-            $(".messages").html('');
-            clearInterval(lapseTimerInterval);
+        $.post(apiUrl + '/openday/' + roomId + '/end', { user_id: userId }, function(res){
+          
+          $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
+              removeCandidate(userId);
+              currentApplicant = 0;
+              call.close();
+              $(".send").prop("disabled", true);
+              $(".messages").html('');
+              clearInterval(lapseTimerInterval);
+              $("#candidate-" + userId).remove();
+              pauseTimer();
+              // TODO: Add AJAX here to record that the candidate has ended in the DB.
 
-            pauseTimer();
-            // TODO: Add AJAX here to record that the candidate has ended in the DB.
-
-        });
+          });
+        })
     }
 
 
@@ -235,13 +323,15 @@ var candidateScreenManagement = (function($) {
 
     function startVideoCall() {
       currentApplicant = pendingApplicant;
+      // console.log(currentApplicant);
       // Update Elements
       $(".invite-button-" + currentApplicant).prop( "disabled", true );
+      $(".invite-button-" + currentApplicant).addClass( "disabled");
       $(".invite-button-" + currentApplicant).html("Interviewing");
 
-      $(".reject-button-" + currentApplicant).hide();
+      $("#reject-" + currentApplicant).hide();
 
-      $(".end-button-" + currentApplicant).show();
+      $("#end-" + currentApplicant).show();
 
       // TODO: add ajax to get the currentApplicant user details and as well as the candidate number.
       var user = { id: currentApplicant, name: 'John Doe' };
@@ -296,13 +386,24 @@ var candidateScreenManagement = (function($) {
     }
 
     function startTotalUsedTime() {
-      var time = jQuery('#initialTime').val();
-      var displayTotalUsedTime = $('#totalUsedTime');
-      displayTotalUsedTime.removeClass('pause');
-      if(timerStarted === false) {
-        totalTimer(time, displayTotalUsedTime, pauseTimer);
-        timerStarted = true;
-      }
+        var end = moment(openday.event_date + " " + openday.end_time);
+         var start = moment(openday.event_date + " " + openday.start_time);
+
+         var totalDuration = end - start;
+         var tD = moment.utc(moment.duration(totalDuration).asMilliseconds()).format("HH[H]mm[M]");
+         $("#totalDuration").html(tD);
+
+        myTimer();
+        var timer = setInterval(myTimer, 5000);
+
+        function myTimer() {
+            var now = moment();
+             var then = moment(openday.event_date + " " + openday.start_time);
+
+             var duration = now - then;
+             var time = moment.utc(moment.duration(duration).asMilliseconds()).format("HH [H] mm [M]");
+             $("#totalUsedTime").html(time);
+        }
     }
 
     function pauseTimer() {
@@ -316,11 +417,72 @@ var candidateScreenManagement = (function($) {
           2. total not yet check in with schedule
           3. waiting list
         **/
-        $("#checkInWithSchedule").html(20);
-        $("#notCheckInWithSchedule").html(20);
-        $("#waitingListCount").html(5);
+        var roomId = $("#roomId").val();
+        $.get(apiUrl + '/openday/' + roomId + '/candidates-id', function(result){
+     
+          var scheduled = result.scheduled;
+          var checkInScheduled = intersect(scheduled, window.online_user);
+          var notCheckInScheduled = scheduled.length - checkInScheduled.length;
+          $("#checkInWithSchedule").html(checkInScheduled.length);
+          $("#notCheckInWithSchedule").html(notCheckInScheduled);
+          $("#waitingListCount").html(result.notScheduled.length);
+        });
     }
 
+    function intersect(a, b) {
+        var d = {};
+        var results = [];
+        for (var i = 0; i < b.length; i++) {
+            d[b[i]] = true;
+        }
+        for (var j = 0; j < a.length; j++) {
+            if (d[a[j]]) 
+                results.push(a[j]);
+        }
+        return results;
+    }
+
+
+    function stopAddingQueue() {
+      var conf = confirm("Are you sure you want to stop?");
+      if(!conf) { return false; }
+      var opendayId = $("#roomId").val();
+      $.post(apiUrl + '/openday/' + opendayId + '/stop', function(res) {
+          $(".stop_queue_btn").prop('disabled', true);
+          $(".stop_queue_btn").addClass('disabled');
+      });
+    }
+
+
+    function viewProfile() {
+      var userId = $(this).data('id');
+
+      $.get(apiUrl + '/users/' + userId, function(user){
+        getTemplate('profile.html', function(render){
+          var html = render({ data: user });
+          $("#profileView").html(html);
+        });
+      });
+    }
+
+    function showExtendMore() {
+      $("#extendMore").fadeIn();
+      $("#profileView").fadeOut();
+    }
+
+    function closeExtendMore() {
+       $("#extendMore").fadeOut();
+      $("#profileView").fadeIn();
+
+    }
+
+    function calculateAmount() {
+      var hours = parseInt($(this).val());
+      var amount = 100 * hours;
+      var amount = (amount > 0) ? amount : 0;
+      $(".total-amount").html("$" + amount);
+
+    }
 
 
 })($);

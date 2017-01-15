@@ -17,6 +17,7 @@ $app->group('/users', function () {
 $app->group('/openday', function(){
 	$this->map(['GET'], '', 'OpenDayController:index');
 	$this->map(['GET'], '/search', 'OpenDayController:search');
+	$this->map(['GET'], '/live', 'OpenDayController:getLiveOpenday');
 	$this->map(['GET'], '/my', 'OpenDayController:myOpenDay');
 	$this->map(['GET'], '/created', 'OpenDayController:createdOpenday');
 	$this->map(['GET'], '/current-rate', 'OpenDayController:currentRate');
@@ -25,9 +26,13 @@ $app->group('/openday', function(){
 	$this->group('/{openday_id}', function() {
 			$this->map(['GET'], '/candidates', 'OpenDayController:candidates');
 			$this->map(['GET'], '/schedule', 'OpenDayController:schedule');
+			$this->map(['GET'], '/candidates-id', 'OpenDayController:getListOfCandidateId');
 			$this->map(['GET'], '/suggested', 'OpenDayController:suggestedUsers');
 			$this->map(['GET'], '', 'OpenDayController:show');
 			$this->map(['POST'], '/join', 'OpenDayController:join');
+			$this->map(['POST'], '/set-interviewing', 'OpenDayController:setInterviewing');
+			$this->map(['POST'], '/stop', 'OpenDayController:stopQueue');
+			$this->map(['POST'], '/end', 'OpenDayController:endInterview');
 			$this->map(['POST'], '/reject', 'OpenDayController:rejectCandidate');
 			$this->map(['PUT'], '', 'OpenDayController:update');
 		
