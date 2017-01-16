@@ -49,12 +49,23 @@ var myOpendayScreenManagement = (function($) {
         var status = 1;
         $("#active_openday>ul").html('');
 
+        $.get(apiUrl + '/openday/my?user_id=' + userId +'&status=0', function(results){
+           for (var i = 0; i < results.length; i++) {
+
+                  var result = results[i];
+                  getTemplate("item.html", function(render){
+                    var html = render({ data: result, status: 'Live' });
+                    $("#active_openday>ul").append(html);
+                  });
+            }
+        });
+
         $.get(apiUrl + '/openday/my?user_id=' + userId +'&status=' + status, function(results){
            for (var i = 0; i < results.length; i++) {
 
                   var result = results[i];
                   getTemplate("item.html", function(render){
-                    var html = render({ data: result });
+                    var html = render({ data: result,  status: 'Waiting'  });
                     $("#active_openday>ul").append(html);
                   });
             }

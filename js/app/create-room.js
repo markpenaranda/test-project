@@ -59,6 +59,7 @@ var createRoomScreenManagement = (function($) {
 
       $("#interviewPostFormContainer").on("keyup", "input", validate);
 
+      $("#createdList").on('change', useOldEvent);
     }
 
     function initialTemplate() {
@@ -97,6 +98,17 @@ var createRoomScreenManagement = (function($) {
             $('#preview').removeAttr('disabled'); 
             $('#preview').removeClass('disabled'); 
         }
+    }
+
+    function useOldEvent() {
+      var opendayId = $(this).val()
+      $.get(apiUrl + '/openday/' + opendayId, function(openday) {
+        $("#eventName").val(openday.event_name); 
+        $("#timeIntervalPerInterview").val(openday.time_interval_per_candidate);
+        $("#introduction").val(openday.introduction);
+
+      });
+
     }
 
     function addForm() {

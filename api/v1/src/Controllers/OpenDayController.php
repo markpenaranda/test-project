@@ -114,6 +114,11 @@ class OpenDayController extends BaseController
      $timeEnd         = $request->getParam('time_end');
      $coverLetter     = $request->getParam('cover_letter');
 
+     $openday = $this->openDayResource->getById($opendayId);
+     if($openday['stopped_adding_queue']) {
+       return $response->withStatus(400);
+     }
+
      $timeBreakdown = $this->openDayResource->getTimeBreakdown($timeBreakdownId);
      if($timeBreakdown['is_filled'] == 1) {
        return $response->withStatus(400);
@@ -183,7 +188,7 @@ class OpenDayController extends BaseController
 
    public function computeTotalHour($request, $response)
    {
-      $timeRange = $request->getParam('timerange')
+      $timeRange = $request->getParam('timerange');
       $interval = $request->getParam('time_interval');
       var_dump($timeRange);
 
