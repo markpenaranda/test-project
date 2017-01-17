@@ -6,6 +6,12 @@ var createRoomScreenManagement = (function($) {
     var apiUrl = '/api/v1/public/index.php';
     var dataStore = [];
 
+    var FORM_REQUIRED_FIELDS = [
+        "event_name",
+        "event_date",
+        "time_interval_per_candidate"
+    ];
+
     return {
         init: init,
         addForm: addForm
@@ -15,6 +21,7 @@ var createRoomScreenManagement = (function($) {
     function init() {
         initialTemplate();
         addEventHandlers();
+        validate([], 1);
     }
 
     function getCurrentUserId() {
@@ -49,6 +56,8 @@ var createRoomScreenManagement = (function($) {
 
       $("#interviewPostFormContainer").on('click', '.remove-time-range', removeTimeRange);
 
+      $("#mainCreateRoomRow").on('click', '.edit-room-btn', backToTop);
+
       $("#submit").on('click', submit);
 
       $("#preview").on('click', preview);
@@ -57,7 +66,7 @@ var createRoomScreenManagement = (function($) {
 
       $("#cancel").on('click', backToTop);
 
-      $("#interviewPostFormContainer").on("keyup", "input", validate);
+      // $("#interviewPostFormContainer").on("keyup", "input", validate);
 
       $("#createdList").on('change', useOldEvent);
     }
@@ -82,23 +91,23 @@ var createRoomScreenManagement = (function($) {
       });
     }
 
-    function validate() {
-            console.log($(this).val());
-      var empty = false;
-        $('input').each(function() {
-            if ($(this).val() == '') {
-                empty = true;
-            }
-        });
+    // function validate() {
+    //         console.log($(this).val());
+    //   var empty = false;
+    //     $('input').each(function() {
+    //         if ($(this).val() == '') {
+    //             empty = true;
+    //         }
+    //     });
 
-        if (empty) {
-            $('#preview').attr('disabled', 'disabled'); 
-            $('#preview').addClass('disabled'); 
-        } else {
-            $('#preview').removeAttr('disabled'); 
-            $('#preview').removeClass('disabled'); 
-        }
-    }
+    //     if (empty) {
+    //         $('#preview').attr('disabled', 'disabled'); 
+    //         $('#preview').addClass('disabled'); 
+    //     } else {
+    //         $('#preview').removeAttr('disabled'); 
+    //         $('#preview').removeClass('disabled'); 
+    //     }
+    // }
 
     function useOldEvent() {
       var opendayId = $(this).val()
@@ -201,6 +210,21 @@ var createRoomScreenManagement = (function($) {
       $(this).parent().parent().parent().parent().remove();
     }
 
+    function validate(data, roomNumber) 
+    {   
+        var valid = true;
+        $.each(FORM_REQUIRED_FIELDS, function(i, field){
+            if(data[field] == "" || data[field] == undefined || data[field] == 0) {
+              $("#" + field + "-required-" + roomNumber).fadeIn();
+              valid = false;
+            }
+            else {
+               $("#" + field + "-required-" + roomNumber).fadeOut();
+            }
+        });
+
+        return valid;
+    }
 
     function preview() {
       // $(".room-form").fadeOut();
@@ -229,7 +253,9 @@ var createRoomScreenManagement = (function($) {
           "in_charge_name": in_charge_name
         };
 
-        
+        if(!validate(data, i)) {
+          return false;
+        }
 
         dataStore.push(data);
 

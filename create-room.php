@@ -55,7 +55,7 @@
 								<button id="cancel" class="hvr-underline-reveal">cancel</button>
 							</li>
 							<li>
-								<button id="preview" disabled="true" class="hvr-underline-reveal disabled">preview</button>
+								<button id="preview" class="hvr-underline-reveal">preview</button>
 								<button id="continue" style="display:none;" class="hvr-underline-reveal">Continue</button>
 								<button id="submit" style="display:none;" class="hvr-underline-reveal">Checkout and Publish</button>
 							</li>

@@ -159,6 +159,7 @@ var candidateScreenManagement = (function($) {
 
     function activateScheduledUnderscoreTemplate(schedule) {
        
+       console.log(schedule);
         getTemplate('scheduled.html', function(render) {
                         var renderedhtml = render({data:schedule});
                         $("#candidate-interview").fadeOut();

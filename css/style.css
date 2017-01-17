@@ -83,6 +83,19 @@ body.inside {
     background: #e0e0e0;
 }
 
+.room-form li {
+  position:relative;
+}
+
+.required-tag { font-size: 11px !important;
+    font-size: 11px !important;
+    position: absolute;
+    top: 25px;
+    color: #a94442 !important;
+    left: 0px;
+    display: none;
+  }
+
 .main_preloader{
     float: left;
     position: fixed;
@@ -6822,11 +6835,13 @@ body.front {
 .online { color: #83c954 !important; }
 
 
+
 /* employer landing page ends here */
 
 }
 
 /************************************************* tabs landscape ends here *********************************************************************/
+
 
 
 

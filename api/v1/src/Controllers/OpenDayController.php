@@ -95,7 +95,7 @@ class OpenDayController extends BaseController
      $startTime = date("H:i", strtotime($request->getParam('start_time')));
      $endTime = date("H:i", strtotime($request->getParam('end_time')));
 
-     $openday = $this->openDayService->update($args['openday_id'], $updateParams, $startTime, $endTime);
+     $openday = $this->openDayResource->update($args['openday_id'], $updateParams, $startTime, $endTime);
 
      return $response->withStatus(200)->withJson($openday);
    }

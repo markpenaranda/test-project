@@ -2,7 +2,11 @@
   <div class="col-lg-6 col-sm-6 col-xs-12">
     <li>
       <p>Event Name</p>
-      <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name">
+      <span>
+      <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name"><br>
+        
+      </span>
+      <p id="event_name-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event name is required</p>
     </li>
     <li>
       <p>Date</p>
@@ -10,10 +14,12 @@
       <div class="col-lg-1">
         <a class="openday_add_more_btn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
       </div>
+            <p id="event_date-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event date is required</p>
     </li>
     <li>
       <p>Time Interval Per Candidate</p>
       <input data-validation="number" type="text" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
+      <p id="time_interval_per_candidate-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Time Interval per candidate is required</p>
     </li>
     <li>
       <p>Link to Job Post's </p>

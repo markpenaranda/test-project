@@ -11,7 +11,7 @@
 	</li>
 	<li>
 		<h1><%= moment(openday.event_date + " " + schedule.schedule_time_start).format("hh:mmA") %> - <%= moment(openday.event_date + " " + schedule.schedule_time_end).format("hh:mmA") %></h1>
-		<h1>Candidate No. : 002</h1>
+		<h1>Candidate No. : <%= schedule.candidate_number %></h1>
 	</li>
 	<li>
 		<h2>

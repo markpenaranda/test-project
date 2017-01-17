@@ -38,11 +38,11 @@ class OpenDay
 
       $sqlInsert = "
           INSERT INTO i_openday (
+            `introduction`,
             `openday_id`,
             `event_name`,
             `event_date`,
             `time_interval_per_candidate`,
-            `introduction`,
             `in_charge_user_id`,
             `rate_per_hour`,
             `created_by_user_id`,
@@ -52,11 +52,11 @@ class OpenDay
             `page_id`
           )
           VALUES (
+            :introduction,
              '". $inputArray['openday_id'] ."',
             '". $inputArray['event_name'] ."',
             '". $inputArray['event_date'] ."',
             '". $inputArray['time_interval_per_candidate'] ."',
-            '". $inputArray['introduction'] ."',
             '". $inputArray['in_charge_user_id'] ."',
             '". $inputArray['rate_per_hour'] ."',
             '". $inputArray['created_by_user_id'] ."',
@@ -69,6 +69,7 @@ class OpenDay
         ";
 
      $opendayInsertStatement  = $this->db->prepare($sqlInsert);
+     $opendayInsertStatement->bindValue(':introduction', $inputArray['introduction']);
 
      // Time Breakdown
      $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
@@ -241,13 +242,23 @@ class OpenDay
      $isScheduled = (boolean) $timeBreakdownId;
      $timeStart = date("H:i:s", strtotime($timeStart));
      $timeEnd = date("H:i:s", strtotime($timeEnd));
+     $timeBreakdown = ($isScheduled) ? $this->getTimeBreakdown($timeBreakdownId) : null;
+
+     if($isScheduled) {
+        $candidate_no = $timeBreakdown['designated_candidate_number'];
+     }
+     else {
+        $candidate_no = $this->getWaitingListNumber($opendayId);
+     }
   
      $this->db->beginTransaction();
      try {
+
       
         $sql = "
           INSERT INTO i_openday_attendees (
             `openday_id`,
+            `candidate_number`,
             `user_id`,
             `cover_letter`,
             `is_scheduled`,
@@ -260,6 +271,7 @@ class OpenDay
           )
           VALUES (
             '$opendayId',
+            '$candidate_no',
             '$userId',
             '$coverLetter',
             '$isScheduled',
@@ -421,6 +433,43 @@ class OpenDay
       return $e;
     }
 
+  }
+
+  public function getWaitingListNumber($opendayId)
+  {
+    $timeBreakDownSql = "
+      SELECT designated_candidate_number FROM i_openday_time_breakdown 
+      WHERE openday_id = '$openday_id'
+      ORDER BY designated_candidate_number DESC
+      LIMIT 1
+    ";
+
+    $attendeesSql = "
+      SELECT COUNT(*) AS attendees FROM i_openday_attendees 
+      WHERE is_scheduled = 0
+      AND openday_id = '$openday_id'
+    ";
+
+    try {
+      $statement = $this->db->prepare($timeBreakDownSql);
+      $statement->execute();
+      $timeBreakdown = $statement->fetch();
+
+      $attendeeStatement = $this->db->prepare($attendeesSql);
+      $attendeeStatement->execute();
+      $attendees = $attendeeStatement->fetch();
+
+      $numberOfUnScheduledAttendees = $attendees['attendees'];
+      $lastScheduledCandidateNumber = $timeBreakdown['designated_candidate_number'];
+
+      $currentCandidate = (int) $numberOfUnScheduledAttendees + (int) $lastScheduledCandidateNumber;
+
+      return $currentCandidate + 1;
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
   }
 
 
@@ -675,12 +724,15 @@ class OpenDay
         $range['end'],
         $timeInterval
       );
+      $candidate_no = 1;
       foreach ($timeBreakDown as $segment) {
         array_push($data, [
           'openday_id' => $opendayId,
           'time_start' => $segment['start'],
-          'time_end' => $segment['end']
+          'time_end' => $segment['end'],
+          'designated_candidate_number' => $candidate_no
         ]);
+        $candidate_no++;
         }
       }
       return $data;   
@@ -744,6 +796,17 @@ class OpenDay
       return $e;
     }
   }
+
+  private function calculateCandidateNo($opendayId, $isScheduled)
+  {
+    if($isScheduled) {
+      $sql = "
+        SELECT @rn:=@rn+1 AS candidate_no, openday_id, `user_id`
+        FROM (SELECT * FROM i_openday_attendees WHERE openday_id = '587c12ae') t1, (SELECT @rn:=0) t2;
+
+      ";
+    }
+  } 
 
 
 
