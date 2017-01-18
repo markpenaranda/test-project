@@ -161,7 +161,7 @@ var candidateScreenManagement = (function($) {
        
        console.log(schedule);
         getTemplate('scheduled.html', function(render) {
-                        var renderedhtml = render({data:schedule});
+                        var renderedhtml = render({data:schedule, openday: openday});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
