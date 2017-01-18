@@ -92,10 +92,10 @@ class OpenDayController extends BaseController
         'rate_per_hour' => $request->getParam('rate_per_hour')
       );
 
-     $startTime = date("H:i", strtotime($request->getParam('start_time')));
-     $endTime = date("H:i", strtotime($request->getParam('end_time')));
+      $jobs      = $request->getParam('jobs');
+      $timeRange = $request->getParam("timerange");
 
-     $openday = $this->openDayResource->update($args['openday_id'], $updateParams, $startTime, $endTime);
+      $openday = $this->openDayResource->update($createParams, $timeRange, $jobs);
 
      return $response->withStatus(200)->withJson($openday);
    }

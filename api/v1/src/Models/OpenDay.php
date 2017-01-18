@@ -538,6 +538,135 @@ class OpenDay
 
   }
 
+  public function update($inputArray, $timeRange, $jobs)
+  {
+    $page = $this->getUserPageId($inputArray['created_by_user_id']);
+    $this->db->beginTransaction();
+    try {
+
+      $inputArray['openday_id'] = substr(uniqid(), 0, 8);
+      $inputArray['event_date'] = date("Y-m-d", strtotime($inputArray['event_date']));
+      $inputArray['rate_per_hour'] = $this->currentRatePerHour;
+      $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate']) * $this->currentRatePerHour;
+      $inputArray['date_created'] = date('Y-m-d H:i:s');
+      $inputArray['date_updated'] = date('Y-m-d H:i:s');
+      $inputArray['page_id'] = $page['page_id'];
+      $timeInterval = $inputArray['time_interval_per_candidate'];
+
+      $sqlInsert = "
+          INSERT INTO i_openday (
+            `introduction`,
+            `openday_id`,
+            `event_name`,
+            `event_date`,
+            `time_interval_per_candidate`,
+            `in_charge_user_id`,
+            `rate_per_hour`,
+            `created_by_user_id`,
+            `amount`,
+            `date_created`,
+            `date_updated`,
+            `page_id`
+          )
+          VALUES (
+            :introduction,
+             '". $inputArray['openday_id'] ."',
+            '". $inputArray['event_name'] ."',
+            '". $inputArray['event_date'] ."',
+            '". $inputArray['time_interval_per_candidate'] ."',
+            '". $inputArray['in_charge_user_id'] ."',
+            '". $inputArray['rate_per_hour'] ."',
+            '". $inputArray['created_by_user_id'] ."',
+            '". $inputArray['amount'] ."',
+            '". $inputArray['date_created'] ."',
+            '". $inputArray['date_updated'] ."',
+            '". $inputArray['page_id'] ."'
+           
+          )
+        ";
+
+     $opendayInsertStatement  = $this->db->prepare($sqlInsert);
+     $opendayInsertStatement->bindValue(':introduction', $inputArray['introduction']);
+
+     // Time Breakdown
+     $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
+   
+    $timeBreakDownRowsSQL = array();
+    $timeBreakDownToBind = array();
+    $timeBreakDownColumnNames = array_keys($timeBreakDownData[0]);
+    foreach($timeBreakDownData as $arrayIndex => $row){
+        $params = array();
+        foreach($row as $columnName => $columnValue){
+            $param = ":" . $columnName . $arrayIndex;
+            $params[] = $param;
+            $timeBreakDownToBind[$param] = $columnValue; 
+        }
+        $timeBreakDownRowsSQL[] = "(" . implode(", ", $params) . ")";
+    }
+    $timeBreakDownSql = "INSERT INTO i_openday_time_breakdown (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsSQL);
+  
+    $opendayTimeBreakDownStatement = $this->db->prepare($timeBreakDownSql);
+    foreach($timeBreakDownToBind as $param => $val){
+        $opendayTimeBreakDownStatement->bindValue($param, $val);
+    }
+     // Openday Link Jobs
+     $jobsData = $this->buildJobsData($jobs, $inputArray['openday_id']);
+
+     $jobsRowsSQL = array();
+    $jobsToBind = array();
+    $jobsColumnNames = array_keys($jobsData[0]);
+    foreach($jobsData as $arrayIndex => $row){
+        $params = array();
+        foreach($row as $columnName => $columnValue){
+            $param = ":" . $columnName . $arrayIndex;
+            $params[] = $param;
+            $jobsToBind[$param] = $columnValue; 
+        }
+        $jobsRowsSQL[] = "(" . implode(", ", $params) . ")";
+    }
+    $jobsSql = "INSERT INTO i_openday_link_job (" . implode(", ", $jobsColumnNames) . ") VALUES " . implode(", ", $jobsRowsSQL);
+    $opendayJobsStatement = $this->db->prepare($jobsSql);
+    foreach($jobsToBind as $param => $val){
+        $opendayJobsStatement->bindValue($param, $val);
+    }
+
+     
+     // Openday Time
+     $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id']);
+     $opendayTimeInsertSql = "
+          INSERT INTO i_openday_time (
+            `openday_id`,
+            `start_time`,
+            `end_time`
+          )
+          VALUES (
+            '". $timeData['openday_id']  ."',
+            '". $timeData['start_time'] ."',
+            '". $timeData['end_time'] ."'
+          )
+        ";
+
+    $opendayTimeStatement = $this->db->prepare($opendayTimeInsertSql);
+
+    
+
+
+     $opendayInsertStatement->execute();
+     $opendayTimeBreakDownStatement->execute();
+     $opendayJobsStatement->execute();
+     $opendayTimeStatement->execute();
+
+      $this->db->commit();
+
+      return $inputArray['openday_id'];
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+      return false;
+    }
+  }
+
+
   public function stopQueue($opendayId)
   {
     $sql = "
