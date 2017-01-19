@@ -277,4 +277,26 @@ class OpenDayController extends BaseController
 
    }
 
+   public function getCurrentlyInterviewed($request, $response, $args)
+   {
+      $opendayId = $args['openday_id'];
+      $candidate = $this->openDayResource->getCurrentlyInterviewedCandidate($opendayId);
+
+      return $response->withStatus(200)->withJson($candidate);
+
+   }
+
+   public function waitingModeInfo($request, $response, $args)
+   {
+      $opendayId = $args['openday_id'];
+      $item = [
+          'currently_interviewed' => $this->openDayResource->getCurrentlyInterviewedCandidate($opendayId),
+          'total_waiting_list' => $this->openDayResource->countWaitingList($opendayId)
+      ];
+
+      return $response->withStatus(200)->withJson($item);
+
+
+   }
+
 }

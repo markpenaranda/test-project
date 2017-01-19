@@ -49,6 +49,7 @@ var candidateScreenManagement = (function($) {
                 onInterview = false;
                 activateEndUnderscoreTemplate();
              }
+
         }
 
         });
@@ -79,6 +80,19 @@ var candidateScreenManagement = (function($) {
                 $(".companyName").html(openday.page_name);
             });
         });
+    }
+
+    function updateCurrentlyInterviewedCandidate() {
+      $.get(apiUrl + '/openday/' + getCurrentRoom() + '/currently-interviewed', function (res) {
+        var candidateNumber = res['candidate_number'];
+        if(candidateNumber) {
+        console.log(candidateNumber);
+          $(".ongoing-interview-number").html(candidateNumber);
+          $("#waitingDiv > .ongoing-interview-number-section").fadeIn();
+        }
+
+      });
+
     }
 
     function getCurrentUser() {
@@ -131,6 +145,8 @@ var candidateScreenManagement = (function($) {
                 activateJoinUnderscoreTemplate(schedule);
             }
 
+           updateCurrentlyInterviewedCandidate();
+
           });
      
     }
@@ -158,13 +174,16 @@ var candidateScreenManagement = (function($) {
     }
 
     function activateScheduledUnderscoreTemplate(schedule) {
-       
-       console.log(schedule);
+       $.get(apiUrl + '/openday/' + getCurrentRoom() + '/waiting-mode', function (res) {
+        var currentlyInterviewed = res['currently_interviewed']['candidate_number'];
+        var waitingListCount = res['total_waiting_list'];
         getTemplate('scheduled.html', function(render) {
-                        var renderedhtml = render({data:schedule, openday: openday});
+                        var renderedhtml = render({data:schedule, openday: openday, waitingListCount: waitingListCount,current_interview: currentlyInterviewed});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
+
+      });
     }
 
     function activateJoinUnderscoreTemplate(schedule) {

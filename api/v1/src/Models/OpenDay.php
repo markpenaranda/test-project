@@ -777,7 +777,9 @@ class OpenDay
     $sql = "
       SELECT * FROM i_openday as openday 
       JOIN i_openday_time as o_time on o_time.openday_id = openday.openday_id
-      WHERE o_time.start_time <= NOW() and openday.event_date = CURDATE()
+      WHERE o_time.start_time <= CURTIME() 
+      AND openday.event_date = CURDATE()
+    
     ";
 
      try {
@@ -795,6 +797,53 @@ class OpenDay
       return $e;
     }
 
+
+  }
+
+  public function getCurrentlyInterviewedCandidate($opendayId)
+  {
+      $sql = "
+        SELECT candidate_number FROM i_openday_attendees
+        WHERE openday_id = '$opendayId'
+        AND status = 0
+        LIMIT 1
+      "; 
+
+    try {
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+
+      return $schedule;
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
+
+  }
+
+  public function countWaitingList($opendayId) 
+  {
+    $sql = "
+      SELECT COUNT(*) as waiting_list_count 
+      FROM i_openday_attendees
+      WHERE status = 1
+      AND is_scheduled = 0
+      AND openday_id = '$opendayId'
+    ";
+
+     try {
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+
+      return $schedule['waiting_list_count'];
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
 
   }
   // Private Functions

@@ -26,6 +26,8 @@ $app->group('/openday', function(){
 	$this->group('/{openday_id}', function() {
 			$this->map(['GET'], '/candidates', 'OpenDayController:candidates');
 			$this->map(['GET'], '/schedule', 'OpenDayController:schedule');
+			$this->map(['GET'], '/currently-interviewed', 'OpenDayController:getCurrentlyInterviewed');
+			$this->map(['GET'], '/waiting-mode', 'OpenDayController:waitingModeInfo');
 			$this->map(['GET'], '/candidates-id', 'OpenDayController:getListOfCandidateId');
 			$this->map(['GET'], '/suggested', 'OpenDayController:suggestedUsers');
 			$this->map(['GET'], '', 'OpenDayController:show');
@@ -35,6 +37,7 @@ $app->group('/openday', function(){
 			$this->map(['POST'], '/end', 'OpenDayController:endInterview');
 			$this->map(['POST'], '/reject', 'OpenDayController:rejectCandidate');
 			$this->map(['PUT'], '', 'OpenDayController:update');
+
 		
 	});
 });
