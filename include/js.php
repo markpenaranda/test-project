@@ -23,7 +23,7 @@
 
 <!-- Footer Scripts
 ============================================= -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   window.liveServerUrl = "https://liveserver.herokuapp.com";
 </script>
 <script type="text/javascript" src="js/components/notify.js"></script>
@@ -32,4 +32,4 @@
 <script type="text/javascript" src="js/components/chat.js"></script>
 <script type="text/javascript" src="js/components/chatroom.js"></script>
 <script type="text/javascript" src="js/components/timer.js"></script>
-<script type="text/javascript" src="js/components/videocall.js"></script>
+<script type="text/javascript" src="js/components/videocall.js"></script> -->

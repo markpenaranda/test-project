@@ -1,7 +1,7 @@
 <li >
-  <div class="row time-range-pair-<%= room_number %> time-range-pair">
+  <div class="row time-range-pair-<%= room_number %> time-range-pair time-range-pair-<%= room_number %>-<%= time_count %>">
     <div class="col-lg-5">
-      <input type="text" name="timerange" class="time start" value="">
+      <input type="text" name="timerange" id="time-start-<%= time_count %>" class="time start" value="">
     </div>
     <div class="col-lg-1">
       <div class="row">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="col-lg-5">
-      <input type="text" name="timerange" class="time end" value="">
+      <input data-room="<%= room_number %>" data-timecount="<%= time_count %>" type="text" name="timerange" class="time end timerange-end" id="time-end-<%= time_count %>" value="">
     </div>
     <div class="col-lg-1">
       <div class="row">

@@ -17,8 +17,8 @@
             <p id="event_date-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event date is required</p>
     </li>
     <li>
-      <p>Time Interval Per Candidate</p>
-      <input data-validation="number" type="text" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
+      <p>Time Interval Per Candidate (minutes)</p>
+      <input data-validation="number" type="number" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
       <p id="time_interval_per_candidate-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Time Interval per candidate is required</p>
     </li>
     <li>
@@ -48,12 +48,12 @@
         </li>
       </ul>
     </li>
-    <li>
+<!--     <li>
       <p>Open Day Interview Link</p>
       <a href="#" class="intrvw_link_a">
         jobsglobal.com/events/xxxxxxxxx
       </a>
-    </li>
+    </li> -->
   </div>
   <div class="col-lg-6 col-sm-6 col-xs-12">
     <li>

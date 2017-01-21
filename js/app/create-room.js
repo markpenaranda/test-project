@@ -5,6 +5,7 @@ var createRoomScreenManagement = (function($) {
     var numberOfRooms = 0;
     var apiUrl = '/api/v1/public/index.php';
     var dataStore = [];
+    var numberOfTimeRange = 0;
 
     var FORM_REQUIRED_FIELDS = [
         "event_name",
@@ -55,6 +56,9 @@ var createRoomScreenManagement = (function($) {
       $("#interviewPostFormContainer").on('click', '.add-time-range', addTimeRange);
 
       $("#interviewPostFormContainer").on('click', '.remove-time-range', removeTimeRange);
+
+      $("#interviewPostFormContainer").on('change', '.timerange-end', reinitializeOtherTimeRange);
+
 
       $("#mainCreateRoomRow").on('click', '.edit-room-btn', backToTop);
 
@@ -132,7 +136,7 @@ var createRoomScreenManagement = (function($) {
               useSelect: true,
 
             });
-          $('.time-range-pair').datepair();
+          // $('.time-range-pair').datepair();
           $('.datepicker').datepicker();
           $('.ui-timepicker-select').addClass('col-lg-12');
           ++numberOfRooms;
@@ -174,8 +178,9 @@ var createRoomScreenManagement = (function($) {
 
 
     function addTimeRange() {
+      numberOfTimeRange += 1;
       getTemplate('partials/input-time-range.html', function (render) {
-        var html = render({ room_number: numberOfRooms - 1});
+        var html = render({ room_number: numberOfRooms - 1, time_count: numberOfTimeRange});
         var lastEndTime = $('.end').last().val();
 
         $("#timeRangeList").append(html);
@@ -185,13 +190,14 @@ var createRoomScreenManagement = (function($) {
         $("a.remove-time-range").last().css("display", "none");
         $("a.add-time-range").last().css("display", "block");
 
-        timePickerInit(lastEndTime);
+        timePickerInit(lastEndTime, numberOfRooms - 1, numberOfTimeRange);
         });
     }
 
-    function timePickerInit(lastEndTime) {
+    function timePickerInit(lastEndTime, room, timecount) {
       var disableRange = ['12am', lastEndTime];
-      $('.time-range-pair .time').timepicker({
+      console.log('.time-range-pair-' + room  +'-'+  timecount +' .time');
+      $('.time-range-pair-' + room  +'-'+  timecount +' .time').timepicker({
         showDuration: true,
         timeFormat: 'g:ia',
         disableTimeRanges: [disableRange]
@@ -203,6 +209,8 @@ var createRoomScreenManagement = (function($) {
         });
       $('.time-range-pair').datepair();
       $('.ui-timepicker-select').addClass('col-lg-12');
+
+      return $("#time-end-" + timecount).val();
 
     }
 
@@ -226,9 +234,23 @@ var createRoomScreenManagement = (function($) {
         return valid;
     }
 
+    function reinitializeOtherTimeRange() {
+      var room_triggered = $(this).data('room');
+      var timecount_triggered = $(this).data('timecount');
+      var timeEnd = $(this).val();
+      var counter = timecount_triggered + 1;
+      for(counter; counter <= numberOfTimeRange; counter++) {
+        console.log(counter);
+         $("#time-start-" + counter).val(timeEnd);
+         $("#time-end-" + counter).val(timeEnd);
+         timeEnd = timePickerInit(timeEnd, room_triggered, counter);
+       
+      }      
+    }
+
     function preview() {
       // $(".room-form").fadeOut();
-  
+      dataStore = [];
       for (var i = 0; i < numberOfRooms; i++) {
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
         var date = $("input[name='event\\["+ i +"\\]\\[\\'date\\'\\]").val();
@@ -277,7 +299,7 @@ var createRoomScreenManagement = (function($) {
     function proceedToCheckout() {
       $(".room-list").fadeOut();
       console.log(dataStore[0].timerange[0].start);
-      totalHours = 0;
+      var totalHours = 0;
       for(var x=0; x < dataStore.length; x++) {
         var data = dataStore[x];
         for(var y=0; y < data.timerange.length; y++) {
