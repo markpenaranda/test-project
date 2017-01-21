@@ -17,8 +17,35 @@ class OpenDay
   }
 
  
-  public function getCurrentRatePerHour() {
+  public function getCurrentRatePerHour() 
+  {
     return $this->currentRatePerHour;
+  }
+
+  public function getLatestEvents() 
+  {
+    $sql = "
+      SELECT * FROM i_openday
+      WHERE is_deleted = 0
+      ORDER BY date_created DESC
+      LIMIT 15
+    ";
+
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+
   }
 
   public function create($inputArray, $timeRange, $jobs)

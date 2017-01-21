@@ -29,9 +29,8 @@ class OpenDayController extends BaseController
 
    public function index($request, $response)
    {
-      $items = $this->openDayResource
-                    ->filter($request->getQueryParams())
-                    ->paginate($request->getQueryParam('page'));
+      $items = $this->openDayResource->getLatestEvents();
+                    
 
       return $response->withStatus(200)->withJson($items);
    }

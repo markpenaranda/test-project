@@ -52,6 +52,7 @@ var discoverJobsManagement = (function($) {
 
     function initialTemplate() {
       loadAccountInfo();
+      initialOpenday();
     }
 
 
@@ -63,6 +64,14 @@ var discoverJobsManagement = (function($) {
             $("#accountInfo").html(html);
           });
       });
+    }
+
+    function initialOpenday() {
+      $.get(apiUrl + '/openday', function(events) {
+        $("#resultsContainer").fadeIn();
+        loadResults(events);
+      });
+
     }
 
     function searchEvent() {
