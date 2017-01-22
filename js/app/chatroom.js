@@ -21,12 +21,15 @@ var candidateScreenManagement = (function($) {
         addEventHandlers();
         loadLiveOpenday(function(results) {
           var opendayId = $("#roomId").val();
+          console.log(opendayId);
           if(opendayId == "") {
+            console.log(results[0].openday_id) 
             $("#roomId").val(results[0].openday_id);
+            window.reinitiateSocket(results[0].openday_id);
           }
-          loadCandidateQueue();
-          renderNecessaryTemplate();
-          socketIOEventHandlers();
+            loadCandidateQueue();
+            renderNecessaryTemplate();
+            socketIOEventHandlers();
           
         });
        
@@ -272,7 +275,7 @@ var candidateScreenManagement = (function($) {
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
         }
-        var link = location.origin + "/candidate.php";
+        var link = location.origin + "/interview.php?openday=" + roomId;
         $.post(apiUrl + '/openday/' + roomId + '/reject', { user_id: userId }, function(res) {
            $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "reject", message: message, link: link}, function (data){
               removeCandidate(userId);
@@ -291,7 +294,7 @@ var candidateScreenManagement = (function($) {
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
         }
-        var link = location.origin + "/candidate.php";
+        var link = location.origin + "/interview.php?openday=" + roomId;
         $.post(apiUrl + '/openday/' + roomId + '/end', { user_id: userId }, function(res){
           
           $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
@@ -333,12 +336,16 @@ var candidateScreenManagement = (function($) {
 
       $("#end-" + currentApplicant).show();
 
-      // TODO: add ajax to get the currentApplicant user details and as well as the candidate number.
-      var user = { id: currentApplicant, name: 'John Doe' };
-      getTemplate('live_candidate_details.html', function(render) {
-           var renderedhtml = render({user: user, room_id: getCurrentRoom(), candidate_no: '001'});
-           $("#liveCandidateDetails").append(renderedhtml);
-       });
+      $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + currentApplicant, function(res){
+        var user = { id: res.user_id, name: res.name, candidate_no:res.candidate_number  };
+        $("#spanCandidateNumber").html("Candidate" + res.candidate_number + ": ");
+        $("#spanCandidateName").html(res.name);
+        getTemplate('live_candidate_details.html', function(render) {
+             var renderedhtml = render({user: user, room_id: getCurrentRoom()});
+             $("#liveCandidateDetails").append(renderedhtml);
+         });
+      });
+
 
       // WebRTC
     	navigator.getUserMedia({video: true, audio: true}, function(stream) {

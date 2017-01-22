@@ -18,6 +18,23 @@ $(document).ready(function(){
          }
     });
 
+    window.reinitiateSocket = function (roomId) {
+        socket.on('chatroom-' + roomId, function(msg){
+
+            console.log(msg);
+            if(msg.user_id != userId) {
+                message = new Message({
+                    text: msg.message,
+                    message_side: 'left'
+                });
+                 $messages = $('.messages');
+                 message.draw();
+                 $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
+
+             }
+        });
+    }
+
 	var Message;
     Message = function (arg) {
         this.text = arg.text, this.message_side = arg.message_side;

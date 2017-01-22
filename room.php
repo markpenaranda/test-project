@@ -5,7 +5,7 @@
 	<body class="inside">
 		<!-- MUST DECLARE HERE THE FF -->
 		<!--  ROOM ID -->
-		<input type="hidden" id="roomId" value="<?php echo $GET['openday']; ?>">
+		<input type="hidden" id="roomId" value="<?php echo isset($_GET['openday']) ? $_GET['openday'] : ''; ?>">
 		<!-- Current User/Admin Id -->
 		<input type="hidden" id="userId" value="05582c0b47a4aab16bcd">
 		<!-- Applicant Id -->
@@ -34,7 +34,7 @@
 						<div class="openday_interview_green_wrapper">
 							<div class="row">
 								<div class="col-lg-12 col-sm-12 col-xs-12">
-									<h1 class="opnday_candidate_name">Candidate 001 : John Doe</h1>
+									<h1 class="opnday_candidate_name"><span id="spanCandidateNumber"></span>  <span id="spanCandidateName"></span></h1>
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div style="margin-top: 5px; width: 100%; height: 280px; position: relative; background-color: black;">
