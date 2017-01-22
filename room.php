@@ -5,7 +5,7 @@
 	<body class="inside">
 		<!-- MUST DECLARE HERE THE FF -->
 		<!--  ROOM ID -->
-		<input type="hidden" id="roomId" value="">
+		<input type="hidden" id="roomId" value="<?php echo $GET['openday']; ?>">
 		<!-- Current User/Admin Id -->
 		<input type="hidden" id="userId" value="05582c0b47a4aab16bcd">
 		<!-- Applicant Id -->

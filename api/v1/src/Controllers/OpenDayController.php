@@ -157,8 +157,13 @@ class OpenDayController extends BaseController
       $status = $request->getParam("status");
       $userId = $request->getParam("user_id");
 
-
-      $items = $this->openDayResource->getOpendayByAttendeeUserId($userId, $status);
+      if($status == 'active') {
+        $items = $this->openDayResource->getActiveOpendayByAttendeeUSerId($userId);
+      }
+      else {
+        $items = $this->openDayResource->getEndOpendayByAttendeeUSerId($userId, $status);
+        
+      }
 
       return $response->withStatus(200)->withJson($items);
 

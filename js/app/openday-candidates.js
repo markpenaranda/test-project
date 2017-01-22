@@ -97,6 +97,7 @@ var opendayCandidatesScreenManagement = (function($) {
                   
                  personal_info = JSON.parse(res[i].personal_info);
                  schedule = res[i];
+                 time = schedule;
                  loadCandidateItem(schedule, personal_info);
               }
         });

@@ -345,6 +345,61 @@ class OpenDay
      }    
   }
 
+  public function getActiveOpendayByAttendeeUSerId($userId)
+  {
+     $sql = "
+      SELECT * FROM i_openday_attendees as attendees
+      JOIN i_openday as openday on openday.openday_id = attendees.openday_id
+      JOIN i_page as page on page.page_id = openday.page_id
+      JOIN i_openday_time as time on openday.openday_id = time.openday_id
+      WHERE attendees.user_id = '$userId'
+      AND openday.event_date >= CURDATE()
+      ORDER BY event_date ASC
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
+
+  public function getEndOpendayByAttendeeUSerId($userId)
+  {
+     $sql = "
+      SELECT * FROM i_openday_attendees as attendees
+      JOIN i_openday as openday on openday.openday_id = attendees.openday_id
+      JOIN i_page as page on page.page_id = openday.page_id
+      JOIN i_openday_time as time on openday.openday_id = time.openday_id
+      WHERE attendees.user_id = '$userId'
+      AND openday.event_date < CURDATE()
+      ORDER BY event_date DESC
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
+
+
   public function getOpendayByAttendeeUserId($userId, $status) 
   {
     $sql = "
