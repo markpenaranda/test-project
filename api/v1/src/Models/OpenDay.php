@@ -530,6 +530,29 @@ class OpenDay
     }
   }
 
+  public function checkIfAlreadySubmittedApplication ($opendayId, $userId) 
+  {
+    $sql = "
+      SELECT COUNT(*) AS attendance FROM i_openday_attendees
+      WHERE user_id = '$userId' 
+      AND openday_id='$opendayId'
+      LIMIT 1
+    ";
+
+    try {
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+
+      return (boolean) $schedule['attendance'];
+
+    }
+    catch(PDOException $e) {
+      return $e;
+    }
+
+  }
+
   public function rejectCandidate($opendayId, $userId)
   {
     $updateAttendeeSql = "

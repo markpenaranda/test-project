@@ -37,10 +37,22 @@ class OpenDayController extends BaseController
 
    public function show($request, $response, $args)
    {
+
       $item = $this->openDayResource->getById($args['openday_id']);
       if($item) {
         $item['time_breakdown'] = $this->openDayResource->getTimeBreakDownByOpendayId($item['openday_id']);
         $item['jobs'] = $this->openDayResource->getJobsByOpendayId($item['openday_id']);
+
+        $userId = $request->getParam('user_id');
+        if($userId) {
+
+          $item['applied'] = $this->openDayResource->checkIfAlreadySubmittedApplication($args['openday_id'], $userId);
+          $item['schedule'] = [];
+          if($item['applied']) {
+            $item['schedule'] =  $this->openDayResource->getSchedule($args['openday_id'], $userId);
+          }
+
+        }
 
         return $response->withStatus(200)->withJson($item);
       }
@@ -296,6 +308,17 @@ class OpenDayController extends BaseController
 
       return $response->withStatus(200)->withJson($item);
 
+
+   }
+
+   public function checkIfJoined($request, $response, $args)
+   {
+      $userId = $request->getParam('user_id');
+      $opendayId = $args['openday_id'];
+
+      $checkIfAttended = $this->openDayResource->checkIfAlreadySubmittedApplication($opendayId, $userId);
+
+      return $response->withStatus(200)->withJson($checkIfAttended);
 
    }
 

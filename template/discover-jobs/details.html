@@ -44,6 +44,8 @@
       </ul>
     </div>
   </div>
+
+  <% if(!applied) { %>
   <div class="row">
     <div class="col-sm-12">
       <h3 class="jg-bold jg-disabled">Available Schedule</h3>
@@ -61,14 +63,27 @@
       </div>
     </div>
   </div>
-
+  <% } else { %>
+  <div class="row">
+    <div style="min-height: 200px;" class="col-sm-12">
+        <p class="centered-info">
+            You've applied for this event.<br>
+            <% if(schedule.is_scheduled) { %>
+            
+              <i class="fa fa-calendar"></i> Your Online Interview is scheduled on:<br> <%= moment(schedule.event_date).format("MMM DD YYYY") %> <%= moment(schedule.event_date + " " + schedule.schedule_time_start).format("hh:mmA") %>-<%= moment(schedule.event_date + " " + schedule.schedule_time_end).format("hh:mmA") %>
+            
+            <% } %>
+        </p>
+    </div>
+  </div>
+  <% } %>
 
     <div class="modal fade" id="joinModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><%= data.event_name %></h4>
+            <h4 class="modal-title">Join <%= data.event_name %></h4>
           </div>
           <div class="modal-body">
             <div class="row">

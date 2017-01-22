@@ -135,19 +135,22 @@ var discoverJobsManagement = (function($) {
 
     function loadDetails(id) {
 
-      $.get(apiUrl + "/openday/" + id, function(res){
+      $.get(apiUrl + "/openday/" + id + "?user_id=" + getCurrentUserId(), function(res){
         console.log(res);
         var created = moment(res.date_created).fromNow();
         var event_date = moment(res.event_date).format("MMMM D YYYY");
          var start_time = moment("2013-02-08 " + res.start_time).format("hh:mmA");
          var end_time = moment("2013-02-08 " + res.end_time).format("hh:mmA");
         // console.log(created);
+
         getTemplate("details.html", function(render){
           var html = render({ user: accountInfo,
                               data: res, created_at: created, 
                               event_date: event_date, 
                               start_time:  start_time,
-                              end_time: end_time
+                              end_time: end_time,
+                              applied: res.applied,
+                              schedule: res.schedule
                           });
           $("#resultDetails").html(html);
         });
@@ -213,14 +216,7 @@ var discoverJobsManagement = (function($) {
 
     function closeJoinModal() {
       console.log('hre');
-       $.get(apiUrl + "/openday/" + selectedOpendayId, function(res){
-
-        getTemplate("details.html", function(render){
-          var html = render({ data: res });
-          $("#resultDetails").html(html);
-
-        });
-      });
+      loadDetails(selectedOpendayId);
 
 
     }
