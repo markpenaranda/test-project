@@ -86,7 +86,7 @@ var opendayCandidatesScreenManagement = (function($) {
         
          $("#candidateList").html("");
         $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=1', function(res){
-            console.log(res);
+            
             if(res.length > 0) {
                 $(".no-results").fadeOut();
             }
@@ -95,14 +95,19 @@ var opendayCandidatesScreenManagement = (function($) {
             }
               for (var i = 0; i < res.length; i++) {
                   
-                  result = JSON.parse(res[i].personal_info);
-                  time = res[i];
-                  getTemplate("item.html", function(render){
-                    var html = render({ data: result, time: time });
-                    $("#candidateList").append(html);
-                  });
+                 personal_info = JSON.parse(res[i].personal_info);
+                 schedule = res[i];
+                 loadCandidateItem(schedule, personal_info);
               }
         });
+    }
+
+    function loadCandidateItem(schedule, personal_info) {
+
+          getTemplate("item.html", function(render){
+            var html = render({ data: personal_info, time: schedule });
+            $("#candidateList").append(html);
+          });
     }
 
 

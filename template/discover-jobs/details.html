@@ -2,7 +2,7 @@
   <h1 class="jg-script-text jg-green">Join to <%= data.event_name %></h1>
   <div class="row jg-border-btm jg-btm-indent jg-mar-btm">
     <div class="col-sm-8 jg-btm-indent">
-      <h3 class="jg-no-margin jg-orange"><%= data.page_name %> - Dubai, UAE</h3>
+      <h3 class="jg-no-margin jg-orange"><%= data.page_name %> - <%= data.country_nicename %></h3>
       <p class="jg-bold jg-mar-top jg-grey">Posted : <%=  created_at %></p>
       <!-- <p class="jg-bold ">Salary: 		12,000 AED</p> -->
       <p class="jg-bold ">Valid Until: 	<%= event_date %>| <%= start_time %> - <%= end_time %> </p>
@@ -36,7 +36,7 @@
   </div>
   <div class="row jg-btm-indent jg-border-btm">
     <div class="col-sm-12">
-      <h3 class="jg-bold">Job Positions - Fulltime</h3>
+      <h3 class="jg-bold">Job Positions - <%= data.employment_type %></h3>
       <ul class="jg-job-positions jg-bold">
         <% _.each(data.jobs, function(i) { %> 
         <li class="clearfix"><span class="jg-mar-btm jg-mar-top"><%= i.job_title %></span><a href="#" class="jg-btn-plain pull-right jg-normal jg-underline">View Job Details</a></li>

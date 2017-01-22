@@ -262,13 +262,14 @@ var createRoomScreenManagement = (function($) {
         var jobNames = $("select[name^='jobs["+ i  +"]']").map(function(){  var item = JSON.parse($(this).val()); return item.name;}).get();
         var timerange = $(".time-range-pair-" + i).map(function(){return {"start" : $(this).find(".start").val(), "end" : $(this).find(".end").val()} }).get();
         var introduction = $("textarea[name='event\\["+ i +"\\]\\[\\'introduction\\'\\]").val();
+     
         var data = {
           "event_name": name,
           "event_date": date,
           "time_interval_per_candidate": interval,
           "jobs": jobs,
           "jobNames": jobNames,
-          "job_type": job_type,
+          "employment_type_id": job_type,
           "timerange": timerange,
           "introduction": introduction,
           "in_charge_user_id": in_charge_user_id,

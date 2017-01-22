@@ -27,6 +27,7 @@ class OpenDay
     $sql = "
       SELECT * FROM i_openday
       WHERE is_deleted = 0
+      AND event_date >= CURDATE()
       ORDER BY date_created DESC
       LIMIT 15
     ";
@@ -76,7 +77,8 @@ class OpenDay
             `amount`,
             `date_created`,
             `date_updated`,
-            `page_id`
+            `page_id`,
+            `employment_type_id`
           )
           VALUES (
             :introduction,
@@ -90,7 +92,8 @@ class OpenDay
             '". $inputArray['amount'] ."',
             '". $inputArray['date_created'] ."',
             '". $inputArray['date_updated'] ."',
-            '". $inputArray['page_id'] ."'
+            '". $inputArray['page_id'] ."',
+            '". $inputArray['employment_type_id'] ."'
            
           )
         ";
@@ -181,10 +184,12 @@ class OpenDay
     try {
 
       $sql = "
-        SELECT openday.*, in_charge.name as in_charge_name, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time FROM i_openday as openday 
+        SELECT openday.*, in_charge.name as in_charge_name, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time, country.nicename as country_nicename, employment_type.employment_type_name as employment_type  FROM i_openday as openday 
         JOIN i_page as page on page.page_id = openday.page_id 
         JOIN i_openday_time as openday_time on openday_time.openday_id = openday.openday_id 
         JOIN i_users as in_charge on in_charge.user_id = openday.in_charge_user_id
+        JOIN i_country as country on country.country_id = page.country_id
+        JOIN i_employment_type as employment_type on employment_type.employment_type_id = openday.employment_type_id
         WHERE openday.openday_id = '$opendayId' limit 1;
       ";
       $statement = $this->db->prepare($sql);
@@ -238,7 +243,7 @@ class OpenDay
   {
     try {
       $sql = "
-        SELECT * FROM i_openday WHERE is_deleted='0' AND MATCH (event_name, introduction)
+        SELECT * FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
              AGAINST ('{$query}' IN BOOLEAN MODE)
       ";
 

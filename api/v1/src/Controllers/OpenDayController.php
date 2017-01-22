@@ -64,7 +64,8 @@ class OpenDayController extends BaseController
         'introduction' => $request->getParam('introduction'),
         'in_charge_user_id' => $request->getParam('in_charge_user_id'),
         'rate_per_hour' => $request->getParam('rate_per_hour'),
-        'created_by_user_id' => $request->getParam('created_by_user_id')
+        'created_by_user_id' => $request->getParam('created_by_user_id'),
+        'employment_type_id' => $request->getParam('employment_type_id')
       );
 
       $jobs      = $request->getParam('jobs');

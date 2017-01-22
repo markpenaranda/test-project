@@ -81,6 +81,7 @@ var discoverJobsManagement = (function($) {
       $.get(apiUrl + '/openday', function(events) {
         $("#resultsContainer").fadeIn();
         loadResults(events);
+         $(".loading-results").fadeOut();
       });
 
     }
@@ -88,7 +89,9 @@ var discoverJobsManagement = (function($) {
     function searchEvent(input) {
       $(".loading-results").fadeIn();
       var q = input.val();
-      console.log(q);
+      if(q.length == 0) {
+        initialOpenday();
+      }
       if (q.length >= 3 ) {
           if (searchRequest != null)
               searchRequest.abort();
@@ -108,13 +111,20 @@ var discoverJobsManagement = (function($) {
         $("#resultsUl").html('');
 
         for (var i = 0; i < results.length; i++) {
-          var result = results[i];
-          var event_date = moment(results[i].event_date).format("MMMM D YYYY");
-          getTemplate("results.html", function(render){
+        
+            loadResultItem(results[i]);
+         
+          
+        }
+    }
+
+    function loadResultItem(result) {
+       var event_date = moment(result.event_date).format("MMMM D YYYY");
+      getTemplate("results.html", function(render){
+             
             var html = render({ data: result, event_date: event_date });
             $("#resultsUl").append(html);
           });
-        }
     }
 
     function viewDetails() {
