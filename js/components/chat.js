@@ -35,6 +35,18 @@ $(document).ready(function(){
         });
     }
 
+    var currentDateTime = function () {
+        var currentdate = new Date(); 
+        var datetime = "Sent : " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+        return datetime;
+    }
+
 	var Message;
     Message = function (arg) {
         this.text = arg.text, this.message_side = arg.message_side;
@@ -48,6 +60,7 @@ $(document).ready(function(){
                     $message = $($('.message_template').clone().html());
                 }
                 $message.addClass(_this.message_side).find('.text').html(_this.text);
+                $message.find('.message_date_time').html(currentDateTime);
                 $('.messages').append($message);
                 return setTimeout(function () {
                     return $message.addClass('appeared');

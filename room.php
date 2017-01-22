@@ -62,7 +62,7 @@
 										<div class="col-lg-10 col-sm-10 col-xs-12">
 											<div class="row">
 												<p class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-												<h6>Sent Nov-2-2016 5:36 PM</h6>
+												<h6 class="message_date_time">Sent Nov-2-2016 5:36 PM</h6>
 											</div>
 										</div>
 										<div class="col-lg-2 col-sm-2 col-xs-12">
@@ -86,7 +86,7 @@
 										<div class="col-lg-10 col-sm-10 col-xs-12">
 											<div class="row">
 												<p class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-												<h6>Sent Nov-2-2016 5:36 PM</h6>
+												<h6 class="message_date_time">Sent Nov-2-2016 5:36 PM</h6>
 											</div>
 										</div>
 										
