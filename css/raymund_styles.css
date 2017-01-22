@@ -1668,7 +1668,7 @@ select {
 .jg-opendayonline-advancedsearch-container,
 .jg-opendayonline-resultdetails-profile {
     background: #fff;
-    border: 1px solid #ECECEC;
+    border: 1px solid #dedcdc;
     padding: 25px;
 }
 .jg-opendayonline-advancedsearch-container .jg-advancedsearch-form {
@@ -1743,7 +1743,7 @@ select {
 	font-size: 14px;
 }
 .jg-opendayonline-resultdetails-info {
-	border: 1px solid #797979;
+	border: 1px solid #dedcdc;
     padding: 25px;
 }
 .jg-timeslot {

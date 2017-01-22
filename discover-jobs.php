@@ -62,11 +62,13 @@
 
 									</ul>
 									<p class="jg-load-on-scroll jg-top-indent">
-										<span class="fa fa-rotate-right"></span>
+							<!-- 			<span class="fa fa-rotate-right"></span> -->
 									</p>
 								</div>
 								<div class="col-sm-9">
-										<div id="resultDetails" class="jg-opendayonline-resultdetails-info"></div>
+										<div style="min-height:500px;" id="resultDetails" class="jg-opendayonline-resultdetails-info">
+												<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View CV' to review candidates.</p>
+										</div>
 								</div>
 							</div>
 						</div>

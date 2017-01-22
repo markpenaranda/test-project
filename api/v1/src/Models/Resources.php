@@ -341,6 +341,32 @@ class Resources {
         }
     }
 
+    public function getKeyword($keyword) 
+    {
+
+        $whereClause = (!empty($keyword)) ? "WHERE keyword LIKE '%$keyword%' LIMIT 10" : null;
+
+        try {
+            $sql = "
+                SELECT
+                    keyword as id,
+                    keyword as value
+                FROM
+                    i_keyword
+                $whereClause
+            ";
+
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetchAll();
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
     
 
 

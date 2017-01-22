@@ -70,6 +70,8 @@ $app->group('/resources', function () {
 		});
 	});
 
+	$this->map(['GET'], '/keyword', 'ResourcesController:getKeyword');
+
 	$this->group('/filterjob', function() {
 		$this->map(['GET'] ,'', 'ResourcesController:getFilterJob');
 	});

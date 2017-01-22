@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="css/font-awesome/css/font-awesome.css" type="text/css" />
 <link rel="stylesheet" href="css/components/animate.css" type="text/css" />
 <link rel="stylesheet" href="css/components/bootstrap-datepicker.min.css" type="text/css" />
+<link rel="stylesheet" href="css/components/jquery.tag-editor.css" type="text/css" />
+<link rel="stylesheet" href="css/components/jquery-ui.min.css" type="text/css" />
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <link rel="stylesheet" href="css/raymund_styles.css" type="text/css" />
 

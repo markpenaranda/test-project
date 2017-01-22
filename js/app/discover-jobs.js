@@ -37,7 +37,7 @@ var discoverJobsManagement = (function($) {
     // Event Handler
     function addEventHandlers() {
 
-      $("#search").on('keyup', searchEvent);
+      // $("#search").on('keyup', searchEvent);
 
       $("#resultsUl").on('click', '.view-details', viewDetails);
 
@@ -47,6 +47,17 @@ var discoverJobsManagement = (function($) {
       // $("#resultDetails").on('click', '#closeJoinModal', closeJoinModal);
 
       $('#resultDetails').on('hidden.bs.modal', '#joinModal', closeJoinModal);
+
+    
+
+      $('#search').tagEditor({ 
+          delimiter: ',', /* space and comma */
+          autocomplete: { 'source': apiUrl + '/resources/keyword', delay: 1000 },
+          placeholder: 'Type your keywords and press enter',
+          // forceLowercase: false,
+          onChange: searchEvent
+      });
+
 
     }
 
@@ -74,9 +85,10 @@ var discoverJobsManagement = (function($) {
 
     }
 
-    function searchEvent() {
+    function searchEvent(input) {
       $(".loading-results").fadeIn();
-      var q = $(this).val();
+      var q = input.val();
+      console.log(q);
       if (q.length >= 3 ) {
           if (searchRequest != null)
               searchRequest.abort();

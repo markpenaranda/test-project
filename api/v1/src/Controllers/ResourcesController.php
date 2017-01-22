@@ -382,7 +382,8 @@ class ResourcesController {
 		return $response->withStatus(200)->withJson($output);
 	}
 
-    public function getFilterJob($request, $response, $args){
+    public function getFilterJob($request, $response, $args)
+    {
 
         $result = $this->resource->getFilterJob();
 
@@ -399,4 +400,26 @@ class ResourcesController {
 
         return $response->withStatus(200)->withJson($output);
     }
+
+    public function getKeyword($request, $response, $args) 
+    {
+
+    // $keyword = $this->commonFunction->cleanString($request->getParam('term'));
+    $keyword = $request->getParam('term');
+
+    $keyword = (!empty($keyword)) ? $keyword : NULL;
+
+    $result = $this->resource->getKeyword($keyword);
+
+    if(!empty($error)) {
+        return $response->withStatus(200)->withJson(array(
+            'success'   => false,
+            'data'      => $error,
+            'validation'=> false
+        ));
+    }
+
+    return $response->withStatus(200)->withJson($result);
+
+	}
 }
