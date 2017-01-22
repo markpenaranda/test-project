@@ -15,6 +15,7 @@ var myOpendayScreenManagement = (function($) {
     function init() {
         initialTemplate();
         addEventHandlers();
+        addSocketEvents();
     }
 
     // Get Template
@@ -38,6 +39,17 @@ var myOpendayScreenManagement = (function($) {
       $('#activeSelect').on('click', loadActiveOpenday);
       $('#endSelect').on('click', loadEndOpenday);
    
+    }
+
+    function addSocketEvents() {
+      window.socket.on("notifier-" + $("#userId").val(), function(data){
+
+        if(data.category == "candidate") {
+             loadActiveOpenday();
+
+        }
+
+        });
     }
 
     function initialTemplate() {

@@ -131,9 +131,14 @@ var opendayCandidatesScreenManagement = (function($) {
         if(!conf) return false;
         var userId = $(this).data('id');
         var opendayId = $("#opendayId").val();
-
+         var message = "Sorry your application has been rejected";
+         var link = location.origin + "/interview.php?openday=" + opendayId;
         $.post(apiUrl + '/openday/' + opendayId + '/reject', { user_id: userId }, function(res) {
             $("#candidate-" + userId).remove();
+            $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "reject", message: message, link: link}, function (data){
+           
+              $("#candidate-" + userId).remove();
+            });
         });
     }
 
