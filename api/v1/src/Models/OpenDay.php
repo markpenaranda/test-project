@@ -265,6 +265,7 @@ class OpenDay
     $opendayId, 
     $userId, 
     $coverLetter, 
+    $coverLetterTitle, 
     $timeBreakdownId, 
     $timeStart, 
     $timeEnd)
@@ -293,6 +294,7 @@ class OpenDay
             `candidate_number`,
             `user_id`,
             `cover_letter`,
+            `cover_letter_title`,
             `is_scheduled`,
             `schedule_time_start`,
             `schedule_time_end`,
@@ -306,6 +308,7 @@ class OpenDay
             '$candidate_no',
             '$userId',
             '$coverLetter',
+            '$coverLetterTitle',
             '$isScheduled',
             '$timeStart',
             '$timeEnd',
@@ -956,6 +959,30 @@ class OpenDay
       return $e;
     }
 
+  }
+
+  public function getCoverLetterByUserId($userId)
+  {
+      $sql = "
+        SELECT cover_letter, cover_letter_title
+        FROM i_openday_attendees
+        WHERE user_id = '$userId'
+        ";
+
+       try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+      }
+      catch(PDOException $e){
+        return $e;
+      }
   }
   // Private Functions
 

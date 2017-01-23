@@ -125,6 +125,7 @@ class OpenDayController extends BaseController
      $timeStart       = $request->getParam('time_start');
      $timeEnd         = $request->getParam('time_end');
      $coverLetter     = $request->getParam('cover_letter');
+     $coverLetterTitle     = $request->getParam('cover_letter_title');
 
      $openday = $this->openDayResource->getById($opendayId);
      if($openday['stopped_adding_queue']) {
@@ -135,7 +136,7 @@ class OpenDayController extends BaseController
      if($timeBreakdown['is_filled'] == 1) {
        return $response->withStatus(400);
      }
-     $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $timeBreakdownId, $timeStart, $timeEnd);
+     $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $coverLetterTitle, $timeBreakdownId, $timeStart, $timeEnd);
      if($result) {
        return $response->withStatus(200)->withJson($result);
      }
@@ -284,6 +285,8 @@ class OpenDayController extends BaseController
 
      $this->openDayResource->setInterviewing($opendayId, $userId);
 
+
+
    }
 
    public function getLiveOpenday($request, $response, $args) 
@@ -325,6 +328,15 @@ class OpenDayController extends BaseController
 
       return $response->withStatus(200)->withJson($checkIfAttended);
 
+   }
+
+   public function getUserCoverLetter($request, $response, $args)
+   {
+      $userId = $request->getParam('user_id');
+
+      $items = $this->openDayResource->getCoverLetterByUserId($userId);
+
+       return $response->withStatus(200)->withJson($items);
    }
 
 }

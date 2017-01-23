@@ -9,6 +9,7 @@ var discoverJobsManagement = (function($) {
     var selectedOpendayId = null;
     var accountInfo = null;
     var selectedOpenday = null;
+    var coverLetters = null;
     var selectedTime = {
         time_start: null,
         time_end: null,
@@ -57,6 +58,7 @@ var discoverJobsManagement = (function($) {
 
     
       $("#resultDetails").on('click', '#joinFormBtn', openJoinForm);
+      $("#resultDetails").on('change', '#oldCoverLetterSelect', updateCoverLetterField);
 
       $('#search').tagEditor({ 
           delimiter: ',', /* space and comma */
@@ -71,9 +73,17 @@ var discoverJobsManagement = (function($) {
 
     function initialTemplate() {
       loadAccountInfo();
+      loadCoverLetter();
       initialOpenday();
     }
 
+    function loadCoverLetter() {
+      $.get(apiUrl + '/openday/cover-letters?user_id=' + getCurrentUserId(), function(cover_letter) {
+        coverLetters = cover_letter;
+
+        console.log(coverLetters);
+      });
+    }
 
     function loadAccountInfo() {
       $.get(apiUrl + "/users/" + getCurrentUserId(), function(user) {
@@ -193,7 +203,8 @@ var discoverJobsManagement = (function($) {
           var html = render({
             user: accountInfo,
             selectedSchedule: selectedTime,
-            openday: selectedOpenday
+            openday: selectedOpenday,
+            coverLetters: coverLetters
           });
           $("#resultDetails").html(html);
         });
@@ -209,6 +220,7 @@ var discoverJobsManagement = (function($) {
         user_id : userId,
         openday_time_breakdown_id: timeBreakdownId,
         cover_letter: $("#coverLetter").val(),
+        cover_letter_title: $("#coverLetterTitle").val(),
         time_start: selectedSchedule.data('start'),
         time_end: selectedSchedule.data('end')
       }
@@ -248,6 +260,12 @@ var discoverJobsManagement = (function($) {
       return $("#userId").val();
     }
 
+    function updateCoverLetterField() {
+      var cl = $(this).val();
+      var clt = $(this).find('option:selected').data('title');
+      $("#coverLetter").val(cl);
+      $("#coverLetterTitle").val(clt);
+    }
 
 
 

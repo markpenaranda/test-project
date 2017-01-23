@@ -43,14 +43,17 @@
 										</div>
 										<div class="row jg-mar-btm">
 											<div class="col-sm-5">
-												<select class="jg-select">
+												<select id="oldCoverLetterSelect" class="jg-select">
 													<option>Use Different Cover Letter</option>
+													<% _.each(coverLetters, function (cl) {  %>
+													<option data-title= "<%= cl.cover_letter_title %>" value="<%= cl.cover_letter %>"><%= cl.cover_letter_title %></option>
+													<% }) %>
 												</select>
 											</div>
 										</div>
 										<div class="row jg-mar-btm">
 											<div class="col-sm-5">
-												<input type="text" class="jg-txt" placeholder="Cover Letter Title">
+												<input id="coverLetterTitle" type="text" class="jg-txt" placeholder="Cover Letter Title">
 											</div>
 										</div>
 										<div class="row jg-mar-btm">
