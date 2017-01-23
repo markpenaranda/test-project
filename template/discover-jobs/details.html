@@ -53,12 +53,13 @@
         <div class="col-sm-9">
           <ul class="jg-available-sched-list">
             <% _.each(data.time_breakdown, function(i){  %>
-            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= moment(data.event_date + ' ' +i.time_start).format('hh:mmA') %>-<%= moment(data.event_date + ' ' +i.time_end).format('hh:mmA') %></li>
+            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" data-candidate_number = "<%= i.designated_candidate_number %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= moment(data.event_date + ' ' +i.time_start).format('hh:mmA') %>-<%= moment(data.event_date + ' ' +i.time_end).format('hh:mmA') %></li>
             <% }) %>
           </ul>
         </div>
         <div class="col-sm-3">
-          <a href="#" data-toggle="modal" data-target="#joinModal" class="btn jg-btn-join jg-btn-grey jg-btn-big"><span class="fa fa-user"></span>	JOIN</a>
+          <!-- <a href="#" data-toggle="modal" data-target="#joinModal" class="btn jg-btn-join jg-btn-grey jg-btn-big"><span class="fa fa-user"></span>  JOIN</a> -->
+          <a href="#resultDetails" id="joinFormBtn" class="btn jg-btn-join jg-btn-grey jg-btn-big"><span class="fa fa-user"></span>	JOIN</a>
         </div>
       </div>
     </div>
@@ -78,64 +79,4 @@
   </div>
   <% } %>
 
-    <div class="modal fade" id="joinModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Join <%= data.event_name %></h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-sm-2">
-                <img src="http://fs1.jobsglobal.us/tree/e47/02fc3ee3c7e4584421f2bc43a.png" class="img-responsive">
-              </div>
-              <div class="col-sm-5">
-                <span><%= user.name %></span><br>
-                <span><%= user.country_name %></span>
-              </div>
-              <div class="col-sm-5">
-                <div class="well centered">
-                  <center>
-                  <h6>Schedule Online Interview</h6>
-                  <%= moment(data.event_date).format("MMM D YYYY") %><br>
-                  <span id="timeBreakdownStart"></span>-<span id="timeBreakdownEnd"></span>
-                    
-                  </center>
-                </div>
-              </div>
-            </div>
-            <p>Your complete profile will be included with your application.</p>
-            <hr>
-            <div id="joinForm" class="form-group">
-              <label>Introduction</label>
-              <textarea id="coverLetter" class="form-control"></textarea>
-            </div>  
-
-            <div id="joinSuccess" style="display:none;" class="centered alert alert-success">
-              <center>
-                <h1>Success!</h1>
-                <span class="alerticon"><img src="http://s22.postimg.org/i5iji9hv1/check.png" alt="checkmark" /></span>
-                <p>Thanks so much for your message. We check e-mail frequently and will try our best to respond to your inquiry.</p>
-                
-              </center>
-            </div>
-            <div id="joinError" style="display:none;" class="centered alert alert-danger alert-error">
-              <center>
-                <h1>Error!</h1>
-                <span class="alerticon"><i class="fa fa-cross"></i></span>
-                <p>We're having problem in processing your request. Make sure that you haven't submitted any application for this particular event.</p>
-                
-              </center>
-            </div>
-            <div class="alert alert-info">
-              <p>Note: Please be online 15 minutes before your schedule online interview, being late will be place on the waiting list and will have less chance to be interviewed.</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" id="closeJoinModal" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button id="joinSubmit" type="button" class="btn btn-success jg-btn pull-right"><i  style="display:none;" class="fa fa-rotate-right fa-spinner fa-spin fa-fw loading"></i>Send Application</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div>
+  

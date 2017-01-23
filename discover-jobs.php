@@ -67,7 +67,7 @@
 								</div>
 								<div class="col-sm-9">
 										<div style="min-height:500px;" id="resultDetails" class="jg-opendayonline-resultdetails-info">
-												<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View CV' to review candidates.</p>
+												<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View Details' to check the event.</p>
 										</div>
 								</div>
 							</div>

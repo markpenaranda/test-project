@@ -1,0 +1,75 @@
+<div class="jg-opendayonline-resultdetails-profile">
+										<h2 class="jg-border-btm jg-script-text jg-green">Join to <%= openday.event_name %></h2>
+										<div class="row jg-mar-btm">
+											<div class="col-sm-2">
+												<img src="http://fs1.jobsglobal.us/tree/e47/02fc3ee3c7e4584421f2bc43a.png" class="img-responsive" >
+											</div>
+											<div class="col-sm-7">
+												<h1 class="jg-big jg-script-text"><%= user.name %></h1>
+												<!-- <h4 class="jg-no-margin">Software Engineer / HKJ Corp</h4> -->
+												<h4 class="jg-no-margin"><%= user.country_name %></h4>
+											</div>
+											<div class="col-sm-3">
+												<div class="jg-interview-sched jg-center">
+													<span class="fa fa-caret-left"></span>
+													<h4>Schedule Online Interview</h4>
+													<p class="jg-no-margin"><%= moment(openday.event_date).format("MMM D YYYY") %></p>
+													<p class="jg-no-margin"><%= selectedSchedule.time_start %> - <%= selectedSchedule.time_end %></p>
+													<p class="jg-no-margin">Candidate NO. <%= selectedSchedule.candidate_number %></p>
+												</div>
+											</div>
+										</div>
+										<p class="jg-bold jg-orange jg-btm-indent jg-border-btm">Your complete profile will be included with your application</p>
+										<div class="row jg-btm-indent">
+											<label class="col-sm-1 jg-mar-top jg-mar-btm">Email:</label>
+											<div class="col-sm-5">
+												<input type="text" class="jg-txt jg-center" value="<%= user.primary_email %>" disabled>
+											</div>
+											<label class="col-sm-1 jg-mar-top jg-mar-btm">Phones:</label>
+										    <div class="col-sm-5">
+												<input type="text" class="jg-txt jg-center" value="<%= user.primary_mobile %>" disabled>
+											</div>
+										</div>
+										<div class="row jg-top-indent jg-btm-indent">
+											<label class="col-sm-1 jg-mar-top jg-mar-btm">Resume:</label>
+											<div class="col-sm-11">
+												<a href="#" class="btn jg-btn-plain jg-orange jg-underline">johnDoe-CV2016.pdf</a>
+												<span>  Or  </span>
+												<a href="#" class="btn jg-btn-orange btn-warning"><span class="fa fa-upload"></span>  Upload different CV</a>
+											</div>
+										</div>
+										<div class="row jg-top-indent jg-mar-btm">
+											<label class="col-sm-12">Cover Letter:</label>
+										</div>
+										<div class="row jg-mar-btm">
+											<div class="col-sm-5">
+												<select class="jg-select">
+													<option>Use Different Cover Letter</option>
+												</select>
+											</div>
+										</div>
+										<div class="row jg-mar-btm">
+											<div class="col-sm-5">
+												<input type="text" class="jg-txt" placeholder="Cover Letter Title">
+											</div>
+										</div>
+										<div class="row jg-mar-btm">
+											<div class="col-sm-12">
+												<textarea id="coverLetter"  class="jg-txtarea"></textarea>
+											</div>
+										</div>
+										<div class="row jg-mar-btm jg-top-indent">
+											<div class="col-sm-12">
+												<!-- <a href="#" class="btn jg-btn btn-success pull-right">Send</a> -->
+												   <button id="joinSubmit" type="button" class="btn jg-btn btn-success pull-right"><i  style="display:none;" class="fa fa-rotate-right fa-spinner fa-spin fa-fw loading"></i>Send</button>
+												<a href="#" class="btn jg-btn-red pull-right">Cancel</a>
+											</div>
+										</div>
+										<div class="row jg-mar-btm jg-top-indent">
+											<div class="col-sm-12">
+												<div class="jg-note">
+													NOTE: Please be online 15 minutes before your schedule online interview, being late will be place on the waiting list and will have less chance to be interiewed
+												</div>
+											</div>
+										</div>
+									</div>

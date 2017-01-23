@@ -8,6 +8,13 @@ var discoverJobsManagement = (function($) {
     var selectedSchedule = null;
     var selectedOpendayId = null;
     var accountInfo = null;
+    var selectedOpenday = null;
+    var selectedTime = {
+        time_start: null,
+        time_end: null,
+        id: null,
+        candidate_number: null
+      }
     return {
         init: init
     };
@@ -49,6 +56,7 @@ var discoverJobsManagement = (function($) {
       $('#resultDetails').on('hidden.bs.modal', '#joinModal', closeJoinModal);
 
     
+      $("#resultDetails").on('click', '#joinFormBtn', openJoinForm);
 
       $('#search').tagEditor({ 
           delimiter: ',', /* space and comma */
@@ -137,6 +145,7 @@ var discoverJobsManagement = (function($) {
 
       $.get(apiUrl + "/openday/" + id + "?user_id=" + getCurrentUserId(), function(res){
         console.log(res);
+        selectedOpenday = res;
         var created = moment(res.date_created).fromNow();
         var event_date = moment(res.event_date).format("MMMM D YYYY");
          var start_time = moment("2013-02-08 " + res.start_time).format("hh:mmA");
@@ -172,16 +181,29 @@ var discoverJobsManagement = (function($) {
 
       $("#timeBreakdownStart").html(moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA"));
       $("#timeBreakdownEnd").html(moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA"));
-
-
+      selectedTime.time_start = moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA");
+      selectedTime.time_end = moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA");
+      selectedTime.id = selectedSchedule.data("id");
+      selectedTime.candidate_number = selectedSchedule.data("candidate_number");
     }
 
+
+    function openJoinForm() {
+       getTemplate("join-form.html", function(render){
+          var html = render({
+            user: accountInfo,
+            selectedSchedule: selectedTime,
+            openday: selectedOpenday
+          });
+          $("#resultDetails").html(html);
+        });
+    }
 
     function join() { 
       $(this).attr("disabled", true);
       $(this).find(".loading").fadeIn();
       var userId = $("#userId").val();
-      var timeBreakdownId = selectedSchedule.data("id");
+      var timeBreakdownId = selectedTime.id;
       var opendayId = selectedOpendayId;
       var data = {
         user_id : userId,
@@ -203,7 +225,7 @@ var discoverJobsManagement = (function($) {
           $("#joinSuccess").fadeIn();
           $("#joinForm").fadeOut();
           $("#joinSubmit").fadeOut();
-         
+         loadDetails(selectedOpendayId);
         },
         error:  function (error) {
           $("#joinError").fadeIn();
