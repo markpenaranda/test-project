@@ -162,7 +162,7 @@
 																<h3>no.of hours</h3>
 															</div>
 															<div class="col-lg-3">
-																<p class="total-amount">$600.00</p>
+																<p class="total-amount">$0.00</p>
 															</div>
 														</li>
 														<li>
@@ -172,7 +172,7 @@
 																<h3>Total</h3>
 															</div>
 															<div class="col-lg-3">
-																<p class="checkout_total_p total-amount">$600.00</p>
+																<p class="checkout_total_p total-amount">$0.00</p>
 															</div>
 														</li>
 													</ul>
