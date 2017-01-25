@@ -51,9 +51,7 @@ $container['ResourcesController'] = function($c) {
 
 $container['OpenDayController'] = function($c) {
     return new \App\Controllers\OpenDayController(
-      $c->get('OpenDay'),
-      $c->get('CreateOpenDayValidation'),
-      $c->get('UpdateOpenDayValidation')
+      $c->get('OpenDay')
     );
 };
 
@@ -87,16 +85,6 @@ $container['OpenDay'] = function($container) {
 
 
 
-// -----------------------------------------------------------------------------
-// Validation factories
-// -----------------------------------------------------------------------------
-$container['CreateOpenDayValidation'] = function($container) {
-  return new App\Validations\CreateOpenDayValidation();
-};
-
-$container['UpdateOpenDayValidation'] = function($container) {
-  return new App\Validations\UpdateOpenDayValidation();
-};
 
 // -----------------------------------------------------------------------------
 // Helpers

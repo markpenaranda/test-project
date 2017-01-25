@@ -61,12 +61,7 @@ class OpenDayController extends BaseController
 
    public function store($request, $response)
    {
-     $isValid = $this->createOpenDayValidation->assert($request->getParams());
-
-     if(!$isValid) {
-       return  $response->withStatus(400)->withJson($this->createOpenDayValidation->errors);
-     }
-
+     
     
 
       $createParams = array(
@@ -89,10 +84,7 @@ class OpenDayController extends BaseController
 
    public function update($request, $response, $args)
    {
-     $isValid = $this->updateOpenDayValidation->assert($request->getParams());
-     if(!$isValid) {
-       return  $response->withStatus(400)->withJson($this->createOpenDayValidation->errors);
-     }
+   
     
 
      $updateParams = array(
