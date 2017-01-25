@@ -17,14 +17,10 @@ class OpenDayController extends BaseController
    public $openDayResouce, $createOpenDayValidation;
 
    public function __construct(
-        OpenDay $openDayResource,
-        CreateOpenDayValidation $createOpenDayValidation,
-        UpdateOpenDayValidation $updateOpenDayValidation
+        OpenDay $openDayResource
    ){
 
       $this->openDayResource = $openDayResource;
-      $this->createOpenDayValidation  = $createOpenDayValidation;
-      $this->updateOpenDayValidation  = $updateOpenDayValidation;
    }
 
    public function index($request, $response)
