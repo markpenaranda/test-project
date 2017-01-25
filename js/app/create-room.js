@@ -213,7 +213,7 @@ var createRoomScreenManagement = (function($) {
 
         });
       $('.time-range-pair').datepair();
-      $('.ui-timepicker-select').addClass('col-lg-12 col-xs-12');
+      $('.ui-timepicker-select').addClass('col-lg-12 col-xs-12 col-sm-12 col-md-12');
 
       return $("#time-end-" + timecount).val();
 

@@ -6841,6 +6841,13 @@ body.front {
 
 }
 
+@media (max-width: 768px) {
+html, body {
+width: auto !important;
+overflow-x: hidden !important;
+}
+}
+
 /************************************************* tabs landscape ends here *********************************************************************/
 
 
