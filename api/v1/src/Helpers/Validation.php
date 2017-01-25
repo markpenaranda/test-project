@@ -59,4 +59,8 @@ class Validation {
         
         return array(true);
     }
+
+    public function checkRequired() {
+        
+    }
 }
