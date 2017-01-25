@@ -88,11 +88,11 @@ body.inside {
 }
 
 .required-tag { font-size: 11px !important;
-    font-size: 11px !important;
-    position: absolute;
-    top: 25px;
+    font-size: 12px !important;
+
+
     color: #a94442 !important;
-    left: 0px;
+
     display: none;
   }
 
