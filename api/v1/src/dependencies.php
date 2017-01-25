@@ -82,19 +82,7 @@ $container['Resources'] = function ($container) {
 $container['OpenDay'] = function($container) {
   return new App\Models\OpenDay($container->get('db'));
 };
-$container['OpenDayTime'] = function($container) {
-  return new App\Models\OpenDayTime($container->get('db'));
-};
-$container['OpenDayTimeBreakdown'] = function($container) {
-  return new App\Models\OpenDayTimeBreakdown($container->get('db'));
-};
-$container['OpenDayJobs'] = function($container) {
-  return new App\Models\OpenDayJobs($container->get('db'));
-};
 
-$container['OpenDayAttendees'] = function($container) {
-  return new App\Models\OpenDayAttendees($container->get('db'));
-};
 
 
 

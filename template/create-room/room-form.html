@@ -1,24 +1,24 @@
 <div class="row room-form">
   <div class="col-lg-6 col-sm-6 col-xs-12">
     <li>
-      <p>Event Name</p>
+      <p class="col-xs-12">Event Name</p>
       <span>
-      <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7" placeholder="Type Open Day Event Name"><br>
+      <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7 col-xs-12" placeholder="Type Open Day Event Name"><br>
         
       </span>
       <p id="event_name-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event name is required</p>
     </li>
     <li>
-      <p>Date</p>
-      <input type="text" data-validation="date" data-validation-format="mm/dd/yyyy" name="event[<%= room_number %>]['date']" id="eventDate" class="col-lg-4 datepicker" placeholder="Select Date">
-      <div class="col-lg-1">
+      <p class="col-xs-12">Date</p>
+      <input type="text" data-validation="date" data-validation-format="mm/dd/yyyy" name="event[<%= room_number %>]['date']" id="eventDate" class="col-lg-4 datepicker col-xs-12" placeholder="Select Date">
+      <div class="hidden-xs  hidden-sm col-lg-1 col-xs-1">
         <a class="openday_add_more_btn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
       </div>
             <p id="event_date-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event date is required</p>
     </li>
     <li>
       <p>Time Interval Per Candidate (minutes)</p>
-      <input data-validation="number" type="number" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3" placeholder="ex. 20 min">
+      <input data-validation="number" type="number" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3 col-xs-12" placeholder="ex. 20 min">
       <p id="time_interval_per_candidate-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Time Interval per candidate is required</p>
     </li>
     <li>
@@ -58,18 +58,18 @@
   <div class="col-lg-6 col-sm-6 col-xs-12">
     <li>
       <p>Time Range From</p>
-      <ul id="timeRangeList" class="col-lg-9 time_range_ul">
+      <ul id="timeRangeList" class="col-lg-9 col-xs-12 time_range_ul">
 
 
       </ul>
     </li>
     <li>
       <p>Introduction</p>
-      <textarea data-validation="required" name="event[<%= room_number %>]['introduction']" id="introduction" class="col-lg-9" placeholder="Type Description"></textarea>
+      <textarea data-validation="required" name="event[<%= room_number %>]['introduction']" id="introduction" class="col-lg-9 col-xs-12" placeholder="Type Description"></textarea>
     </li>
     <li>
       <p>Recruiter In-charge</p>
-      <select  data-validation="required" name="event[<%= room_number %>]['in_charge_user_id']" id="in-charge-<%= room_number %>"  class="col-lg-4">
+      <select  data-validation="required" name="event[<%= room_number %>]['in_charge_user_id']" id="in-charge-<%= room_number %>"  class="col-lg-4 col-xs-12">
         
       </select>
     </li>

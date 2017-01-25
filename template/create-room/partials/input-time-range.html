@@ -1,20 +1,20 @@
-<li >
-  <div class="row time-range-pair-<%= room_number %> time-range-pair time-range-pair-<%= room_number %>-<%= time_count %>">
-    <div class="col-lg-5">
-      <input type="text" name="timerange" id="time-start-<%= time_count %>" class="time start" value="">
+<li class="row">
+  <div class="row time-range-pair-<%= room_number %> time-range-pair time-range-pair-<%= room_number %>-<%= time_count %> col-sm-12">
+    <div class="col-lg-5 col-xs-12">
+      <input type="text" name="timerange" id="time-start-<%= time_count %>" class="time start col-xs-12" value="">
     </div>
-    <div class="col-lg-1">
+    <div class="col-lg-1 col-xs-12">
       <div class="row">
         <h4>To</h4>
       </div>
     </div>
-    <div class="col-lg-5">
+    <div class="col-lg-5 col-xs-12">
       <input data-room="<%= room_number %>" data-timecount="<%= time_count %>" type="text" name="timerange" class="time end timerange-end" id="time-end-<%= time_count %>" value="">
     </div>
     <div class="col-lg-1">
       <div class="row">
-        <a class="openday_add_more_btn remove-time-range" href="#"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
-        <a class="openday_add_more_btn add-time-range" href="#"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
+        <a class="openday_add_more_btn remove-time-range remove-<%= room_number %>-<%= time_count %>" href="#"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+        <a class="openday_add_more_btn add-time-range add-<%= room_number %>-<%= time_count %>" href="#"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
 
       </div>
     </div>

@@ -1,10 +1,10 @@
-<div class="">
-  <select class="col-lg-8" name="jobs[<%= room_number %>]">
+<div class="col-xs-12">
+  	<select class="col-lg-8 col-xs-10" name="jobs[<%= room_number %>]">
     <% _.each(jobs, function(i) { %>
       <option value='{"id": "<%= i.job_post_id %>", "name": "<%= i.job_title %>" }'><%= i.job_title %></option>
       <% }) %>
     </select>
-    <div class="col-lg-1">
+    <div class="col-lg-1 col-xs-2">
       <a class="openday_add_more_btn job-select-btn remove-job-btn" href="#jobSelect"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
       <a class="openday_add_more_btn job-select-btn add-job-btn" href="#jobSelect"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
 

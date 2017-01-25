@@ -40,7 +40,7 @@
 											<p>Create from Previous Post</p>
 										</div>
 									</li>
-									<li class="col-lg-3">
+									<li class="col-lg-3 col-sm-12 col-xs-12">
 										<div class="row">
 											<select id="createdList">
 												<option>--SELECT FROM ALREADY CREATED EVENTS--</option>

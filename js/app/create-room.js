@@ -58,6 +58,7 @@ var createRoomScreenManagement = (function($) {
       $("#interviewPostFormContainer").on('click', '.remove-time-range', removeTimeRange);
 
       $("#interviewPostFormContainer").on('change', '.timerange-end', reinitializeOtherTimeRange);
+      $("#interviewPostFormContainer").on('change', '.timerange-end', toggleAddDeleteTimeRangeButton);
 
 
       $("#mainCreateRoomRow").on('click', '.edit-room-btn', backToTop);
@@ -187,8 +188,12 @@ var createRoomScreenManagement = (function($) {
 
         $("a.add-time-range").css("display", "none");
         $("a.remove-time-range").css("display", "block");
-        $("a.remove-time-range").last().css("display", "none");
-        $("a.add-time-range").last().css("display", "block");
+        $("a.remove-time-range").last().css("display", "block");
+        $("a.add-time-range").last().css("display", "none");
+
+        if(numberOfTimeRange == 1) {
+          $("a.remove-time-range").last().css("display", "none");
+        }
 
         timePickerInit(lastEndTime, numberOfRooms - 1, numberOfTimeRange);
         });
@@ -208,7 +213,7 @@ var createRoomScreenManagement = (function($) {
 
         });
       $('.time-range-pair').datepair();
-      $('.ui-timepicker-select').addClass('col-lg-12');
+      $('.ui-timepicker-select').addClass('col-lg-12 col-xs-12');
 
       return $("#time-end-" + timecount).val();
 
@@ -216,6 +221,18 @@ var createRoomScreenManagement = (function($) {
 
     function removeTimeRange() {
       $(this).parent().parent().parent().parent().remove();
+       $("a.add-time-range").last().css("display", "block");
+       $("a.remove-time-range").last().css("display", "block");
+    }
+
+    function toggleAddDeleteTimeRangeButton() {
+      console.log($(this).data('timecount'));
+      var timecount = $(this).data('timecount');
+      var roomNumber = $(this).data('room');
+        console.log(".add-"+roomNumber+"-"+timecount);
+      $(".add-"+roomNumber+"-"+timecount).css("display", "block");
+      $(".remove-"+roomNumber+"-"+timecount).css("display", "none");
+
     }
 
     function validate(data, roomNumber) 
