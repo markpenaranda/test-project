@@ -27,6 +27,8 @@ select:focus {
     outline: none;
 }
 
+.time-range-pair:after {  display: :none !important;  }
+
 @font-face {
     font-family: 'open_sansregular';
     src: url(../fonts/OpenSans-Regular-webfont.eot);
@@ -6680,6 +6682,8 @@ ul.reg_list_sub_ul > li > a{
 .employer_landing_page_ul {
   padding: 15px 0;
 }
+
+
 
 /* employer landing page ends here */
 
