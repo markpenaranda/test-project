@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div  class="col-lg-4 col-sm-4 col-xs-12">
+					<div id="candidatesResultList" class="col-lg-4 col-sm-4 col-xs-12">
 						<ul class="interview_list_right_div">
 							<li>
 								<div class="reg-select-container apply-select-container">
@@ -71,7 +71,8 @@
 						</ul>
 					</div>
 					<div class="col-lg-8 col-sm-8 col-xs-12">
-						<div style="min-height:500px;" id="opendayProfile" class="openday_profile_view_wrapper">
+						<button id="back" style="width:10%;" class="xs-hide-me visible-xs btn jg-btn btn-success"><i class="fa fa-angle-left"></i></button>
+						<div id="opendayProfile" class="xs-hide-me  openday_profile_view_wrapper">
 							<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View CV' to review candidates.</p>
 						</div>
 						

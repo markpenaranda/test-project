@@ -1919,6 +1919,7 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
 }
 
 @media screen and (max-width: 768px){
+	.xs-hide-me {  display: none !important; }
 	.jg-result-pic {
 		width: 8em;
 		height: 8em;
@@ -1973,9 +1974,15 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
 	::-webkit-scrollbar {
 	      width: 0px;
 	}
+
+	.interview_list_right_ul li h6 {  text-align: center !important; }
+	.interview_list_right_ul li p {  text-align: center !important; }
+	.interview_list_right_ul li div {  text-align: center !important; }
+	.interview_list_right_ul > li img {  display: block; margin: auto; width: 40%; float: none;}
 }
 @media screen and (max-width: 568px) {
 	.hide_me {  display: none !important; }
+	.xs-hide-me {  display: none !important; }
 
 	.jg-plain-btn,
 	.jg-btn,

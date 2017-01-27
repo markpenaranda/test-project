@@ -39,6 +39,25 @@ var opendayCandidatesScreenManagement = (function($) {
         $("#candidateList").on('click', '.reject_btn', rejectCandidate);
 
         $("#opendayList").on('change', viewOpenday);
+
+        $("body").on('click', '#back', back);
+
+         $(window).on('resize', windowResize);
+
+    }
+
+    function windowResize() {
+        if($(window).width() > 768) {
+           $("#candidatesResultList").removeClass("animated bounceOutLeft xs-hide-me").addClass("animated bounceInLeft");
+          $("#opendayProfile").removeClass("animated bounceOutRight xs-hide-me").addClass("animated bounceInRight");
+        
+        }
+
+         if($(window).width() < 768) {
+           $("#candidatesResultList").removeClass("animated bounceOutLeft xs-hide-me").addClass("animated bounceInLeft");
+           $("#opendayProfile").removeClass("animated bounceInRight").addClass("animated bounceOutRight xs-hide-me");
+            $("#back").addClass("xs-hide-me");
+         }
     }
 
     function initialTemplate() {
@@ -118,12 +137,22 @@ var opendayCandidatesScreenManagement = (function($) {
           getTemplate("profile.html", function(render){
             var html = render({ data: result, time: time });
             $("#opendayProfile").html(html);
+
+            $("#candidatesResultList").removeClass("animated bounceInLeft").addClass("animated bounceOutLeft xs-hide-me");
+            $("#opendayProfile").removeClass("animated bounceOutRight xs-hide-me").addClass("animated bounceInRight");
+            $("#back").removeClass("xs-hide-me");
           });
             
         })
               
       
 
+    }
+
+    function back() {
+       $("#opendayProfile").removeClass("animated bounceInRight").addClass("animated bounceOutRight xs-hide-me"); 
+       $("#candidatesResultList").removeClass("animated bounceOutLeft xs-hide-me").addClass("animated bounceInLeft");
+       $(this).addClass("xs-hide-me");
     }
 
     function rejectCandidate() {
