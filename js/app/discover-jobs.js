@@ -59,7 +59,21 @@ var discoverJobsManagement = (function($) {
     
       $("#resultDetails").on('click', '#joinFormBtn', openJoinForm);
       $("#resultDetails").on('change', '#oldCoverLetterSelect', updateCoverLetterField);
+      $("body").on('click', '#back', back);
 
+      $(window).on('resize', function(){
+        if($(window).width() > 768) {
+           $("#resultsUl").removeClass("animated bounceOutLeft hide_me").addClass("animated bounceInLeft");
+          $("#resultDetails").removeClass("animated bounceOutRight hide_me").addClass("animated bounceInRight");
+        
+        }
+
+         if($(window).width() < 768) {
+           $("#resultsUl").removeClass("animated bounceOutLeft hide_me").addClass("animated bounceInLeft");
+           $("#resultDetails").removeClass("animated bounceInRight").addClass("animated bounceOutRight hide_me");
+            $("#back").addClass("hide_me");
+         }
+      });
       $('#search').tagEditor({ 
           delimiter: ',', /* space and comma */
           autocomplete: { 'source': apiUrl + '/resources/keyword', delay: 1000 },
@@ -68,9 +82,12 @@ var discoverJobsManagement = (function($) {
           onChange: searchEvent
       });
 
-
+    
     }
 
+
+
+ 
     function initialTemplate() {
       loadAccountInfo();
       loadCoverLetter();
@@ -148,7 +165,19 @@ var discoverJobsManagement = (function($) {
     function viewDetails() {
       var id = $(this).data('id');
       selectedOpendayId = $(this).data('id');
+
+      if ( $(window).width() < 768 ) {
+        $("#resultsUl").removeClass("animated bounceInLeft").addClass("animated bounceOutLeft hide_me");
+        $("#back").removeClass("hide_me");
+      
+      }
       loadDetails(selectedOpendayId);
+    }
+
+    function back() {
+       $("#resultDetails").removeClass("animated bounceInRight").addClass("animated bounceOutRight hide_me"); 
+       $("#resultsUl").removeClass("animated bounceOutLeft hide_me").addClass("animated bounceInLeft");
+       $(this).addClass("hide_me");
     }
 
     function loadDetails(id) {
@@ -172,6 +201,10 @@ var discoverJobsManagement = (function($) {
                               schedule: res.schedule
                           });
           $("#resultDetails").html(html);
+            if ( $(window).width() < 768 ) {
+             $("#resultDetails").removeClass("animated bounceOutRight hide_me").addClass("animated bounceInRight");
+        
+            }
         });
       });
     }

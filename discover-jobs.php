@@ -32,10 +32,10 @@
 					<div class="row">
 						<div class="jg-opendayonline-advancedsearch-container">
 							<div class="row">
-								<div id="accountInfo" class="col-sm-3 jg-btm-indent">
+								<div id="accountInfo" class="col-lg-3 col-sm-12 jg-btm-indent">
 									
 								</div>
-								<div class="col-sm-9">
+								<div class="col-lg-9 col-sm-12">
 									<div class="jg-advancedsearch-form">
 										<div class="row">
 											<div class="col-sm-12 jg-mar-btm">
@@ -54,7 +54,7 @@
 						</p>
 						<div id="resultsContainer" style="display:none;" class="jg-opendayonline-eventcallresult-container">
 							<div class="row">
-								<div class="col-sm-3">
+								<div class="col-lg-3 col-sm-3 col-xs-12 col-md-3">
 									<!--<h4 class="jg-resultdate jg-center">January 1, 2017</h4>-->
 									<h4><span id="numberOfResults"></span> Results</h4>
 									<ul id="resultsUl" class="jg-opendayonline-eventcallresult-list">
@@ -65,8 +65,9 @@
 							<!-- 			<span class="fa fa-rotate-right"></span> -->
 									</p>
 								</div>
-								<div class="col-sm-9">
-										<div style="min-height:500px;" id="resultDetails" class="jg-opendayonline-resultdetails-info">
+								<div class="col-lg-9 col-md-9 col-xs-12 col-sm-9">
+								<button id="back" style="width:10%;" class="hide_me visible-xs btn jg-btn btn-success"><i class="fa fa-angle-left"></i></button>
+										<div id="resultDetails" class="hide_me jg-opendayonline-resultdetails-info">
 												<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View Details' to check the event.</p>
 										</div>
 								</div>
