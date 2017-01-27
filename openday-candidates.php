@@ -51,9 +51,9 @@
 						<ul class="interview_list_right_div">
 							<li>
 								<div class="reg-select-container apply-select-container">
-									<select>
-										<option>Candidates with schedule</option>
-										<option>Candidates without schedule</option>
+									<select id="candidateSchedule">
+										<option value="1">Candidates with schedule</option>
+										<option value="0">Candidates without schedule</option>
 									</select>
 									<span class="arrow" aria-hidden="true"></span>
 								</div>

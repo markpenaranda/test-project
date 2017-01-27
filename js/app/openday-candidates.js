@@ -44,6 +44,8 @@ var opendayCandidatesScreenManagement = (function($) {
 
          $(window).on('resize', windowResize);
 
+         $("#candidateSchedule").on('change', loadScheduledCandidates);
+
     }
 
     function windowResize() {
@@ -102,9 +104,9 @@ var opendayCandidatesScreenManagement = (function($) {
 
     function loadScheduledCandidates() {
         var opendayId = $("#opendayId").val();
-        
+        var is_scheduled = $("#candidateSchedule").val()
          $("#candidateList").html("");
-        $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=1', function(res){
+        $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
             
             if(res.length > 0) {
                 $(".no-results").fadeOut();
@@ -121,6 +123,8 @@ var opendayCandidatesScreenManagement = (function($) {
               }
         });
     }
+
+
 
     function loadCandidateItem(schedule, personal_info) {
 
