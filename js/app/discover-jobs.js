@@ -82,6 +82,8 @@ var discoverJobsManagement = (function($) {
           onChange: searchEvent
       });
 
+      $("#search").on('change', manualSearch);
+
     
     }
 
@@ -119,6 +121,16 @@ var discoverJobsManagement = (function($) {
          $(".loading-results").fadeOut();
       });
 
+    }
+
+    function manualSearch(event) {
+       var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            searchEvent($(this));
+        }
+       if($(this).val().length == 0) {
+        initialOpenday();
+        }
     }
 
     function searchEvent(input) {
