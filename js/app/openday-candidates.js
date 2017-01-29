@@ -141,10 +141,11 @@ var opendayCandidatesScreenManagement = (function($) {
           getTemplate("profile.html", function(render){
             var html = render({ data: result, time: time });
             $("#opendayProfile").html(html);
-
+            if($(window).width() < 768) {
             $("#candidatesResultList").removeClass("animated bounceInLeft").addClass("animated bounceOutLeft xs-hide-me");
             $("#opendayProfile").removeClass("animated bounceOutRight xs-hide-me").addClass("animated bounceInRight");
             $("#back").removeClass("xs-hide-me");
+          }
           });
             
         })
