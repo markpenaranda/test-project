@@ -59,6 +59,8 @@ var discoverJobsManagement = (function($) {
     
       $("#resultDetails").on('click', '#joinFormBtn', openJoinForm);
       $("#resultDetails").on('change', '#oldCoverLetterSelect', updateCoverLetterField);
+      $("#resultDetails").on('click', ".join-form-cancel", closeJoinForm);
+
       $("body").on('click', '#back', back);
 
       $(window).on('resize', function(){
@@ -253,6 +255,10 @@ var discoverJobsManagement = (function($) {
           });
           $("#resultDetails").html(html);
         });
+    }
+
+    function closeJoinForm() {
+      loadDetails(selectedOpenday.openday_id);
     }
 
     function join() { 
