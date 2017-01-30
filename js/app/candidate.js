@@ -75,7 +75,7 @@ var candidateScreenManagement = (function($) {
         $.get(apiUrl + '/openday/' + getCurrentRoom(), function(opendayRes){
             openday = opendayRes;
             getTemplate('openday-detail.html',function(render) {
-                var html = render({data: openday});
+                var html = render({data: openday, jobName: openday.jobs});
                 $("#opendayDetails").html(html);
                 $(".companyName").html(openday.page_name);
             });

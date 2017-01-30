@@ -6,6 +6,7 @@ use App\Models\OpenDay;
 use App\Validations\CreateOpenDayValidation;
 use App\Validations\UpdateOpenDayValidation;
 use App\Helpers\Request;
+use App\Helpers\Paginate;
 
 /**
  * Class OpenDayController
@@ -17,15 +18,18 @@ class OpenDayController extends BaseController
    public $openDayResouce, $createOpenDayValidation;
 
    public function __construct(
-        OpenDay $openDayResource
+        OpenDay $openDayResource,
+        Paginate $paginate
    ){
 
       $this->openDayResource = $openDayResource;
+      $this->paginate = $paginate;
    }
 
    public function index($request, $response)
    {
-      $items = $this->openDayResource->getLatestEvents();
+      $paginate = $this->paginate->init($request->getParam('page'));
+      $items = $this->openDayResource->getLatestEvents($paginate);
                     
 
       return $response->withStatus(200)->withJson($items);
@@ -134,8 +138,9 @@ class OpenDayController extends BaseController
    public function search($request, $response, $args)
    {
      $search = $request->getParam("q");
+     $paginate = $this->paginate->init($request->getParam('page'));
 
-     $result = $this->openDayResource->search($search);
+     $result = $this->openDayResource->search($search, $paginate);
 
      return $response->withStatus(200)->withJson($result);
 

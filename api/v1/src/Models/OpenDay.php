@@ -22,14 +22,25 @@ class OpenDay
     return $this->currentRatePerHour;
   }
 
-  public function getLatestEvents() 
+  public function getLatestEvents($paginate) 
   {
+
+    $countSql = "
+      SELECT COUNT(*) as total FROM i_openday
+      WHERE is_deleted = 0
+      AND event_date >= CURDATE()
+    ";
+
+     $countStatement = $this->db->prepare($countSql);
+     $countStatement->execute();
+     $count = $countStatement->fetch();
+
     $sql = "
       SELECT * FROM i_openday
       WHERE is_deleted = 0
       AND event_date >= CURDATE()
       ORDER BY date_created DESC
-      LIMIT 15
+      LIMIT ". $paginate['skip'] .", " . $paginate['limit'] . "
     ";
 
     try {
@@ -41,7 +52,11 @@ class OpenDay
 
       $results = $statement->fetchAll();
 
-      return $results;
+      return array(
+          'count_result' => count($results),
+          'total' => $count['total'],
+          'results' => $results
+        );
     }
     catch(PDOException $e){
       return $e;
@@ -239,12 +254,23 @@ class OpenDay
     }   
   }
 
-  public function search($query)
+  public function search($query, $paginate)
   {
     try {
+      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
+             AGAINST ('{$query}' IN BOOLEAN MODE)";
+
+      $statement = $this->db->prepare($countSql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $count = $statement->fetch();
+
       $sql = "
         SELECT * FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
              AGAINST ('{$query}' IN BOOLEAN MODE)
+             LIMIT " . $paginate['skip'] .", ". $paginate['limit'] ."
       ";
 
       $statement = $this->db->prepare($sql);
@@ -254,7 +280,11 @@ class OpenDay
 
       $results = $statement->fetchAll();
 
-      return $results;
+      return array(
+        'results' => $results,
+        'total' => $count['total'],
+        'count_result' => count($results)
+        );
     }
     catch(PDOException $e){
       return $e;
@@ -811,7 +841,8 @@ class OpenDay
   {
     $sql = "
       UPDATE i_openday_attendees
-      SET status = 2
+      SET status = 2,
+      date_interviewed_end = NOW()
       WHERE openday_id = '$opendayId'
       AND user_id = '$userId'
     ";
@@ -865,7 +896,8 @@ class OpenDay
 
     $sql = "
       UPDATE i_openday_attendees
-      SET status = 0
+      SET status = 0,
+      date_interviewed_start = NOW()
       WHERE openday_id = '$opendayId'
       AND user_id = '$userId'
     ";

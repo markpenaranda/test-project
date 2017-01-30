@@ -51,7 +51,8 @@ $container['ResourcesController'] = function($c) {
 
 $container['OpenDayController'] = function($c) {
     return new \App\Controllers\OpenDayController(
-      $c->get('OpenDay')
+      $c->get('OpenDay'),
+      $c->get('Paginate')
     );
 };
 
@@ -92,4 +93,8 @@ $container['OpenDay'] = function($container) {
 
 $container['Validation'] = function ($container) {
     return new App\Helpers\Validation($container->get('Exam'));
+};
+
+$container['Paginate'] = function ($container) {
+    return new App\Helpers\Paginate();
 };

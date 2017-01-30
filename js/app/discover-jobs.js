@@ -117,9 +117,12 @@ var discoverJobsManagement = (function($) {
     }
 
     function initialOpenday() {
-      $.get(apiUrl + '/openday', function(events) {
+      $.get(apiUrl + '/openday', function(res) {
         $("#resultsContainer").fadeIn();
-        loadResults(events);
+        
+        $("#resultsSize").html(res.count_result);
+        $("#totalResults").html(res.total);
+        loadResults(res.results);
          $(".loading-results").fadeOut();
       });
 
@@ -149,8 +152,9 @@ var discoverJobsManagement = (function($) {
             $("#resultsContainer").fadeIn();
 
 
-              $("#numberOfResults").html(res.length);
-              loadResults(res);
+              $("#resultsSize").html(res.count_result);
+              $("#totalResults").html(res.total);
+              loadResults(res.results);
               $(".jg-load-on-scroll ").fadeOut();
           });
       }

@@ -41,12 +41,12 @@
 											<div class="col-lg-6">
 												<p class="label_p">Link to Job Post's</p>
 												<ul class="openday_list_inner_ul">
-													 <% _.each(data.jobNames, function(jobName, i) { %>
+													 <% _.each(data.jobs, function(jobName, i) { %>
 										                <li>
 										                  <h6>
 										                    <i class="fa fa-suitcase" aria-hidden="true"></i>
-										                    <%= jobName %>
-										                    <a href="/jobs/<%= data.jobs[i] %>">(View Job Details)</a>
+										                    <%= jobName.job_title %>
+										                    <a href="/jobs/<%= jobName.job_post_id %>">(View Job Details)</a>
 										                  </h6>
 										                </li>
 

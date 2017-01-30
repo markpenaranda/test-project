@@ -24,7 +24,8 @@
         "palanik/corsslim": "dev-slim3",
         "fpdo/fluentpdo": "dev-master",
         "phpmailer/phpmailer": "5.2.4",
-        "respect/validation": "^1.1"
+        "respect/validation": "^1.1",
+        "nesbot/carbon": "~1.18"
     },
 
     "require-dev": {
