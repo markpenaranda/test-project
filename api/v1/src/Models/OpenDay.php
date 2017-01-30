@@ -1189,7 +1189,7 @@ class OpenDay
       $statement->execute();
       $city = $statement->fetch();
 
-      $timezone = TimeZone::getTimeZoneByCoordinates(
+      $timezone = $this->getTimeZoneByCoordinates(
                               $city['longitude'], 
                               $city['latitude'],
                               "AIzaSyBxkwfU2Xdm9pT6J1xGVmBOca9J04TeirE"
@@ -1203,6 +1203,29 @@ class OpenDay
     }
 
   } 
+
+  private function getTimeZoneByCoordinates($long, $lat, $googleMapApiKey)
+  {
+    $url = "https://maps.googleapis.com/maps/api/timezone/json?location=". $lat .",". $long ."&timestamp=" . time() ."&key=" . $googleMapApiKey;
+
+    $curl = curl_init();
+    
+    $action_url = $url;
+
+
+
+    curl_setopt_array($curl, array(
+          CURLOPT_RETURNTRANSFER => 1,
+          CURLOPT_URL => $url
+      ));
+    $resp = curl_exec($curl);
+
+
+       $result = json_decode($resp, true);
+
+    return $result;   
+  
+  }
 
 
 
