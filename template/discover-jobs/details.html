@@ -5,7 +5,7 @@
       <h3 class="jg-no-margin jg-orange"><%= data.page_name %> - <%= data.country_nicename %></h3>
       <p class="jg-bold jg-mar-top jg-grey">Posted : <%=  created_at %></p>
       <!-- <p class="jg-bold ">Salary: 		12,000 AED</p> -->
-      <p class="jg-bold ">Valid Until: 	<%= event_date %>| <%= start_time %> - <%= end_time %> </p>
+      <p class="jg-bold ">Valid Until: 	<%= event_date %>| <%= moment(moment.utc(event_date + ' ' + start_time).toDate()).local().format('hh:mmA') %> - <%= moment(moment.utc(event_date + ' ' + end_time).toDate()).local().format('hh:mmA') %> </p>
     </div>
     <div class="col-sm-4">
       <div class="row jg-mar-btm">
@@ -53,7 +53,7 @@
         <div class="col-sm-9">
           <ul class="jg-available-sched-list">
             <% _.each(data.time_breakdown, function(i){  %>
-            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" data-candidate_number = "<%= i.designated_candidate_number %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= moment(data.event_date + ' ' +i.time_start).format('hh:mmA') %>-<%= moment(data.event_date + ' ' +i.time_end).format('hh:mmA') %></li>
+            <li data-start="<%= i.time_start %>" data-end="<%= i.time_end %>" data-id="<%= i.time_breakdown_id %>" data-candidate_number = "<%= i.designated_candidate_number %>" class="schedule <% if(i.is_filled == 1) { %> jg-sched-unavailable <% } else { %>jg-sched-available <% } %>"><%= moment(moment.utc(data.event_date + ' ' +i.time_start).toDate()).local().format('hh:mmA') %>-<%= moment(moment.utc(data.event_date + ' ' +i.time_end).toDate()).local().format('hh:mmA')  %></li>
             <% }) %>
           </ul>
         </div>
@@ -71,7 +71,7 @@
             You've applied for this event.<br>
             <% if(schedule.is_scheduled) { %>
             
-              <i class="fa fa-calendar"></i> Your Online Interview is scheduled on:<br> <%= moment(schedule.event_date).format("MMM DD YYYY") %> <%= moment(schedule.event_date + " " + schedule.schedule_time_start).format("hh:mmA") %>-<%= moment(schedule.event_date + " " + schedule.schedule_time_end).format("hh:mmA") %>
+              <i class="fa fa-calendar"></i> Your Online Interview is scheduled on:<br> <%= moment(schedule.event_date).format("MMM DD YYYY") %> <%= moment(moment.utc(schedule.event_date + " " + schedule.schedule_time_start).toDate()).local().format("hh:mmA") %>-<%= moment(moment.utc(schedule.event_date + " " + schedule.schedule_time_end).toDate()).local().format("hh:mmA") %>
             
             <% } %>
         </p>

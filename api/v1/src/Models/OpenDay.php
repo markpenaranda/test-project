@@ -4,6 +4,8 @@ namespace App\Models;
 
 use PDO;
 use App\Models\OpenDayTimeBreakdown;
+use MarkPenaranda\GMapsTimeZone\TimeZoneClient as TimeZone;
+use Carbon\Carbon;
 
 class OpenDay
 {
@@ -70,14 +72,19 @@ class OpenDay
     $this->db->beginTransaction();
     try {
 
+      $timezone = $this->getTimeZoneByPageId($page['page_id']);
+
+
       $inputArray['openday_id'] = substr(uniqid(), 0, 8);
-      $inputArray['event_date'] = date("Y-m-d", strtotime($inputArray['event_date']));
+      $inputArray['event_date'] = date("Y-m-d", strtotime($inputArray['event_date'] . " " . $timeRange[0]['start']));
       $inputArray['rate_per_hour'] = $this->currentRatePerHour;
-      $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate']) * $this->currentRatePerHour;
+      $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate'], $timezone['timeZoneId']) * $this->currentRatePerHour;
       $inputArray['date_created'] = date('Y-m-d H:i:s');
       $inputArray['date_updated'] = date('Y-m-d H:i:s');
       $inputArray['page_id'] = $page['page_id'];
       $timeInterval = $inputArray['time_interval_per_candidate'];
+
+
 
       $sqlInsert = "
           INSERT INTO i_openday (
@@ -117,7 +124,7 @@ class OpenDay
      $opendayInsertStatement->bindValue(':introduction', $inputArray['introduction']);
 
      // Time Breakdown
-     $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
+     $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id'], $timezone['timeZoneId']);
    
     $timeBreakDownRowsSQL = array();
     $timeBreakDownToBind = array();
@@ -160,7 +167,7 @@ class OpenDay
 
      
      // Openday Time
-     $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id']);
+     $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id'], $timezone['timeZoneId']);
      $opendayTimeInsertSql = "
           INSERT INTO i_openday_time (
             `openday_id`,
@@ -691,7 +698,7 @@ class OpenDay
       $inputArray['openday_id'] = substr(uniqid(), 0, 8);
       $inputArray['event_date'] = date("Y-m-d", strtotime($inputArray['event_date']));
       $inputArray['rate_per_hour'] = $this->currentRatePerHour;
-      $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate']) * $this->currentRatePerHour;
+      $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate'], $timezone['timeZoneId']) * $this->currentRatePerHour;
       $inputArray['date_created'] = date('Y-m-d H:i:s');
       $inputArray['date_updated'] = date('Y-m-d H:i:s');
       $inputArray['page_id'] = $page['page_id'];
@@ -1018,10 +1025,16 @@ class OpenDay
   }
   // Private Functions
 
-  private function createSplitTimeArray($startTime, $endTime, $split)
+  private function createSplitTimeArray($startTime, $endTime, $split, $timezone)
   {
-    $startTime = date("H:i", strtotime($startTime));
-    $endTime = date("H:i", strtotime($endTime));
+ 
+    $startCarbon = Carbon::createFromFormat("h:ia", $startTime, $timezone);
+    $startCarbon->tz('UTC');
+    $startTime = $startCarbon->format("H:i");
+
+    $endCarbon = Carbon::createFromFormat("h:ia", $endTime, $timezone);
+    $endCarbon->tz('UTC');
+    $endTime = $endCarbon->format("H:i");
 
     $timeArray = [];
     do {
@@ -1038,14 +1051,15 @@ class OpenDay
     return $timeArray;
   }
 
-  public function computeTotalHours(array $timeRange, $timeInterval)
+  public function computeTotalHours(array $timeRange, $timeInterval, $timezone)
   {
      $breakdownCount = 0;
      foreach ($timeRange as $range) {
         $timeBreakDown = $this->createSplitTimeArray(
           $range['start'],
           $range['end'],
-          $timeInterval
+          $timeInterval,
+          $timezone
         );
 
         $breakdownCount += count($timeBreakDown);
@@ -1062,7 +1076,7 @@ class OpenDay
 
 
 
-  private function buildSaveTimeBreakDownData(array $timeRange, $timeInterval, $opendayId)
+  private function buildSaveTimeBreakDownData(array $timeRange, $timeInterval, $opendayId, $timezone)
   {
      $data = [];
      foreach ($timeRange as $range) {
@@ -1070,7 +1084,8 @@ class OpenDay
       $timeBreakDown = $this->createSplitTimeArray(
         $range['start'],
         $range['end'],
-        $timeInterval
+        $timeInterval,
+        $timezone
       );
       $candidate_no = 1;
       foreach ($timeBreakDown as $segment) {
@@ -1098,16 +1113,20 @@ class OpenDay
     return $data;
   }
 
-  private function buildTimeData($timerange, $opendayId)
+  private function buildTimeData($timerange, $opendayId, $timezone)
   {
     $startTime = current($timerange)['start'];
     $endTime   = end($timerange)['end'];
 
+    $start = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime($startTime)), $timezone);
+    $end = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime($endTime)), $timezone);
+    $start->tz('UTC');
+    $end->tz('UTC');
 
     return [
       'openday_id' => $opendayId,
-      'start_time' => date("H:i:s", strtotime($startTime)),
-      'end_time'   => date("H:i:s", strtotime($endTime))
+      'start_time' => $start->format("H:i:s"),
+      'end_time'   => $end->format("H:i:s")
     ];
   }
 
@@ -1154,6 +1173,35 @@ class OpenDay
 
       ";
     }
+  }
+
+  private function getTimeZoneByPageId($pageId)
+  {
+    $sql = "SELECT * FROM i_page 
+            JOIN i_city ON i_page.city_id = i_city.city_id
+            WHERE i_page.page_id='$pageId'
+            ";
+
+    try {
+      
+
+      $statement = $this->db->prepare($sql);
+      $statement->execute();
+      $city = $statement->fetch();
+
+      $timezone = TimeZone::getTimeZoneByCoordinates(
+                              $city['longitude'], 
+                              $city['latitude'],
+                              "AIzaSyBxkwfU2Xdm9pT6J1xGVmBOca9J04TeirE"
+                        );
+
+      return $timezone;
+
+    } 
+    catch(PDOException $e) {
+      return $e;
+    }
+
   } 
 
 

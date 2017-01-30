@@ -17,7 +17,7 @@
 												<p class="label_p">Time Range From</p>
 												<h6>
 													<i class="fa fa-clock-o" aria-hidden="true"></i>
-													<%= moment(data.event_date + " " + data.start_time).format("hh:mmA") %> - <%= moment(data.event_date + " " + data.end_time).format("hh:mmA") %> 
+													<%= moment(moment.utc(data.event_date + " " + data.start_time).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc(data.event_date + " " + data.end_time).toDate()).local().format("hh:mmA") %> 
 												</h6>
 											</div>
 											<div class="col-lg-3">

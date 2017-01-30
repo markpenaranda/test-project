@@ -45,7 +45,7 @@
 	</div>
 	<div class="col-lg-12 col-sm-12 col-xs-12">
 		<div class="row">
-			<h4 class="schedule_h4">Sched :<%= moment("1992-09-03 " + data.schedule_time_start).format("hh:mmA") %>-<%= moment("1992-09-03 " + data.schedule_time_end).format("hh:mmA") %></h4>
+			<h4 class="schedule_h4">Sched :<%= moment(moment.utc("1992-09-03 " + data.schedule_time_start).toDate()).local().format("hh:mmA") %>-<%= moment(moment.utc("1992-09-03 " + data.schedule_time_end).toDate()).local().format("hh:mmA") %></h4>
 		</div>
 	</div>
 	<div class="col-lg-12 col-sm-12 col-xs-12">

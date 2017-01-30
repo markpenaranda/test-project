@@ -8,6 +8,7 @@ use App\Validations\UpdateOpenDayValidation;
 use App\Helpers\Request;
 use App\Helpers\Paginate;
 
+
 /**
  * Class OpenDayController
  * @package App\Controllers
@@ -28,6 +29,7 @@ class OpenDayController extends BaseController
 
    public function index($request, $response)
    {
+
       $paginate = $this->paginate->init($request->getParam('page'));
       $items = $this->openDayResource->getLatestEvents($paginate);
                     

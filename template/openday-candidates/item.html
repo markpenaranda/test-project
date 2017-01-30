@@ -27,7 +27,7 @@
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div class="row">
-										<h4 class="schedule_h4">Sched : <%= time.schedule_time_start %> - <%= time.schedule_time_end %></h4>
+										<h4 class="schedule_h4">Sched : <%= moment(moment.utc("2017-01-01 " + time.schedule_time_start).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc("2017-01-01 " + time.schedule_time_end).toDate()).local().format("hh:mmA") %></h4>
 									</div>
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">

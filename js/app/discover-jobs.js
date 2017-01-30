@@ -205,8 +205,8 @@ var discoverJobsManagement = (function($) {
         selectedOpenday = res;
         var created = moment(res.date_created).fromNow();
         var event_date = moment(res.event_date).format("MMMM D YYYY");
-         var start_time = moment("2013-02-08 " + res.start_time).format("hh:mmA");
-         var end_time = moment("2013-02-08 " + res.end_time).format("hh:mmA");
+         var start_time = moment("2013-02-08 " + res.start_time).format("HH:mm");
+         var end_time = moment("2013-02-08 " + res.end_time).format("HH:mm");
         // console.log(created);
 
         getTemplate("details.html", function(render){
