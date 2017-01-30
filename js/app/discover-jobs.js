@@ -203,7 +203,7 @@ var discoverJobsManagement = (function($) {
       $.get(apiUrl + "/openday/" + id + "?user_id=" + getCurrentUserId(), function(res){
         console.log(res);
         selectedOpenday = res;
-        var created = moment(res.date_created).fromNow();
+        var created = moment(moment.utc(res.date_created).toDate()).fromNow();
         var event_date = moment(res.event_date).format("MMMM D YYYY");
          var start_time = moment("2013-02-08 " + res.start_time).format("HH:mm");
          var end_time = moment("2013-02-08 " + res.end_time).format("HH:mm");

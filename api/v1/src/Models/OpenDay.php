@@ -41,7 +41,7 @@ class OpenDay
       SELECT * FROM i_openday
       WHERE is_deleted = 0
       AND event_date >= CURDATE()
-      ORDER BY date_created DESC
+      ORDER BY date_created ASC
       LIMIT ". $paginate['skip'] .", " . $paginate['limit'] . "
     ";
 
@@ -277,6 +277,7 @@ class OpenDay
       $sql = "
         SELECT * FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
              AGAINST ('{$query}' IN BOOLEAN MODE)
+             ORDER BY event_date ASC
              LIMIT " . $paginate['skip'] .", ". $paginate['limit'] ."
       ";
 
