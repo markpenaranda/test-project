@@ -98,7 +98,10 @@ var candidateScreenManagement = (function($) {
          }
 
          if(data.tag == "add") {
-            addCandidate(data.user_id);
+            $.get(apiUrl + "/openday/" + getCurrentRoom() + "/schedule?user_id=" + data.user_id, function(candidate){
+              addCandidate(candidate);
+
+            });
 
          }
 

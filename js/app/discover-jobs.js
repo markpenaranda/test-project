@@ -322,7 +322,11 @@ var discoverJobsManagement = (function($) {
           $("#joinSuccess").fadeIn();
           $("#joinForm").fadeOut();
           $("#joinSubmit").fadeOut();
-         loadDetails(selectedOpendayId);
+          $.get(window.liveServerUrl + '/room/' + selectedOpendayId + '/add?user_id=' + userId, function(res) {
+
+            loadDetails(selectedOpendayId);
+          });
+         
         },
         error:  function (error) {
           $("#joinError").fadeIn();
