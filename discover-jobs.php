@@ -54,15 +54,15 @@
 						</p>
 						<div id="resultsContainer" style="display:none;" class="jg-opendayonline-eventcallresult-container">
 							<div class="row">
-								<div class="col-lg-3 col-sm-3 col-xs-12 col-md-3">
+								<div  class="col-lg-3 col-sm-3 col-xs-12 col-md-3">
 									<!--<h4 class="jg-resultdate jg-center">January 1, 2017</h4>-->
 									<h4><span id="numberOfResults"></span> Results <span id="resultsSize"></span> out of <span id="totalResults"></span></h4>
-									<ul id="resultsUl" class="jg-opendayonline-eventcallresult-list">
+									<ul style="overflow: scroll; max-height: 500px;" id="resultsUl" class="jg-opendayonline-eventcallresult-list">
 
 
 									</ul>
-									<p class="jg-load-on-scroll jg-top-indent">
-							<!-- 			<span class="fa fa-rotate-right"></span> -->
+									<p id="resultsUlLoader" class="jg-load-on-scroll jg-top-indent loading-results">
+										<span class="fa fa-rotate-right fa-spin" style="color:#555"></span>
 									</p>
 								</div>
 								<div class="col-lg-9 col-md-9 col-xs-12 col-sm-9">

@@ -10,6 +10,9 @@ var discoverJobsManagement = (function($) {
     var accountInfo = null;
     var selectedOpenday = null;
     var coverLetters = null;
+    var currentPage = 1;
+    var currentResult = 0;
+    var totalResults = 0;
     var selectedTime = {
         time_start: null,
         time_end: null,
@@ -62,6 +65,8 @@ var discoverJobsManagement = (function($) {
       $("#resultDetails").on('click', ".join-form-cancel", closeJoinForm);
 
       $("body").on('click', '#back', back);
+
+      $("#resultsUl").infiniteScroll({delay: 500}, loadNextPage);
 
       $(window).on('resize', function(){
         if($(window).width() > 768) {
@@ -117,15 +122,28 @@ var discoverJobsManagement = (function($) {
     }
 
     function initialOpenday() {
-      $.get(apiUrl + '/openday', function(res) {
+      $.get(apiUrl + '/openday?page=' + currentPage, function(res) {
         $("#resultsContainer").fadeIn();
-        
-        $("#resultsSize").html(res.count_result);
-        $("#totalResults").html(res.total);
+        countResult = parseInt(res.count_result); 
+        totalResults = parseInt(res.total);
+        if(currentPage > 1) {
+          var currentSize = $("#resultsSize").html();
+          countResult += parseInt(currentSize);
+        }
+        $("#resultsSize").html(countResult);
+        $("#totalResults").html(totalResults);
         loadResults(res.results);
          $(".loading-results").fadeOut();
       });
 
+    }
+
+    function loadNextPage() {
+      if(countResult < totalResults) {
+        currentPage += 1;
+        var q = $("#search").val();
+        loadQuery(q);
+      }
     }
 
     function manualSearch(event) {
@@ -139,21 +157,31 @@ var discoverJobsManagement = (function($) {
     }
 
     function searchEvent(input) {
+      currentPage = 1;
       $(".loading-results").fadeIn();
       var q = input.val();
+      loadQuery(q);
+    }
+
+    function loadQuery(q) {
       if(q.length == 0) {
         initialOpenday();
       }
       if (q.length >= 3 ) {
           if (searchRequest != null)
               searchRequest.abort();
-          var searchRequest = $.get(apiUrl + "/openday/search?q=" + q, function(res){
+          var searchRequest = $.get(apiUrl + "/openday/search?page="+ currentPage +"&q=" + q, function(res){
             $(".loading-results").fadeOut();
             $("#resultsContainer").fadeIn();
+            countResult = parseInt(res.count_result); 
+            totalResults = parseInt(res.total);
+            if(currentPage > 1) {
+              var currentSize = $("#resultsSize").html();
+              countResult += parseInt(currentSize);
+            }
 
-
-              $("#resultsSize").html(res.count_result);
-              $("#totalResults").html(res.total);
+              $("#resultsSize").html(countResult);
+              $("#totalResults").html(totalResults);
               loadResults(res.results);
               $(".jg-load-on-scroll ").fadeOut();
           });
@@ -161,7 +189,9 @@ var discoverJobsManagement = (function($) {
     }
 
     function loadResults(results) {
-        $("#resultsUl").html('');
+        if(currentPage == 1) {
+          $("#resultsUl").html('');
+        }
 
         for (var i = 0; i < results.length; i++) {
         

@@ -1,6 +1,6 @@
 <!-- External JavaScripts
 ============================================= -->
-<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/components/jquery.timepicker.min.js"></script>
 <script type="text/javascript" src="js/components/bootstrap-datepicker.min.js"></script>
@@ -18,6 +18,7 @@
 <script type="text/javascript" src="js/plugins/moment-with-locales.js"></script>
 <script type="text/javascript" src="js/plugins/jquery.caret.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery.tag-editor.js"></script>
+<script type="text/javascript" src="js/plugins/jquery.infinite-scroll.js"></script>
 
 
 
