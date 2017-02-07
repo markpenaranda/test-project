@@ -266,10 +266,10 @@ class OpenDay
     try {
      
 
-      $countSql = " SELECT
+      $countSql = "SELECT
                     COUNT(IF(MATCH (event_name, introduction) AGAINST ('$query' IN NATURAL LANGUAGE MODE), 1, NULL))
                     AS total
-                    FROM i_openday WHERE is_deleted='0'"
+                    FROM i_openday WHERE is_deleted='0'";
 
       $statement = $this->db->prepare($countSql);
 
