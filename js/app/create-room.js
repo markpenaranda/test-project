@@ -248,6 +248,21 @@ var createRoomScreenManagement = (function($) {
             }
         });
 
+        var rangeValid = true;
+        $.each(data['timerange'], function(i, range){
+          if(range.start == range.end) {
+            rangeValid = false;
+          }
+        });
+
+        if(!rangeValid) {
+          valid = false;
+          $("#time-range-zero-minute-" + roomNumber).fadeIn();
+        } 
+        else {
+          $("#time-range-zero-minute-" + roomNumber).fadeOut();
+        }
+
         return valid;
     }
 
