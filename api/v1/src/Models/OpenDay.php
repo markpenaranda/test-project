@@ -264,7 +264,7 @@ class OpenDay
   public function search($query, $paginate)
   {
     try {
-      $countSql = "SELECT COUNT(*) as total  AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
+       $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
              AGAINST ('$query' IN NATURAL LANGUAGE MODE)";
 
 
