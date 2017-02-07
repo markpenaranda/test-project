@@ -276,8 +276,7 @@ class OpenDay
       $count = $statement->fetch();
 
       $sql = "
-        SELECT * FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
-             AGAINST ('$query' IN NATURAL LANGUAGE MODE)
+        SELECT * FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction) AGAINST ('$query' IN NATURAL LANGUAGE MODE)
       ";
 
       $statement = $this->db->prepare($sql);
