@@ -86,6 +86,7 @@ var opendayCandidatesScreenManagement = (function($) {
         $("#opendayId").val(opendayId);
         loadOpendayDetails();
         loadScheduledCandidates();
+        $("#opendayProfile").html("<p class='click-to-view-info centered-info' ><i class='fa fa-search fa-fw'></i>Click 'View CV' to review candidates.</p>");
         
     }
 
