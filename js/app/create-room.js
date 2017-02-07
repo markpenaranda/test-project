@@ -282,7 +282,34 @@ var createRoomScreenManagement = (function($) {
           $("#time-range-zero-minute-" + roomNumber).fadeOut();
         }
 
+        var jobValid = true;
+        $.each(data['jobs'], function(i, job){
+            if(countOccurance(job, data['jobs']) > 1) {
+              jobValid = false;
+            }
+        });
+
+        if(!jobValid) {
+          valid = false;
+          $("#linked-job-post-required-" + roomNumber).fadeIn();
+        } 
+        else {
+          $("#linked-job-post-required-" + roomNumber).fadeOut();
+        }
+
         return valid;
+    }
+
+    function countOccurance($needle, $haystack) {
+        var instance = 0;
+        for (var i = $haystack.length - 1; i >= 0; i--) {
+          var item = $haystack[i];
+          if(item == $needle) {
+            ++instance;
+          }
+        }
+
+        return instance;
     }
 
     function reinitializeOtherTimeRange() {
