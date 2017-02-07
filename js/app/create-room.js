@@ -74,13 +74,14 @@ var createRoomScreenManagement = (function($) {
       // $("#interviewPostFormContainer").on("keyup", "input", validate);
 
       $("#createdList").on('change', useOldEvent);
+
+
+      $("#interviewPostFormContainer").on('change', '.job-type-radio',jobTypeChange);
     }
 
     function initialTemplate() {
       addForm();
-      addNewJob();
-      addTimeRange();
-      loadResponsibleUserOption();
+
       loadPastCreated();
     }
 
@@ -142,12 +143,30 @@ var createRoomScreenManagement = (function($) {
           $('.ui-timepicker-select').addClass('col-lg-12');
           ++numberOfRooms;
 
+          addNewJob();
+          addTimeRange();
+          loadResponsibleUserOption();
        
       });
     }
 
-    function addNewJob() {
-      $.get(apiUrl + '/resources/filterjob', function(res) {
+    function jobTypeChange() {
+      console.log("change");
+      var currentRoom = numberOfRooms - 1;
+      currentRoom = (currentRoom < 0) ? 0 : currentRoom;
+
+      $('group#jobSelect').html('');
+      addNewJob();
+
+    }
+
+    function addNewJob() {  
+      var currentRoom = numberOfRooms - 1;
+      currentRoom = (currentRoom < 0) ? 0 : currentRoom;
+      console.log(".job-type-radio-"+ currentRoom + ":checked");  
+      var employment_type_id = $(".job-type-radio-"+ (numberOfRooms - 1) + ":checked").val();
+
+      $.get(apiUrl + '/resources/filterjob?employment_type_id=' + employment_type_id, function(res) {
         getTemplate('partials/select-job.html', function(render){
           var html = render({jobs: res.data, room_number: numberOfRooms - 1});
           $(".add-job-btn").css("display", "none");

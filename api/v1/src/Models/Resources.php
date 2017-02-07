@@ -318,7 +318,7 @@ class Resources {
         }
     }
 
-    public function getFilterJob() {
+    public function getFilterJob($employment_type) {
 
         try {
             // $sql = "
@@ -326,7 +326,9 @@ class Resources {
             //     FROM i_zconnected_filter_job ";
 
             $sql = "
-              SELECT job_post_id, job_title from i_job_post;
+              SELECT job_post_id, job_title from i_job_post
+              WHERE employment_type_id = $employment_type
+              ;
             ";
 
             $statement = $this->db->prepare($sql);

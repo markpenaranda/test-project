@@ -385,7 +385,7 @@ class ResourcesController {
     public function getFilterJob($request, $response, $args)
     {
 
-        $result = $this->resource->getFilterJob();
+        $result = $this->resource->getFilterJob($request->getParam('employment_type_id'));
 
         if(empty($result)) {
             return $response->withStatus(200)->withJson(array(
