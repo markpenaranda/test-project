@@ -173,8 +173,7 @@ var createRoomScreenManagement = (function($) {
           $("a.remove-job-btn").css("display", "block");
             $('group#jobSelect').append(html);
 
-            $("a.remove-job-btn").last().css("display", "none");
-            $("a.add-job-btn").last().css("display", "block");
+            reinitializeJobOptionButtons(currentRoom);
         });
       });
 
@@ -182,6 +181,17 @@ var createRoomScreenManagement = (function($) {
 
     function removeJob() {
       $(this).parent().parent().remove();
+      var roomNumber = $(this).data("room-number");
+      reinitializeJobOptionButtons(roomNumber);
+    }
+
+    function reinitializeJobOptionButtons(roomNumber) {
+      $(".remove-job-btn-" + roomNumber).css("display", "block");
+      $(".add-job-btn-" + roomNumber).css("display", "block");
+      var countJobLink = $(".remove-job-btn-"+ roomNumber).length;
+      if(countJobLink  == 1) {
+        $(".remove-job-btn-" + roomNumber).first().css("display", "none");
+      }
     }
 
     function loadResponsibleUserOption() {
