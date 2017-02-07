@@ -265,7 +265,7 @@ class OpenDay
   {
     try {
       $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
-             AGAINST ("{$query}" IN BOOLEAN MODE)";
+             AGAINST ('$query' IN BOOLEAN MODE)";
 
       $statement = $this->db->prepare($countSql);
 
