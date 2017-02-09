@@ -12,10 +12,13 @@ var candidateScreenManagement = (function($) {
 
     // Init
     function init() {
-        loadOpendayDetail();
-        socketIOEventHandlers();
-        addEventHandlers();
-        renderNecessaryTemplate();
+        console.log("trigger here");
+        loadOpendayDetail(function(){
+            socketIOEventHandlers();
+            addEventHandlers();
+            renderNecessaryTemplate();
+
+        });
     }
 
     // Event Handler
@@ -71,14 +74,19 @@ var candidateScreenManagement = (function($) {
     }
 
 
-    function loadOpendayDetail() {
+    function loadOpendayDetail(callback) {
         $.get(apiUrl + '/openday/' + getCurrentRoom(), function(opendayRes){
+            console.log(opendayRes);
             openday = opendayRes;
             getTemplate('openday-detail.html',function(render) {
                 var html = render({data: openday, jobName: openday.jobs});
                 $("#opendayDetails").html(html);
                 $(".companyName").html(openday.page_name);
+                callback();
             });
+
+          
+
         });
     }
 
@@ -118,6 +126,7 @@ var candidateScreenManagement = (function($) {
           $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
             var scheduleStatus = parseInt(schedule.status);
             var isScheduled = (schedule.is_scheduled === '1');
+            console.log("trigger inside openday load");
             // Waiting and Scheduled
             if(scheduleStatus == 1 && isScheduled) {
                 activateScheduledUnderscoreTemplate(schedule);
@@ -142,6 +151,7 @@ var candidateScreenManagement = (function($) {
 
             // Interviewing
             if(scheduleStatus == 0) {
+                alert("here");
                 activateJoinUnderscoreTemplate(schedule);
             }
 
