@@ -65,13 +65,19 @@ var myOpendayScreenManagement = (function($) {
            for (var i = 0; i < results.length; i++) {
 
                   var result = results[i];
-                  getTemplate("item.html", function(render){
-                    var html = render({ data: result});
-                    $("#active_openday>ul").append(html);
-                  });
+                  renderOpenday(result);
+                 
             }
         });
 
+    }
+
+
+    function renderOpenday(openday) {
+         getTemplate("item.html", function(render){
+                    var html = render({ data: openday});
+                    $("#active_openday>ul").append(html);
+                  });
     }
 
 
