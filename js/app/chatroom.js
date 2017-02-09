@@ -309,6 +309,7 @@ var candidateScreenManagement = (function($) {
               clearInterval(lapseTimerInterval);
               $("#candidate-" + userId).remove();
               pauseTimer();
+              $("#liveOpendaySelect").prop('disabled', false);
               // TODO: Add AJAX here to record that the candidate has ended in the DB.
 
           });
@@ -346,6 +347,7 @@ var candidateScreenManagement = (function($) {
         getTemplate('live_candidate_details.html', function(render) {
              var renderedhtml = render({user: user, room_id: getCurrentRoom()});
              $("#liveCandidateDetails").append(renderedhtml);
+             $("#liveOpendaySelect").prop('disabled', 'disabled');
          });
       });
 
