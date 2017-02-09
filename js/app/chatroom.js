@@ -344,10 +344,11 @@ var candidateScreenManagement = (function($) {
         var user = { id: res.user_id, name: res.name, candidate_no:res.candidate_number  };
         $("#spanCandidateNumber").html("Candidate" + res.candidate_number + ": ");
         $("#spanCandidateName").html(res.name);
+        $("#liveOpendaySelect").prop('disabled', 'disabled');
         getTemplate('live_candidate_details.html', function(render) {
              var renderedhtml = render({user: user, room_id: getCurrentRoom()});
              $("#liveCandidateDetails").append(renderedhtml);
-             $("#liveOpendaySelect").prop('disabled', 'disabled');
+      
          });
       });
 
