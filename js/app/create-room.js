@@ -77,6 +77,8 @@ var createRoomScreenManagement = (function($) {
 
 
       $("#interviewPostFormContainer").on('change', '.job-type-radio',jobTypeChange);
+
+      $("#addRoom").on('click', addForm);
     }
 
     function initialTemplate() {
@@ -97,23 +99,6 @@ var createRoomScreenManagement = (function($) {
       });
     }
 
-    // function validate() {
-    //         console.log($(this).val());
-    //   var empty = false;
-    //     $('input').each(function() {
-    //         if ($(this).val() == '') {
-    //             empty = true;
-    //         }
-    //     });
-
-    //     if (empty) {
-    //         $('#preview').attr('disabled', 'disabled'); 
-    //         $('#preview').addClass('disabled'); 
-    //     } else {
-    //         $('#preview').removeAttr('disabled'); 
-    //         $('#preview').removeClass('disabled'); 
-    //     }
-    // }
 
     function useOldEvent() {
       var opendayId = $(this).val()
@@ -162,16 +147,21 @@ var createRoomScreenManagement = (function($) {
 
     function addNewJob() {  
       var currentRoom = numberOfRooms - 1;
+      console.log($(this).data("room-number"));
+      if ($(this).data("room-number")) {
+       currentRoom = $(this).data("room-number");
+      }
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
+
       console.log(".job-type-radio-"+ currentRoom + ":checked");  
-      var employment_type_id = $(".job-type-radio-"+ (numberOfRooms - 1) + ":checked").val();
+      var employment_type_id = $(".job-type-radio-"+ currentRoom+ ":checked").val();
 
       $.get(apiUrl + '/resources/filterjob?employment_type_id=' + employment_type_id, function(res) {
         getTemplate('partials/select-job.html', function(render){
-          var html = render({jobs: res.data, room_number: numberOfRooms - 1});
-          $(".add-job-btn").css("display", "none");
+          var html = render({jobs: res.data, room_number: currentRoom});
+          // $(".add-job-btn").css("display", "none");
           $("a.remove-job-btn").css("display", "block");
-            $('group#jobSelect').append(html);
+            $('group#jobSelect-' + currentRoom).append(html);
 
             reinitializeJobOptionButtons(currentRoom);
         });
@@ -209,11 +199,20 @@ var createRoomScreenManagement = (function($) {
 
     function addTimeRange() {
       numberOfTimeRange += 1;
-      getTemplate('partials/input-time-range.html', function (render) {
-        var html = render({ room_number: numberOfRooms - 1, time_count: numberOfTimeRange});
-        var lastEndTime = $('.end').last().val();
 
-        $("#timeRangeList").append(html);
+      var currentRoom = numberOfRooms - 1;
+      console.log($(this).data("room-number"));
+      if (typeof $(this).data("room-number") !== "undefined") {
+       currentRoom = $(this).data("room-number");
+      }
+      console.log(currentRoom);
+      currentRoom = (currentRoom < 0) ? 0 : currentRoom;
+
+      getTemplate('partials/input-time-range.html', function (render) {
+        var html = render({ room_number: currentRoom, time_count: numberOfTimeRange});
+        var lastEndTime = $('#timeRangeList-'+ currentRoom +' .end').last().val();
+        console.log("#timeRangeList-" + currentRoom);
+        $("#timeRangeList-" + currentRoom).append(html);
 
         $("a.add-time-range").css("display", "none");
         $("a.remove-time-range").css("display", "block");
@@ -224,7 +223,7 @@ var createRoomScreenManagement = (function($) {
           $("a.remove-time-range").last().css("display", "none");
         }
 
-        timePickerInit(lastEndTime, numberOfRooms - 1, numberOfTimeRange);
+        timePickerInit(lastEndTime, currentRoom, numberOfTimeRange);
         });
     }
 

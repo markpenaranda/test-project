@@ -50,14 +50,18 @@
 								</ul>
 							</li>
 						</ul>
-						<ul class="apply_page_btnset_ul">
-							<li>
-								<button id="cancel" class="hvr-underline-reveal">cancel</button>
+
+						<ul style="width:100%" class="apply_page_btnset_ul">
+							<li class="pull-left">
+								<button id="addRoom" class="hvr-underline-reveal"><i class="fa fa-plus fa-fw"></i>Add Room</button>
 							</li>
-							<li>
+							<li class="pull-right">
 								<button id="preview" class="hvr-underline-reveal">preview</button>
 								<button id="continue" style="display:none;" class="hvr-underline-reveal">Continue</button>
 								<button id="submit" style="display:none;" class="hvr-underline-reveal">Checkout and Publish</button>
+							</li>
+							<li class="pull-right">
+								<button id="cancel" class="hvr-underline-reveal">cancel</button>
 							</li>
 						</ul>
 					</div>
