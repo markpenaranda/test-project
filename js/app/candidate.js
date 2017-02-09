@@ -219,7 +219,7 @@ var candidateScreenManagement = (function($) {
       
       
        getTemplate('end.html', function(render) {
-                       var renderedhtml = render({openday: openday, company_name : company_name});
+                       var renderedhtml = render({openday: openday});
                        $("#waitingDiv").html(renderedhtml);
                        $("#opendayDetails").fadeIn();
                        $("#waitingDiv").fadeIn();
