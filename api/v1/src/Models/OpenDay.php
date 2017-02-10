@@ -498,13 +498,18 @@ class OpenDay
     }
   }
 
-  public function getCandidates($opendayId, $isScheduled) {
+  public function getCandidates($opendayId, $isScheduled, $withEnded = false) {
+    $status = 2;
+    if($withEnded) {
+      $status = 3;
+    }
+    
     $sql = "
       SELECT * FROM i_openday_attendees as attendees
       JOIN i_users_object_data as user on attendees.user_id = user.user_id
       WHERE attendees.openday_id = '$opendayId'
       AND attendees.is_scheduled = '$isScheduled '
-      AND attendees.status < 2
+      AND attendees.status < $status
     ";
     try {
 
@@ -865,6 +870,19 @@ class OpenDay
 
 
       $this->db->commit();
+
+
+      $querySql = "SELECT date_interviewed_end 
+              FROM i_openday_attendees
+              WHERE openday_id = '$opendayId'
+              AND user_id = '$userId'
+              ";
+      
+      $statement = $this->db->prepare($querySql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+      return $schedule;
+
     }
     catch(PDOException $e) {
       $this->db->rollBack();

@@ -5916,6 +5916,16 @@ button.end_btn{
   text-align: center;
   width: 100%;
 }
+.ended_h4 {
+  color: #555;
+  float: left;
+  font-family: open_sanssemibold;
+  font-size: 13px;
+  margin: 10px 0 0;
+  text-align: center;
+  width: 100%;
+}
+
 
 .candidates_profile_view_container{
   float: left;

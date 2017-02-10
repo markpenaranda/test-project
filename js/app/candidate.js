@@ -151,7 +151,7 @@ var candidateScreenManagement = (function($) {
 
             // Interviewing
             if(scheduleStatus == 0) {
-                alert("here");
+                
                 activateJoinUnderscoreTemplate(schedule);
             }
 

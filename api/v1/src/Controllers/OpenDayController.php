@@ -178,8 +178,9 @@ class OpenDayController extends BaseController
    {
       $isScheduled     = $request->getParam('is_scheduled');
       $opendayId       = $args['openday_id'];
+      $withEnded       = $request->getParam('with_ended');
 
-      $items = $this->openDayResource->getCandidates($opendayId, $isScheduled);
+      $items = $this->openDayResource->getCandidates($opendayId, $isScheduled, $withEnded);
 
 
       return $response->withStatus(200)->withJson($items);
@@ -250,7 +251,9 @@ class OpenDayController extends BaseController
       $opendayId = $args['openday_id'];
       $userId    = $request->getParam('user_id');
 
-      $this->openDayResource->endInterview($opendayId, $userId);
+      $schedule = $this->openDayResource->endInterview($opendayId, $userId);
+      return $response->withStatus(200)->withJson($schedule);
+  
    }
 
    public function getListOfCandidateId($request, $response, $args)

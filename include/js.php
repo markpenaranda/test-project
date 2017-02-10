@@ -9,7 +9,7 @@
 <script type="text/javascript" src="js/plugins.js"></script>
 <script type="text/javascript" src="js/plugins/adapter-latest.js"></script>
 <script type="text/javascript" src="js/plugins/peer.min.js"></script>
-<script type="text/javascript" src="https://liveserver.herokuapp.com/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="http://45.76.115.245:3000/socket.io/socket.io.js"></script>
 
 <!-- jQuery Cookie Plugin -->
 <script type="text/javascript" src="js/plugins/jquery.cookie.js"></script>
@@ -28,7 +28,7 @@
 <!-- Footer Scripts
 ============================================= -->
 <script type="text/javascript">
-  window.liveServerUrl = "https://liveserver.herokuapp.com";
+  window.liveServerUrl = "http://45.76.115.245:3000";
 </script>
 <script type="text/javascript" src="js/components/notify.js"></script>
 <script type="text/javascript" src="js/components/moneyfied.js"></script>

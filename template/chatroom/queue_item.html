@@ -48,7 +48,8 @@
 			<h4 class="schedule_h4">Sched :<%= moment(moment.utc("1992-09-03 " + data.schedule_time_start).toDate()).local().format("hh:mmA") %>-<%= moment(moment.utc("1992-09-03 " + data.schedule_time_end).toDate()).local().format("hh:mmA") %></h4>
 		</div>
 	</div>
-	<div class="col-lg-12 col-sm-12 col-xs-12">
+	<% if(!data.date_interviewed_end) { %>
+	<div id="candidate-<%= user_id %>-button-group" class="col-lg-12 col-sm-12 col-xs-12">
 		<div class="row">
 			<ul class="interview_list_btn_ul">
 				<li>
@@ -67,4 +68,12 @@
 			</ul>
 		</div>
 	</div>
+	<% } %>
+
+	<div id="candidate-<%= user_id %>-end" <% if(!data.date_interviewed_end) { %> style="display:none" 	<% } %>  class="clol-lg-12 col-sm-12 col-xs-12">
+		<div class="row">
+			<h4 class="ended_h4">Interview Ended : <span id="candidate-<%= user_id %>-end-span"><%= moment(moment.utc(data.date_interviewed_end).toDate()).local().format("MM/D hh:mmA") %></span></h4>
+		</div>
+	</div>
+
 </li>

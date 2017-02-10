@@ -146,7 +146,6 @@ var candidateScreenManagement = (function($) {
     }
 
     function renderNecessaryTemplate () {
-        // TODO: Do ajax stuff here and activate the necessary template
         var opendayId = $("#roomId").val();
         loadOpenday(opendayId);
     }
@@ -212,7 +211,7 @@ var candidateScreenManagement = (function($) {
        $("#queue-item").html("");
       var is_scheduled = $("#scheduleFilter").val();
 
-      $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
+      $.get(apiUrl + '/openday/' + opendayId + '/candidates?with_ended=1&is_scheduled=' + is_scheduled, function(res){
        
         for (var i = 0; i < res.length; i++) {
        
@@ -307,7 +306,10 @@ var candidateScreenManagement = (function($) {
               $(".send").prop("disabled", true);
               $(".messages").html('');
               clearInterval(lapseTimerInterval);
-              $("#candidate-" + userId).remove();
+              var endInterviewTime = moment(moment.utc(res.date_interviewed_end).toDate()).local().format("MM/D hh:mmA");
+              $("#candidate-" + userId + "-end-span").html(endInterviewTime);
+              $("#candidate-"+ userId + "-button-group").fadeOut();
+              $("#candidate-"+ userId + "-end").fadeIn();
               pauseTimer();
               $("#liveOpendaySelect").prop('disabled', false);
               // TODO: Add AJAX here to record that the candidate has ended in the DB.
