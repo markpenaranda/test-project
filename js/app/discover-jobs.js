@@ -298,7 +298,7 @@ var discoverJobsManagement = (function($) {
     function join() { 
       $(this).attr("disabled", true);
       $(this).find(".loading").fadeIn();
-      var userId = $("#userId").val();
+      var userId = getCurrentUserId();
       var timeBreakdownId = selectedTime.id;
       var opendayId = selectedOpendayId;
       var data = {
@@ -346,6 +346,10 @@ var discoverJobsManagement = (function($) {
 
 
     function getCurrentUserId() {
+       var localStorageUser = localStorage.getItem('userId');
+        if(localStorageUser) {
+          return localStorageUser;
+        }
       return $("#userId").val();
     }
 

@@ -104,7 +104,14 @@ var candidateScreenManagement = (function($) {
     }
 
     function getCurrentUser() {
+
         var userId = $('#userId').val();
+        
+        var localStorageUser = localStorage.getItem('userId');
+        if(localStorageUser) {
+          return localStorageUser;
+        }
+
         return userId;
     }
 

@@ -57,7 +57,7 @@ var myOpendayScreenManagement = (function($) {
     }
 
     function loadActiveOpenday() {
-        var userId = $("#userId").val();
+        var userId = getCurrentUserId();
         var status = 1;
         $("#active_openday>ul").html('');
 
@@ -82,7 +82,7 @@ var myOpendayScreenManagement = (function($) {
 
 
     function loadEndOpenday(){
-      var userId = $("#userId").val();
+      var userId = getCurrentUserId();
         var status = 2;
         $("#end_openday>ul").html('')
 
@@ -97,7 +97,13 @@ var myOpendayScreenManagement = (function($) {
 
 
 
-
+    function getCurrentUserId() {
+         var localStorageUser = localStorage.getItem('userId');
+        if(localStorageUser) {
+          return localStorageUser;
+        }
+        return $("#userId").val();
+    }
 
 
 

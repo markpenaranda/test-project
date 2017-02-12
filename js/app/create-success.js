@@ -17,6 +17,10 @@ var createSuccessManagement = (function($) {
     }
 
     function getCurrentUserId() {
+          var localStorageUser = localStorage.getItem('userId');
+        if(localStorageUser) {
+          return localStorageUser;
+        }
         return $("#userId").val();
     }
 
