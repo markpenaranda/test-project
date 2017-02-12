@@ -140,14 +140,14 @@ var candidateScreenManagement = (function($) {
             var currentTime = getCurrentUTCTime();
             var eventSchedule = moment(schedule.event_date + " " + schedule.schedule_time_end, "YYYY-M-D H:mm:ss");
             // Missed  
-            if(eventSchedule.isBefore(currentTime) && schedule.is_attended == 0) {
+            // if(eventSchedule.isBefore(currentTime) && schedule.is_attended == 0) {
 
-                console.log(eventSchedule.isBefore(currentTime));
-                console.log(schedule.is_attended);
-                activateMissedTemplate(schedule);
-            }
+            //     console.log(eventSchedule.isBefore(currentTime));
+            //     console.log(schedule.is_attended);
+            //     activateMissedTemplate(schedule);
+            // }
 
-            else {
+            // else {
                 // Waiting and Scheduled
                 if(scheduleStatus == 1 && isScheduled) {
                     console.log("waiting");
@@ -183,7 +183,7 @@ var candidateScreenManagement = (function($) {
                     activateJoinUnderscoreTemplate(schedule);
                 }
 
-            }
+            // }
           
 
            updateCurrentlyInterviewedCandidate();

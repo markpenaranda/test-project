@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 //
 
- var peer = new Peer('openday-' + $("#userId").val(),  {host: 'mjpvc.herokuapp.com', secure:true, port:443, key: 'peerjs'});
+ var peer = new Peer('openday-' + $("#userId").val(),  {host: '45.76.115.245', key: 'peerjs'});
 
 window.peer = peer;
 
