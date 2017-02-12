@@ -4,10 +4,19 @@
 			<h1><%= data.event_name %></h1>
 			<h2><%= data.page_name %></h2>
 			<h2>
-				<% if(data.status == 0) { %>Live<% } %>
-				<% if(data.status == 1) { %>Waiting<% } %>
-				<% if(data.status == 2) { %>Interviewed<% } %>
-				<% if(data.status == 3) { %>Rejected<% } %>
+				<% if(attendance_status == "active") { %>
+					<% if(data.status == 0) { %>Live<% } %>
+					<% if(data.status == 1) { %>Waiting<% } %>
+					<% if(data.status == 3) { %>Rejected<% } %>
+					
+				<% } %>
+				<% if(attendance_status == "end") { %>
+
+					<% if(data.is_attended == 1 || data.status == 2) { %>Interviewed<% } %>
+					<% if(data.status == 3) { %>Rejected<% } %>
+					<% if(data.status == 1 && data.is_attended == 0) { %>Missed<% } %>
+
+				 <% } %>
 			</h2>
 		</li>
 		<li>

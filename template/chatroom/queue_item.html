@@ -72,7 +72,7 @@
 
 	<div id="candidate-<%= user_id %>-end" <% if(!data.date_interviewed_end) { %> style="display:none" 	<% } %>  class="clol-lg-12 col-sm-12 col-xs-12">
 		<div class="row">
-			<h4 class="ended_h4">Interview Ended : <span id="candidate-<%= user_id %>-end-span"><%= moment(moment.utc(data.date_interviewed_end).toDate()).local().format("MM/D hh:mmA") %></span></h4>
+			<h4 class="ended_h4">Done Interview at<span id="candidate-<%= user_id %>-end-span"><%= moment(moment.utc(data.date_interviewed_end).toDate()).local().format("MM/D hh:mmA") %></span></h4>
 		</div>
 	</div>
 

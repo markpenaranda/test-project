@@ -395,7 +395,8 @@ class OpenDay
       JOIN i_page as page on page.page_id = openday.page_id
       JOIN i_openday_time as time on openday.openday_id = time.openday_id
       WHERE attendees.user_id = '$userId'
-      AND openday.event_date >= CURDATE()
+      AND time.end_time > CURTIME() 
+      AND openday.event_date = CURDATE()
       ORDER BY event_date ASC
     ";
     try {
@@ -421,8 +422,9 @@ class OpenDay
       JOIN i_openday as openday on openday.openday_id = attendees.openday_id
       JOIN i_page as page on page.page_id = openday.page_id
       JOIN i_openday_time as time on openday.openday_id = time.openday_id
-      WHERE attendees.user_id = '$userId'
-      AND openday.event_date < CURDATE()
+      WHERE attendees.user_id = '$userId'     
+      AND time.end_time <= CURTIME() 
+      AND openday.event_date <= CURDATE()
       ORDER BY event_date DESC
     ";
     try {
@@ -856,7 +858,8 @@ class OpenDay
     $sql = "
       UPDATE i_openday_attendees
       SET status = 2,
-      date_interviewed_end = NOW()
+      date_interviewed_end = NOW(),
+      is_attended = 1
       WHERE openday_id = '$opendayId'
       AND user_id = '$userId'
     ";

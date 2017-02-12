@@ -65,7 +65,7 @@ var myOpendayScreenManagement = (function($) {
            for (var i = 0; i < results.length; i++) {
 
                   var result = results[i];
-                  renderOpenday(result);
+                  renderOpenday(result,"#active_openday>ul", "active");
                  
             }
         });
@@ -73,10 +73,10 @@ var myOpendayScreenManagement = (function($) {
     }
 
 
-    function renderOpenday(openday) {
+    function renderOpenday(openday, selector, schedule_status) {
          getTemplate("item.html", function(render){
-                    var html = render({ data: openday});
-                    $("#active_openday>ul").append(html);
+                    var html = render({ data: openday, attendance_status : schedule_status});
+                    $(selector).append(html);
                   });
     }
 
@@ -89,11 +89,7 @@ var myOpendayScreenManagement = (function($) {
         $.get(apiUrl + '/openday/my?user_id=' + userId +'&status=end', function(results){
            for (var i = 0; i < results.length; i++) {
                   var result = results[i];
-
-                  getTemplate("item.html", function(render){
-                    var html = render({ data: result });
-                    $("#end_openday>ul").append(html);
-                  });
+                  renderOpenday(result, "#end_openday>ul", "end");
             }
         });
 

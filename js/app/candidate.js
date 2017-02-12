@@ -127,33 +127,57 @@ var candidateScreenManagement = (function($) {
             var scheduleStatus = parseInt(schedule.status);
             var isScheduled = (schedule.is_scheduled === '1');
             console.log("trigger inside openday load");
-            // Waiting and Scheduled
-            if(scheduleStatus == 1 && isScheduled) {
-                activateScheduledUnderscoreTemplate(schedule);
+            console.log(schedule);
+
+
+            var currentTime = getCurrentUTCTime();
+            var eventSchedule = moment(schedule.event_date + " " + schedule.schedule_time_end, "YYYY-M-D H:mm:ss");
+            // Missed  
+            if(eventSchedule.isBefore(currentTime) && schedule.is_attended == 0) {
+
+                console.log(eventSchedule.isBefore(currentTime));
+                console.log(schedule.is_attended);
+                activateMissedTemplate(schedule);
             }
 
-            // Waiting not Scheduled
-             if(scheduleStatus == 1 && !isScheduled) {
-                activateWaitingListUnderscoreTemplate(schedule);
+            else {
+                // Waiting and Scheduled
+                if(scheduleStatus == 1 && isScheduled) {
+                    console.log("waiting");
+                    activateScheduledUnderscoreTemplate(schedule);
+                }
+
+                // Waiting not Scheduled
+                 if(scheduleStatus == 1 && !isScheduled) {
+                    console.log("waiting not sched");
+                    activateWaitingListUnderscoreTemplate(schedule);
+                }
+
+                // Reject
+
+                if(scheduleStatus == 3) {
+                    console.log("reject");
+
+                    activateRejectUnderscoreTemplate(schedule);
+                }
+
+                // End
+
+                if(scheduleStatus == 2 && schedule.is_attended == 1) {
+                    console.log("end");
+
+                    activateEndUnderscoreTemplate(schedule);
+                }
+
+                // Interviewing
+                if(scheduleStatus == 0) {
+                    console.log("interviewing");
+
+                    activateJoinUnderscoreTemplate(schedule);
+                }
+
             }
-
-            // Reject
-
-            if(scheduleStatus == 3) {
-                activateRejectUnderscoreTemplate(schedule);
-            }
-
-            // End
-
-            if(scheduleStatus == 2) {
-                activateEndUnderscoreTemplate(schedule);
-            }
-
-            // Interviewing
-            if(scheduleStatus == 0) {
-                
-                activateJoinUnderscoreTemplate(schedule);
-            }
+          
 
            updateCurrentlyInterviewedCandidate();
 
@@ -227,6 +251,16 @@ var candidateScreenManagement = (function($) {
        });
    }
 
+   function activateMissedTemplate(schedule) {
+       getTemplate('missed.html', function(render) {
+                       var renderedhtml = render({openday: openday});
+                       $("#waitingDiv").html(renderedhtml);
+                       $("#opendayDetails").fadeIn();
+                       $("#waitingDiv").fadeIn();
+                       $("#candidate-interview").fadeOut();
+       });
+   }
+
    function sendChat() {
      var message = $('#message').val();
      if(onInterview) {
@@ -240,6 +274,11 @@ var candidateScreenManagement = (function($) {
      if(keycode == '13'){
          sendChat();
      }
+   }
+
+
+   function getCurrentUTCTime() {
+      return moment().utc();
    }
 
 })($);
