@@ -9,7 +9,8 @@
 <script type="text/javascript" src="js/plugins.js"></script>
 <script type="text/javascript" src="js/plugins/adapter-latest.js"></script>
 <script type="text/javascript" src="js/plugins/peer.min.js"></script>
-<script type="text/javascript" src="http://45.76.115.245:3000/socket.io/socket.io.js"></script>
+<!-- <script type="text/javascript" src="http://45.76.115.245:3000/socket.io/socket.io.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
 
 <!-- jQuery Cookie Plugin -->
 <script type="text/javascript" src="js/plugins/jquery.cookie.js"></script>
