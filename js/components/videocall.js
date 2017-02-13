@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 //
 
- var peer = new Peer('openday-' + $("#userId").val(),  {host: '45.76.115.245', key: 'peerjs'});
+ var peer = new Peer('openday-' + $("#userId").val(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
 
 window.peer = peer;
 
