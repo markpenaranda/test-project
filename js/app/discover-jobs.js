@@ -132,6 +132,7 @@ var discoverJobsManagement = (function($) {
         }
         $("#resultsSize").html(countResult);
         $("#totalResults").html(totalResults);
+
         loadResults(res.results);
          $(".loading-results").fadeOut();
       });
@@ -152,6 +153,7 @@ var discoverJobsManagement = (function($) {
             searchEvent($(this));
         }
        if($(this).val().length == 0) {
+        console.log('no manualSearch');
         initialOpenday();
         }
     }
@@ -160,10 +162,14 @@ var discoverJobsManagement = (function($) {
       currentPage = 1;
       $(".loading-results").fadeIn();
       var q = input.val();
+      if(q.length == 0) { 
+        initialOpenday();
+      }
       loadQuery(q);
     }
 
     function loadQuery(q) {
+
       if(q.length == 0) {
         initialOpenday();
       }
