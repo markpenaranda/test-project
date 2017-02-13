@@ -29,7 +29,7 @@
 <!-- Footer Scripts
 ============================================= -->
 <script type="text/javascript">
-  window.liveServerUrl = "http://45.76.115.245:3000";
+  window.liveServerUrl = "https://openday.jobsglobal.com:3000";
 </script>
 <script type="text/javascript" src="js/components/notify.js"></script>
 <script type="text/javascript" src="js/components/moneyfied.js"></script>
