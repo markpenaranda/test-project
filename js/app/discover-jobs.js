@@ -167,7 +167,7 @@ var discoverJobsManagement = (function($) {
       if(q.length == 0) {
         initialOpenday();
       }
-      if (q.length >= 3 ) {
+      
           if (searchRequest != null)
               searchRequest.abort();
           var searchRequest = $.get(apiUrl + "/openday/search?page="+ currentPage +"&q=" + q, function(res){
@@ -185,7 +185,7 @@ var discoverJobsManagement = (function($) {
               loadResults(res.results);
               $(".jg-load-on-scroll ").fadeOut();
           });
-      }
+      
     }
 
     function loadResults(results) {

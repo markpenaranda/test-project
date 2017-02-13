@@ -264,8 +264,10 @@ class OpenDay
   public function search($query, $paginate)
   {
     try {
-      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()  AND MATCH (event_name, introduction)
-             AGAINST ('$query' IN NATURAL LANGUAGE MODE)";
+      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' 
+             AND event_date >= CURDATE() 
+             AND MATCH(event_name) AGAINST('$query' IN BOOLEAN MODE)
+             ";
 
 
       $statement = $this->db->prepare($countSql);
@@ -277,7 +279,9 @@ class OpenDay
 
       $sql = "
         SELECT *, MATCH (event_name, introduction)
-             AGAINST ('$query' IN BOOLEAN MODE) as score FROM i_openday WHERE is_deleted='0' AND event_date >= CURDATE()
+             AGAINST ('$query' IN BOOLEAN MODE) as score FROM i_openday WHERE is_deleted='0' 
+             AND event_date >= CURDATE()
+             AND MATCH(event_name) AGAINST('$query' IN BOOLEAN MODE)
              ORDER BY event_date ASC
              LIMIT " . $paginate['skip'] .", ". $paginate['limit'] ."
       ";
