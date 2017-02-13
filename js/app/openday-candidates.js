@@ -109,24 +109,27 @@ var opendayCandidatesScreenManagement = (function($) {
 
     function loadScheduledCandidates() {
         var opendayId = $("#opendayId").val();
-        var is_scheduled = $("#candidateSchedule").val()
-         $("#candidateList").html("");
-        $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
-            
-            if(res.length > 0) {
-                $(".no-results").fadeOut();
-            }
-            else {
-                $(".no-results").fadeIn();
-            }
-              for (var i = 0; i < res.length; i++) {
-                  
-                 personal_info = JSON.parse(res[i].personal_info);
-                 schedule = res[i];
-                 time = schedule;
-                 loadCandidateItem(schedule, personal_info);
+        if(opendayId) {
+          var is_scheduled = $("#candidateSchedule").val()
+           $("#candidateList").html("");
+          $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
+              
+              if(res.length > 0) {
+                  $(".no-results").fadeOut();
               }
-        });
+              else {
+                  $(".no-results").fadeIn();
+              }
+                for (var i = 0; i < res.length; i++) {
+                    
+                   personal_info = JSON.parse(res[i].personal_info);
+                   schedule = res[i];
+                   time = schedule;
+                   loadCandidateItem(schedule, personal_info);
+                }
+          });
+          
+        }
     }
 
 
