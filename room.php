@@ -264,6 +264,7 @@
 				</div>
 			</footer>
 			<?php include 'include/js.php'; ?>
+			<script type="text/javascript" src="js/components/videocall.js"></script>
 			<script type="text/javascript" src="js/app/chatroom.js"></script>
 		</body>
 	</html>

@@ -37,4 +37,4 @@
 <script type="text/javascript" src="js/components/chat.js"></script>
 <script type="text/javascript" src="js/components/chatroom.js"></script>
 <script type="text/javascript" src="js/components/timer.js"></script>
-<!-- <script type="text/javascript" src="js/components/videocall.js"></script> -->
+
