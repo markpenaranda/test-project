@@ -416,11 +416,11 @@ var candidateScreenManagement = (function($) {
         var timer = setInterval(myTimer, 5000);
 
         function myTimer() {
-            var now = moment.utc();
-            console.log(now);
+            var now = moment();
+            var nowUtc = moment.utc(now);
              var then = moment(openday.event_date + " " + openday.start_time);
 
-             var duration = now - then;
+             var duration = nowUtc - then;
              var time = moment.utc(moment.duration(duration).asMilliseconds()).format("HH [H] mm [M]");
              $("#totalUsedTime").html(time);
         }
