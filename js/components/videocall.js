@@ -33,4 +33,9 @@ peer.on('call', function(call) {
 });
 
 
+peer.on('disconnect', function() {
+  alert('Disconnected');
+})
+
+
 });
