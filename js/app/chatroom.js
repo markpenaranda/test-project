@@ -417,6 +417,7 @@ var candidateScreenManagement = (function($) {
 
         function myTimer() {
             var now = moment.utc();
+            console.log(now);
              var then = moment(openday.event_date + " " + openday.start_time);
 
              var duration = now - then;
