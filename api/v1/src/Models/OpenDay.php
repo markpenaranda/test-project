@@ -958,6 +958,7 @@ class OpenDay
       SELECT * FROM i_openday as openday 
       JOIN i_openday_time as o_time on o_time.openday_id = openday.openday_id
       WHERE o_time.start_time <= CURTIME() 
+      AND o_time.end_time >= CURTIME()
       AND openday.event_date = CURDATE()
     
     ";
