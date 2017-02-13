@@ -1,8 +1,15 @@
 $(document).ready(function(){
 
 //
+function getCurrentUserId() {
+   var localStorageUser = localStorage.getItem('userId');
+    if(localStorageUser) {
+      return localStorageUser;
+    }
+  return $("#userId").val();
+}
 
- var peer = new Peer('openday-' + $("#userId").val(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
+ var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
 
 window.peer = peer;
 
