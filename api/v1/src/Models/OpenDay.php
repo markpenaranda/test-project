@@ -75,7 +75,7 @@ class OpenDay
       $timezone = $this->getTimeZoneByPageId($page['page_id']);
 
 
-      $inputArray['openday_id'] = substr(uniqid(), 0, 8);
+      $inputArray['openday_id'] = $this->getUniqueId();
       $inputArray['event_date'] = date("Y-m-d", strtotime($inputArray['event_date'] . " " . $timeRange[0]['start']));
       $inputArray['rate_per_hour'] = $this->currentRatePerHour;
       $inputArray['amount'] = (float) $this->computeTotalHours($timeRange, $inputArray['time_interval_per_candidate'], $timezone['timeZoneId']) * $this->currentRatePerHour;
@@ -104,7 +104,7 @@ class OpenDay
           )
           VALUES (
             :introduction,
-             '". $inputArray['openday_id'] ."',
+            '". $inputArray['openday_id'] . "',
             '". $inputArray['event_name'] ."',
             '". $inputArray['event_date'] ."',
             '". $inputArray['time_interval_per_candidate'] ."',
@@ -1051,6 +1051,19 @@ class OpenDay
       }
   }
   // Private Functions
+
+  private function  getUniqueId() {
+
+        $sql       = "SELECT SUBSTRING(UUID(), 1, 8) as uniqueId";
+        $statement = $this->db->prepare($sql);
+
+        $statement->execute();
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+        $results = $statement->fetchAll();
+
+        return $results[0]['uniqueId'];
+    }
 
   private function createSplitTimeArray($startTime, $endTime, $split, $timezone)
   {

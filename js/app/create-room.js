@@ -374,17 +374,22 @@ var createRoomScreenManagement = (function($) {
 
         dataStore.push(data);
 
-        getTemplate('room-list.html', function(render){
-            var html = render({data: data});
-            $("#interviewPostFormContainer").fadeOut();
-            $('#mainCreateRoomRow').prepend(html);
-
-        });
+        
+        renderRoomList(data);
 
         $("#preview").fadeOut();
         $("#continue").fadeIn();
 
       }
+    }
+
+    function renderRoomList(data) {
+      getTemplate('room-list.html', function(render){
+            var html = render({data: data});
+            $("#interviewPostFormContainer").fadeOut();
+            $('#mainCreateRoomRow').prepend(html);
+
+        });
     }
 
 
@@ -447,11 +452,21 @@ var createRoomScreenManagement = (function($) {
     }
 
     function submit() {
+      var savedOpenday = 0;
       for (var i = 0; i < dataStore.length; i++) {
+        console.log(i);
         var data = dataStore[i];
         data.created_by_user_id = getCurrentUserId();
         $.post(apiUrl + "/openday", data, function(res) {
-          document.location = "create-success.php?openday=" + res;
+          var lastDataStore = dataStore.length;
+          savedOpenday += 1;
+          if(savedOpenday == lastDataStore) {
+          
+            document.location = "create-success.php?openday=" + res;
+          }
+          else {
+            window.open("create-success.php?openday=" + res);
+          }
         });
       }
 
