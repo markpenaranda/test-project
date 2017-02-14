@@ -8,6 +8,19 @@
 	<input type="text" id="userId" />
 	<button id="loginBtn">Login</button>
 
+
+	<br><br><br>
+	<p>After clicking login select the page.:</p>
+
+	<ul>
+		<li>
+			<a href="/discover-jobs.php">Discover Jobs</a>
+		</li>
+		<li>
+			<a href="/my-openday.php">My Openday</a>
+		</li>
+	</ul>
+
 <?php include 'include/js.php'; ?>
 
 <script type="text/javascript">
