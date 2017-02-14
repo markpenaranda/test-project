@@ -337,4 +337,12 @@ class OpenDayController extends BaseController
        return $response->withStatus(200)->withJson($items);
    }
 
+   public function extendHours($request, $response, $args) {
+
+      $numberOfHours = $request->getParam('number_of_hours');
+      $opendayId = $args['openday_id'];
+
+      $this->openDayResource->extendOpendayTime($numberOfHours, $opendayId);
+   }
+
 }

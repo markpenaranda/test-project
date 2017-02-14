@@ -81,6 +81,8 @@ var candidateScreenManagement = (function($) {
 
          $("#liveOpendaySelect").on('change', changeOpenday);
 
+         $(".checkout_btn").on("click", extendHours);
+
 
     }
 
@@ -493,6 +495,16 @@ var candidateScreenManagement = (function($) {
        $("#extendMore").fadeOut();
       $("#profileView").fadeIn();
 
+    }
+
+    function extendHours() {
+      var numberOfHours = $("#numberOfHours").val();
+      var opendayId = getCurrentRoom();
+
+      $.post(apiUrl + '/openday/' + opendayId + '/extend', {numberOfHours: numberOfHours }, function(){
+        closeExtendMore();
+        loadOpenday();
+      });
     }
 
     function calculateAmount() {

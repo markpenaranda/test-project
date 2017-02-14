@@ -1051,6 +1051,35 @@ class OpenDay
         return $e;
       }
   }
+
+  public function extendOpendayTime($numberOfHours, $opendayId)
+  { 
+
+      $sql = "
+        SELECT end_time FROM i_openday_attendees
+        WHERE openday_id = '$opendayId'
+        ";
+
+       try {
+
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $openday =  $statement->fetch();
+        
+        $extendedHours =  date("H:i:s", strtotime('+'. $numberOfHours . ' hours', strtotime($openday['end_time'])));
+        
+        $updateSql = "UPDATE i_openday_time SET end_time = '$extendedHours' WHERE openday_id = '$opendayId";
+
+        $updateStatement = $this->db->prepare($updateSql);
+
+        $updateStatement->execute();
+
+
+      }
+      catch(PDOException $e){
+        return $e;
+      }
+  }
   // Private Functions
 
   private function  getUniqueId() {

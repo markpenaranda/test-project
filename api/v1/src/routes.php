@@ -38,6 +38,7 @@ $app->group('/openday', function(){
 			$this->map(['POST'], '/stop', 'OpenDayController:stopQueue');
 			$this->map(['POST'], '/end', 'OpenDayController:endInterview');
 			$this->map(['POST'], '/reject', 'OpenDayController:rejectCandidate');
+			$this->map(['POST'], '/extend', 'OpenDayController:extendHours');
 			$this->map(['PUT'], '', 'OpenDayController:update');
 
 
