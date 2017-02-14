@@ -142,10 +142,11 @@ var createRoomScreenManagement = (function($) {
 
     function jobTypeChange() {
       console.log("change");
+      var roomNumber = $(this).data("room-number");
       var currentRoom = numberOfRooms - 1;
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
-      $('group#jobSelect').html('');
+      $('group#jobSelect-' + roomNumber).html('');
       addNewJob();
 
     }
