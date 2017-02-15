@@ -84,6 +84,8 @@ var createRoomScreenManagement = (function($) {
       $("#interviewPostFormContainer").on('change', '.job-type-radio',jobTypeChange);
 
       $("#addRoom").on('click', addForm);
+
+      $("#interviewPostFormContainer").on('click', ".remove-form-btn", removeForm);
     }
 
     function initialTemplate() {
@@ -97,7 +99,7 @@ var createRoomScreenManagement = (function($) {
       $.get(apiUrl + '/openday/created?user_id='+ getCurrentUserId(), function(res) {
           console.log(res);
           for (var i = 0; i < res.length; i++) {
-            
+
             var html = "<option value='"+ res[i].openday_id +"'>"+ res[i].event_name +"</option>"
             $("#createdList").append(html);
           }
@@ -108,7 +110,7 @@ var createRoomScreenManagement = (function($) {
     function useOldEvent() {
       var opendayId = $(this).val()
       $.get(apiUrl + '/openday/' + opendayId, function(openday) {
-        $("#eventName").val(openday.event_name); 
+        $("#eventName").val(openday.event_name);
         $("#timeIntervalPerInterview").val(openday.time_interval_per_candidate);
         $("#introduction").val(openday.introduction);
 
@@ -136,8 +138,13 @@ var createRoomScreenManagement = (function($) {
           addNewJob();
           addTimeRange();
           loadResponsibleUserOption();
-       
+
       });
+    }
+
+    function removeForm() {
+      var roomNumber = $(this).data('room-number');
+      $("#room-form-" + roomNumber).remove();
     }
 
     function jobTypeChange() {
@@ -151,7 +158,7 @@ var createRoomScreenManagement = (function($) {
 
     }
 
-    function addNewJob() {  
+    function addNewJob() {
       var currentRoom = numberOfRooms - 1;
       console.log($(this).data("room-number"));
       if ($(this).data("room-number")) {
@@ -159,7 +166,7 @@ var createRoomScreenManagement = (function($) {
       }
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
-      console.log(".job-type-radio-"+ currentRoom + ":checked");  
+      console.log(".job-type-radio-"+ currentRoom + ":checked");
       var employment_type_id = $(".job-type-radio-"+ currentRoom+ ":checked").val();
 
       $.get(apiUrl + '/resources/filterjob?employment_type_id=' + employment_type_id, function(res) {
@@ -269,8 +276,8 @@ var createRoomScreenManagement = (function($) {
 
     }
 
-    function validate(data, roomNumber) 
-    {   
+    function validate(data, roomNumber)
+    {
         var valid = true;
         $.each(FORM_REQUIRED_FIELDS, function(i, field){
             if(data[field] == "" || data[field] == undefined || data[field] == 0) {
@@ -292,7 +299,7 @@ var createRoomScreenManagement = (function($) {
         if(!rangeValid) {
           valid = false;
           $("#time-range-zero-minute-" + roomNumber).fadeIn();
-        } 
+        }
         else {
           $("#time-range-zero-minute-" + roomNumber).fadeOut();
         }
@@ -307,7 +314,7 @@ var createRoomScreenManagement = (function($) {
         if(!jobValid) {
           valid = false;
           $("#linked-job-post-required-" + roomNumber).fadeIn();
-        } 
+        }
         else {
           $("#linked-job-post-required-" + roomNumber).fadeOut();
         }
@@ -337,12 +344,13 @@ var createRoomScreenManagement = (function($) {
          $("#time-start-" + counter).val(timeEnd);
          $("#time-end-" + counter).val(timeEnd);
          timeEnd = timePickerInit(timeEnd, room_triggered, counter);
-       
-      }      
+
+      }
     }
 
     function preview() {
       // $(".room-form").fadeOut();
+      $("#addRoom").fadeOut();
       dataStore = [];
       for (var i = 0; i < numberOfRooms; i++) {
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
@@ -355,7 +363,7 @@ var createRoomScreenManagement = (function($) {
         var jobNames = $("select[name^='jobs["+ i  +"]']").map(function(){  var item = JSON.parse($(this).val()); return item.name;}).get();
         var timerange = $(".time-range-pair-" + i).map(function(){return {"start" : $(this).find(".start").val(), "end" : $(this).find(".end").val()} }).get();
         var introduction = $("textarea[name='event\\["+ i +"\\]\\[\\'introduction\\'\\]").val();
-     
+
         var data = {
           "event_name": name,
           "event_date": date,
@@ -375,7 +383,7 @@ var createRoomScreenManagement = (function($) {
 
         dataStore.push(data);
 
-        
+
         renderRoomList(data);
 
         $("#preview").fadeOut();
@@ -448,6 +456,7 @@ var createRoomScreenManagement = (function($) {
       $(".checkout-form").remove();
 
       $("#preview").fadeIn();
+        $("#addRoom").fadeIn();
       $("#continue").fadeOut();
       $("#submit").fadeOut();
     }
@@ -462,7 +471,7 @@ var createRoomScreenManagement = (function($) {
           var lastDataStore = dataStore.length;
           savedOpenday += 1;
           if(savedOpenday == lastDataStore) {
-          
+
             document.location = "create-success.php?openday=" + res;
           }
           else {
@@ -472,6 +481,8 @@ var createRoomScreenManagement = (function($) {
       }
 
     }
+
+
 
 
 

@@ -18,13 +18,13 @@ class OpenDay
       $this->db = $db;
   }
 
- 
-  public function getCurrentRatePerHour() 
+
+  public function getCurrentRatePerHour()
   {
     return $this->currentRatePerHour;
   }
 
-  public function getLatestEvents($paginate) 
+  public function getLatestEvents($paginate)
   {
 
     $countSql = "
@@ -116,7 +116,7 @@ class OpenDay
             '". $inputArray['date_updated'] ."',
             '". $inputArray['page_id'] ."',
             '". $inputArray['employment_type_id'] ."'
-           
+
           )
         ";
 
@@ -125,7 +125,7 @@ class OpenDay
 
      // Time Breakdown
      $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id'], $timezone['timeZoneId']);
-   
+
     $timeBreakDownRowsSQL = array();
     $timeBreakDownToBind = array();
     $timeBreakDownColumnNames = array_keys($timeBreakDownData[0]);
@@ -134,12 +134,12 @@ class OpenDay
         foreach($row as $columnName => $columnValue){
             $param = ":" . $columnName . $arrayIndex;
             $params[] = $param;
-            $timeBreakDownToBind[$param] = $columnValue; 
+            $timeBreakDownToBind[$param] = $columnValue;
         }
         $timeBreakDownRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
     $timeBreakDownSql = "INSERT INTO i_openday_time_breakdown (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsSQL);
-  
+
     $opendayTimeBreakDownStatement = $this->db->prepare($timeBreakDownSql);
     foreach($timeBreakDownToBind as $param => $val){
         $opendayTimeBreakDownStatement->bindValue($param, $val);
@@ -155,7 +155,7 @@ class OpenDay
         foreach($row as $columnName => $columnValue){
             $param = ":" . $columnName . $arrayIndex;
             $params[] = $param;
-            $jobsToBind[$param] = $columnValue; 
+            $jobsToBind[$param] = $columnValue;
         }
         $jobsRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
@@ -165,7 +165,7 @@ class OpenDay
         $opendayJobsStatement->bindValue($param, $val);
     }
 
-     
+
      // Openday Time
      $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id'], $timezone['timeZoneId']);
      $opendayTimeInsertSql = "
@@ -183,7 +183,7 @@ class OpenDay
 
     $opendayTimeStatement = $this->db->prepare($opendayTimeInsertSql);
 
-    
+
 
 
      $opendayInsertStatement->execute();
@@ -206,9 +206,9 @@ class OpenDay
     try {
 
       $sql = "
-        SELECT openday.*, in_charge.name as in_charge_name, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time, country.nicename as country_nicename, employment_type.employment_type_name as employment_type  FROM i_openday as openday 
-        JOIN i_page as page on page.page_id = openday.page_id 
-        JOIN i_openday_time as openday_time on openday_time.openday_id = openday.openday_id 
+        SELECT openday.*, in_charge.name as in_charge_name, page.page_name as page_name, page.page_id, openday_time.start_time, openday_time.end_time, country.nicename as country_nicename, employment_type.employment_type_name as employment_type  FROM i_openday as openday
+        JOIN i_page as page on page.page_id = openday.page_id
+        JOIN i_openday_time as openday_time on openday_time.openday_id = openday.openday_id
         JOIN i_users as in_charge on in_charge.user_id = openday.in_charge_user_id
         JOIN i_country as country on country.country_id = page.country_id
         JOIN i_employment_type as employment_type on employment_type.employment_type_id = openday.employment_type_id
@@ -247,7 +247,7 @@ class OpenDay
   {
      try{
       $sql = "
-        SELECT * FROM `i_openday_link_job` as link_job 
+        SELECT * FROM `i_openday_link_job` as link_job
         JOIN i_job_post as job on link_job.job_post_id = job.job_post_id
         WHERE link_job.openday_id = '$opendayId'
       ";
@@ -258,15 +258,18 @@ class OpenDay
     }
     catch(PDOException $e) {
       return $e;
-    }   
+    }
   }
 
   public function search($query, $paginate)
   {
+    $queryArray = explode(" ", $query);
+    $queryWithPlusSymbol = implode('+ ', $queryArray);
+    $queryWithPlusSymbol += "+";
     try {
-      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0' 
-             AND event_date >= CURDATE() 
-             AND MATCH(event_name) AGAINST('$query' IN BOOLEAN MODE)
+      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0'
+             AND event_date >= CURDATE()
+             AND MATCH(event_name) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
              ";
 
 
@@ -278,10 +281,9 @@ class OpenDay
       $count = $statement->fetch();
 
       $sql = "
-        SELECT *, MATCH (event_name, introduction)
-             AGAINST ('$query' IN BOOLEAN MODE) as score FROM i_openday WHERE is_deleted='0' 
+        SELECT * FROM i_openday WHERE is_deleted='0'
              AND event_date >= CURDATE()
-             AND MATCH(event_name) AGAINST('$query' IN BOOLEAN MODE)
+             AND MATCH(event_name) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
              ORDER BY event_date ASC
              LIMIT " . $paginate['skip'] .", ". $paginate['limit'] ."
       ";
@@ -305,12 +307,12 @@ class OpenDay
   }
 
   public function join(
-    $opendayId, 
-    $userId, 
-    $coverLetter, 
-    $coverLetterTitle, 
-    $timeBreakdownId, 
-    $timeStart, 
+    $opendayId,
+    $userId,
+    $coverLetter,
+    $coverLetterTitle,
+    $timeBreakdownId,
+    $timeStart,
     $timeEnd)
   {
 
@@ -326,11 +328,11 @@ class OpenDay
      else {
         $candidate_no = $this->getWaitingListNumber($opendayId);
      }
-  
+
      $this->db->beginTransaction();
      try {
 
-      
+
         $sql = "
           INSERT INTO i_openday_attendees (
             `openday_id`,
@@ -366,8 +368,8 @@ class OpenDay
         $joinStatement->execute();
 
         if($isScheduled) {
-          
-       
+
+
           $updateTimeBreakDownSql = "
             UPDATE i_openday_time_breakdown
             SET scheduled_user_id = '$userId',
@@ -375,20 +377,20 @@ class OpenDay
             date_filled = NOW(),
             date_updated = NOW()
             WHERE time_breakdown_id = '$timeBreakdownId'
-          ";          
+          ";
 
           $updateTimeBreakDownStatement = $this->db->prepare($updateTimeBreakDownSql);
 
           $updateTimeBreakDownStatement->execute();
         }
-       
+
         $this->db->commit();
         return true;
      }
      catch(PDOEXception $e) {
        $this->rollBack();
        return $e;
-     }    
+     }
   }
 
   public function getActiveOpendayByAttendeeUSerId($userId)
@@ -399,7 +401,7 @@ class OpenDay
       JOIN i_page as page on page.page_id = openday.page_id
       JOIN i_openday_time as time on openday.openday_id = time.openday_id
       WHERE attendees.user_id = '$userId'
-      AND time.end_time > CURTIME() 
+      AND time.end_time > CURTIME()
       AND openday.event_date = CURDATE()
       ORDER BY event_date ASC
     ";
@@ -426,8 +428,8 @@ class OpenDay
       JOIN i_openday as openday on openday.openday_id = attendees.openday_id
       JOIN i_page as page on page.page_id = openday.page_id
       JOIN i_openday_time as time on openday.openday_id = time.openday_id
-      WHERE attendees.user_id = '$userId'     
-      AND time.end_time <= CURTIME() 
+      WHERE attendees.user_id = '$userId'
+      AND time.end_time <= CURTIME()
       AND openday.event_date <= CURDATE()
       ORDER BY event_date DESC
     ";
@@ -448,7 +450,7 @@ class OpenDay
   }
 
 
-  public function getOpendayByAttendeeUserId($userId, $status) 
+  public function getOpendayByAttendeeUserId($userId, $status)
   {
     $sql = "
       SELECT * FROM i_openday_attendees as attendees
@@ -480,14 +482,14 @@ class OpenDay
     $jobs = $this->getJobsByOpendayId($opendayId);
     $q = "";
     foreach($jobs as $job) {
-      $q .= " " . $job['job_title'];  
+      $q .= " " . $job['job_title'];
     }
-   
+
     try {
       $sql = '
-        SELECT * FROM 
-        i_users_object_data WHERE 
-        MATCH ( personal_info ) 
+        SELECT * FROM
+        i_users_object_data WHERE
+        MATCH ( personal_info )
         AGAINST ("' . $q . '" IN BOOLEAN MODE);
       ';
       $statement = $this->db->prepare($sql);
@@ -509,7 +511,7 @@ class OpenDay
     if($withEnded) {
       $status = 3;
     }
-    
+
     $sql = "
       SELECT * FROM i_openday_attendees as attendees
       JOIN i_users_object_data as user on attendees.user_id = user.user_id
@@ -557,7 +559,7 @@ class OpenDay
   public function getTimeBreakdown($timeBreakdownId)
   {
     $sql = "
-      SELECT * FROM i_openday_time_breakdown 
+      SELECT * FROM i_openday_time_breakdown
       WHERE time_breakdown_id = '$timeBreakdownId'
       LIMIT 1
     ";
@@ -578,14 +580,14 @@ class OpenDay
   public function getWaitingListNumber($opendayId)
   {
     $timeBreakDownSql = "
-      SELECT designated_candidate_number FROM i_openday_time_breakdown 
+      SELECT designated_candidate_number FROM i_openday_time_breakdown
       WHERE openday_id = '$openday_id'
       ORDER BY designated_candidate_number DESC
       LIMIT 1
     ";
 
     $attendeesSql = "
-      SELECT COUNT(*) AS attendees FROM i_openday_attendees 
+      SELECT COUNT(*) AS attendees FROM i_openday_attendees
       WHERE is_scheduled = 0
       AND openday_id = '$openday_id'
     ";
@@ -639,11 +641,11 @@ class OpenDay
     }
   }
 
-  public function checkIfAlreadySubmittedApplication ($opendayId, $userId) 
+  public function checkIfAlreadySubmittedApplication ($opendayId, $userId)
   {
     $sql = "
       SELECT COUNT(*) AS attendance FROM i_openday_attendees
-      WHERE user_id = '$userId' 
+      WHERE user_id = '$userId'
       AND openday_id='$opendayId'
       LIMIT 1
     ";
@@ -745,7 +747,7 @@ class OpenDay
             '". $inputArray['date_created'] ."',
             '". $inputArray['date_updated'] ."',
             '". $inputArray['page_id'] ."'
-           
+
           )
         ";
 
@@ -754,7 +756,7 @@ class OpenDay
 
      // Time Breakdown
      $timeBreakDownData = $this->buildSaveTimeBreakDownData($timeRange, $timeInterval, $inputArray['openday_id']);
-   
+
     $timeBreakDownRowsSQL = array();
     $timeBreakDownToBind = array();
     $timeBreakDownColumnNames = array_keys($timeBreakDownData[0]);
@@ -763,12 +765,12 @@ class OpenDay
         foreach($row as $columnName => $columnValue){
             $param = ":" . $columnName . $arrayIndex;
             $params[] = $param;
-            $timeBreakDownToBind[$param] = $columnValue; 
+            $timeBreakDownToBind[$param] = $columnValue;
         }
         $timeBreakDownRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
     $timeBreakDownSql = "INSERT INTO i_openday_time_breakdown (" . implode(", ", $timeBreakDownColumnNames) . ") VALUES " . implode(", ", $timeBreakDownRowsSQL);
-  
+
     $opendayTimeBreakDownStatement = $this->db->prepare($timeBreakDownSql);
     foreach($timeBreakDownToBind as $param => $val){
         $opendayTimeBreakDownStatement->bindValue($param, $val);
@@ -784,7 +786,7 @@ class OpenDay
         foreach($row as $columnName => $columnValue){
             $param = ":" . $columnName . $arrayIndex;
             $params[] = $param;
-            $jobsToBind[$param] = $columnValue; 
+            $jobsToBind[$param] = $columnValue;
         }
         $jobsRowsSQL[] = "(" . implode(", ", $params) . ")";
     }
@@ -794,7 +796,7 @@ class OpenDay
         $opendayJobsStatement->bindValue($param, $val);
     }
 
-     
+
      // Openday Time
      $timeData = $this->buildTimeData($timeRange, $inputArray['openday_id']);
      $opendayTimeInsertSql = "
@@ -812,7 +814,7 @@ class OpenDay
 
     $opendayTimeStatement = $this->db->prepare($opendayTimeInsertSql);
 
-    
+
 
 
      $opendayInsertStatement->execute();
@@ -879,12 +881,12 @@ class OpenDay
       $this->db->commit();
 
 
-      $querySql = "SELECT date_interviewed_end 
+      $querySql = "SELECT date_interviewed_end
               FROM i_openday_attendees
               WHERE openday_id = '$opendayId'
               AND user_id = '$userId'
               ";
-      
+
       $statement = $this->db->prepare($querySql);
       $statement->execute();
       $schedule = $statement->fetch();
@@ -899,10 +901,10 @@ class OpenDay
 
   }
 
-  public function getListofCandidateId($opendayId, $status, $scheduled) 
+  public function getListofCandidateId($opendayId, $status, $scheduled)
   {
     $sql = "
-      SELECT user_id 
+      SELECT user_id
       FROM  i_openday_attendees
       WHERE openday_id = '$opendayId'
       AND is_scheduled = '$scheduled'
@@ -952,15 +954,15 @@ class OpenDay
 
   }
 
-  public function liveOpenday() 
+  public function liveOpenday()
   {
     $sql = "
-      SELECT * FROM i_openday as openday 
+      SELECT * FROM i_openday as openday
       JOIN i_openday_time as o_time on o_time.openday_id = openday.openday_id
-      WHERE o_time.start_time <= CURTIME() 
+      WHERE o_time.start_time <= CURTIME()
       AND o_time.end_time >= CURTIME()
       AND openday.event_date = CURDATE()
-    
+
     ";
 
      try {
@@ -988,7 +990,7 @@ class OpenDay
         WHERE openday_id = '$opendayId'
         AND status = 0
         LIMIT 1
-      "; 
+      ";
 
     try {
       $statement = $this->db->prepare($sql);
@@ -1004,10 +1006,10 @@ class OpenDay
 
   }
 
-  public function countWaitingList($opendayId) 
+  public function countWaitingList($opendayId)
   {
     $sql = "
-      SELECT COUNT(*) as waiting_list_count 
+      SELECT COUNT(*) as waiting_list_count
       FROM i_openday_attendees
       WHERE status = 1
       AND is_scheduled = 0
@@ -1053,7 +1055,7 @@ class OpenDay
   }
 
   public function extendOpendayTime($numberOfHours, $opendayId)
-  { 
+  {
 
       $sql = "
         SELECT end_time FROM i_openday_attendees
@@ -1065,9 +1067,9 @@ class OpenDay
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $openday =  $statement->fetch();
-        
+
         $extendedHours =  date("H:i:s", strtotime('+'. $numberOfHours . ' hours', strtotime($openday['end_time'])));
-        
+
         $updateSql = "UPDATE i_openday_time SET end_time = '$extendedHours' WHERE openday_id = '$opendayId";
 
         $updateStatement = $this->db->prepare($updateSql);
@@ -1097,7 +1099,7 @@ class OpenDay
 
   private function createSplitTimeArray($startTime, $endTime, $split, $timezone)
   {
- 
+
     $startCarbon = Carbon::createFromFormat("h:ia", $startTime, $timezone);
     $startCarbon->tz('UTC');
     $startTime = $startCarbon->format("H:i");
@@ -1168,7 +1170,7 @@ class OpenDay
         $candidate_no++;
         }
       }
-      return $data;   
+      return $data;
   }
 
   private function buildJobsData(array $jobs, $opendayId)
@@ -1211,7 +1213,7 @@ class OpenDay
       $statement->execute();
       return $statement->fetch();
 
-    } 
+    }
     catch(PDOException $e) {
       return $e;
     }
@@ -1228,7 +1230,7 @@ class OpenDay
       $statement->execute();
       return $statement->fetch();
 
-    } 
+    }
     catch(PDOException $e) {
       return $e;
     }
@@ -1247,39 +1249,39 @@ class OpenDay
 
   private function getTimeZoneByPageId($pageId)
   {
-    $sql = "SELECT * FROM i_page 
+    $sql = "SELECT * FROM i_page
             JOIN i_city ON i_page.city_id = i_city.city_id
             WHERE i_page.page_id='$pageId'
             ";
 
     try {
-      
+
 
       $statement = $this->db->prepare($sql);
       $statement->execute();
       $city = $statement->fetch();
 
       $timezone = $this->getTimeZoneByCoordinates(
-                              $city['longitude'], 
+                              $city['longitude'],
                               $city['latitude'],
                               "AIzaSyBxkwfU2Xdm9pT6J1xGVmBOca9J04TeirE"
                         );
 
       return $timezone;
 
-    } 
+    }
     catch(PDOException $e) {
       return $e;
     }
 
-  } 
+  }
 
   private function getTimeZoneByCoordinates($long, $lat, $googleMapApiKey)
   {
     $url = "https://maps.googleapis.com/maps/api/timezone/json?location=". $lat .",". $long ."&timestamp=" . time() ."&key=" . $googleMapApiKey;
 
     $curl = curl_init();
-    
+
     $action_url = $url;
 
 
@@ -1293,12 +1295,12 @@ class OpenDay
 
        $result = json_decode($resp, true);
 
-    return $result;   
-  
+    return $result;
+
   }
 
 
 
-  
+
 
 }

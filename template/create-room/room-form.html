@@ -1,36 +1,35 @@
-<div class="row room-form">
+<div id="room-form-<%= room_number %>" class="row room-form">
 <div class="col-lg-12 col-xs-12">
-   
+
       <li>
           <div>
           <p id="event_name-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event name is required</p>
           </div>
           <div>
            <p id="event_date-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Event date is required</p>
-            
+
           </div>
           <div>
              <p id="time_interval_per_candidate-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Time Interval per candidate is required</p>
-            
+
           </div>
 
           <div>
              <p id="time-range-zero-minute-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Time Range must be more than a minute</p>
-            
+
           </div>
 
           <div>
              <p id="linked-job-post-required-<%= room_number %>" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Duplicate linked job post not allowed.</p>
-            
+
           </div>
 
-    
-      </li>
-   
-  
- 
 
-    
+      </li>
+
+
+
+
 
 </div>
   <div class="col-lg-6 col-sm-6 col-xs-12">
@@ -38,9 +37,9 @@
       <p class="col-xs-12">Event Name</p>
       <span>
       <input data-validation="required" type="text" name="event[<%= room_number %>]['name']" id="eventName" class="col-lg-7 col-xs-12" placeholder="Type Open Day Event Name"><br>
-        
+
       </span>
-    
+
     </li>
     <li>
       <p class="col-xs-12">Date</p>
@@ -48,12 +47,12 @@
       <div class="hidden-xs  hidden-sm col-lg-1 col-xs-1">
         <a class="openday_add_more_btn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
       </div>
-            
+
     </li>
     <li>
       <p>Time Interval Per Candidate (minutes)</p>
       <input data-validation="number" type="number" name="event[<%= room_number %>]['time_interval']" id="timeIntervalPerInterview" class="col-lg-3 col-xs-12" placeholder="ex. 20 min">
-     
+
     </li>
     <li>
       <p>Link to Job Post's </p>
@@ -104,8 +103,16 @@
     <li>
       <p>Recruiter In-charge</p>
       <select  data-validation="required" name="event[<%= room_number %>]['in_charge_user_id']" id="in-charge-<%= room_number %>"  class="col-lg-4 col-xs-12">
-        
+
       </select>
     </li>
   </div>
+  <div class="row">
+    <center>
+      <% if(room_number > 0) { %>
+        <button type="button" data-room-number="<%= room_number %>" class="remove-form-btn hvr-remove"><i class="fa fa-minus fa-fw"></i>Remove Room</button>
+        <% } %>
+      </center>
+    </div>
+    <hr>
 </div>

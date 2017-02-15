@@ -64,14 +64,19 @@ var createSuccessManagement = (function($) {
         $.get(apiUrl + '/openday/' + getOpendayId() + '/suggested', function(res) {
             for(var x = 0; x < res.length; x++) {
                 var candidate = res[x];
-                getTemplate("results.html", function(render){
+                renderSuggestedCandidate(candidate);
+                
+            }
+        });
+    }
+
+    function renderSuggestedCandidate(candidate) {
+        getTemplate("results.html", function(render){
                     var data = JSON.parse(candidate.personal_info);
                     console.log(data);
                     var html = render({data : data});
                     $('#resultsUl').append(html);
                 });
-            }
-        });
     }
 
 

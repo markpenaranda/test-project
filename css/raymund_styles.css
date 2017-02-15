@@ -2195,3 +2195,10 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
 
 
 .disabled { background: grey !important;  }
+
+.hvr-remove {
+	border: 1px solid #009864;
+    background-color: white;
+    color: #009864;
+    border-radius: 7px;
+}
