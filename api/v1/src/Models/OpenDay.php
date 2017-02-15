@@ -264,12 +264,12 @@ class OpenDay
   public function search($query, $paginate)
   {
     $queryArray = explode(" ", $query);
-    $queryWithPlusSymbol = implode('+ ', $queryArray);
-    $queryWithPlusSymbol += "+";
+    $queryWithPlusSymbol = implode('* ', $queryArray);
+    $queryWithPlusSymbol += "*";
     try {
       $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0'
              AND event_date >= CURDATE()
-             AND MATCH(event_name) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
+             AND MATCH(event_name, introduction) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
              ";
 
 
@@ -283,7 +283,7 @@ class OpenDay
       $sql = "
         SELECT * FROM i_openday WHERE is_deleted='0'
              AND event_date >= CURDATE()
-             AND MATCH(event_name) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
+             AND MATCH(event_name, introduction) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
              ORDER BY event_date ASC
              LIMIT " . $paginate['skip'] .", ". $paginate['limit'] ."
       ";
