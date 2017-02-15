@@ -350,9 +350,11 @@ var createRoomScreenManagement = (function($) {
 
     function preview() {
       // $(".room-form").fadeOut();
-      $("#addRoom").fadeOut();
+
       dataStore = [];
+      var validRooms = true;
       for (var i = 0; i < numberOfRooms; i++) {
+        var validForm = true;
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
         var date = $("input[name='event\\["+ i +"\\]\\[\\'date\\'\\]").val();
         var interval = $("input[name='event\\["+ i +"\\]\\[\\'time_interval\\'\\]").val();
@@ -378,24 +380,33 @@ var createRoomScreenManagement = (function($) {
         };
 
         if(!validate(data, i)) {
-          return false;
+          validForm = false;
+          validRooms = false;
         }
 
-        dataStore.push(data);
+        if(validForm) {
+          dataStore.push(data);
+        }
 
-
-        renderRoomList(data);
-
-        $("#preview").fadeOut();
-        $("#continue").fadeIn();
 
       }
+      if(validRooms) {
+        for (var i = 0; i < dataStore.length; i++) {
+          var data = dataStore[i];
+          renderRoomList(data);
+        }
+        $("#interviewPostFormContainer").fadeOut();
+        $("#preview").fadeOut();
+        $("#addRoom").fadeOut();
+        $("#continue").fadeIn();
+      }
+
     }
 
     function renderRoomList(data) {
       getTemplate('room-list.html', function(render){
             var html = render({data: data});
-            $("#interviewPostFormContainer").fadeOut();
+
             $('#mainCreateRoomRow').prepend(html);
 
         });
