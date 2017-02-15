@@ -265,13 +265,13 @@ class OpenDay
   {
     $queryArray = explode(" ", $query);
     $queryWithPlusSymbol = implode('* ', $queryArray);
-    $queryWithPlusSymbol += "*";
+    $queryWithPlusSymbol .= "*";
     try {
-      $countSql = "SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0'
+      $countSql = "
+            SELECT COUNT(*) as total FROM i_openday WHERE is_deleted='0'
              AND event_date >= CURDATE()
              AND MATCH(event_name, introduction) AGAINST('$queryWithPlusSymbol' IN BOOLEAN MODE)
              ";
-
 
       $statement = $this->db->prepare($countSql);
 
