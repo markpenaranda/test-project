@@ -42,7 +42,7 @@ var candidateScreenManagement = (function($) {
 
         if(data.category == "candidate") {
              if(data.tag == "invite") {
-                activateJoinUnderscoreTemplate();
+                renderNecessaryTemplate();
              }
              if(data.tag == "reject") {
                 activateRejectUnderscoreTemplate();
