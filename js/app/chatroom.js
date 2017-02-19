@@ -11,7 +11,7 @@ var candidateScreenManagement = (function($) {
     var online_user = [];
     var openday;
     var liveOpenday = [];
-    var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
+    var peer = new Peer('openday-' + getCurrentUser(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
 
     return {
         init: init
