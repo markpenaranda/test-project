@@ -97,7 +97,7 @@ var createRoomScreenManagement = (function($) {
     function loadPastCreated() {
 
       $.get(apiUrl + '/openday/created?user_id='+ getCurrentUserId(), function(res) {
-          console.log(res);
+          // console.log(res);
           for (var i = 0; i < res.length; i++) {
 
             var html = "<option value='"+ res[i].openday_id +"'>"+ res[i].event_name +"</option>"
@@ -148,7 +148,7 @@ var createRoomScreenManagement = (function($) {
     }
 
     function jobTypeChange() {
-      console.log("change");
+      // console.log("change");
       var roomNumber = $(this).data("room-number");
       var currentRoom = numberOfRooms - 1;
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
@@ -160,13 +160,13 @@ var createRoomScreenManagement = (function($) {
 
     function addNewJob() {
       var currentRoom = numberOfRooms - 1;
-      console.log($(this).data("room-number"));
+      // console.log($(this).data("room-number"));
       if ($(this).data("room-number")) {
        currentRoom = $(this).data("room-number");
       }
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
-      console.log(".job-type-radio-"+ currentRoom + ":checked");
+      // console.log(".job-type-radio-"+ currentRoom + ":checked");
       var employment_type_id = $(".job-type-radio-"+ currentRoom+ ":checked").val();
 
       $.get(apiUrl + '/resources/filterjob?employment_type_id=' + employment_type_id, function(res) {
@@ -214,17 +214,17 @@ var createRoomScreenManagement = (function($) {
       numberOfTimeRange += 1;
 
       var currentRoom = numberOfRooms - 1;
-      console.log($(this).data("room-number"));
+      // console.log($(this).data("room-number"));
       if (typeof $(this).data("room-number") !== "undefined") {
        currentRoom = $(this).data("room-number");
       }
-      console.log(currentRoom);
+      // console.log(currentRoom);
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
       getTemplate('partials/input-time-range.html', function (render) {
         var html = render({ room_number: currentRoom, time_count: numberOfTimeRange});
         var lastEndTime = $('#timeRangeList-'+ currentRoom +' .end').last().val();
-        console.log("#timeRangeList-" + currentRoom);
+        // console.log("#timeRangeList-" + currentRoom);
         $("#timeRangeList-" + currentRoom).append(html);
 
         $("a.add-time-range").css("display", "none");
@@ -242,7 +242,7 @@ var createRoomScreenManagement = (function($) {
 
     function timePickerInit(lastEndTime, room, timecount) {
       var disableRange = ['12am', lastEndTime];
-      console.log('.time-range-pair-' + room  +'-'+  timecount +' .time');
+      // console.log('.time-range-pair-' + room  +'-'+  timecount +' .time');
       $('.time-range-pair-' + room  +'-'+  timecount +' .time').timepicker({
         showDuration: true,
         timeFormat: 'g:ia',
@@ -267,10 +267,10 @@ var createRoomScreenManagement = (function($) {
     }
 
     function toggleAddDeleteTimeRangeButton() {
-      console.log($(this).data('timecount'));
+      // console.log($(this).data('timecount'));
       var timecount = $(this).data('timecount');
       var roomNumber = $(this).data('room');
-        console.log(".add-"+roomNumber+"-"+timecount);
+        // console.log(".add-"+roomNumber+"-"+timecount);
       $(".add-"+roomNumber+"-"+timecount).css("display", "block");
       $(".remove-"+roomNumber+"-"+timecount).css("display", "none");
 
@@ -340,7 +340,7 @@ var createRoomScreenManagement = (function($) {
       var timeEnd = $(this).val();
       var counter = timecount_triggered + 1;
       for(counter; counter <= numberOfTimeRange; counter++) {
-        console.log(counter);
+        // console.log(counter);
          $("#time-start-" + counter).val(timeEnd);
          $("#time-end-" + counter).val(timeEnd);
          timeEnd = timePickerInit(timeEnd, room_triggered, counter);
@@ -416,7 +416,7 @@ var createRoomScreenManagement = (function($) {
 
     function proceedToCheckout() {
       $(".room-list").fadeOut();
-      console.log(dataStore[0].timerange[0].start);
+      // console.log(dataStore[0].timerange[0].start);
       var totalHours = 0;
       for(var x=0; x < dataStore.length; x++) {
         var data = dataStore[x];
@@ -475,7 +475,7 @@ var createRoomScreenManagement = (function($) {
     function submit() {
       var savedOpenday = 0;
       for (var i = 0; i < dataStore.length; i++) {
-        console.log(i);
+        // console.log(i);
         var data = dataStore[i];
         data.created_by_user_id = getCurrentUserId();
         $.post(apiUrl + "/openday", data, function(res) {

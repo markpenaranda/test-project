@@ -402,7 +402,7 @@ class OpenDay
       JOIN i_openday_time as time on openday.openday_id = time.openday_id
       WHERE attendees.user_id = '$userId'
       AND time.end_time > CURTIME()
-      AND openday.event_date = CURDATE()
+      AND openday.event_date >= CURDATE()
       ORDER BY event_date ASC
     ";
     try {
