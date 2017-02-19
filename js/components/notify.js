@@ -36,11 +36,22 @@ function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+function getCurrentUser() {
+
+    var userId = $('#userId').val();
+    
+    var localStorageUser = localStorage.getItem('userId');
+    if(localStorageUser) {
+      return localStorageUser;
+    }
+
+    return userId;
+}
 
 window.socket = io(window.liveServerUrl);
 
 
-socket.on("notifier-" + $("#userId").val(), function(data){
+socket.on("notifier-" + getCurrentUser(), function(data){
 
 	if(data.category == "candidate") {
 		 browserNotifyMe(data.message, data.link);
@@ -61,7 +72,7 @@ socket.on("room-" + $("#roomId").val(), function(data){
 });
 
 // For Live Checking
-socket.emit("live-connect", { user_id: $("#userId").val() });
+socket.emit("live-connect", { user_id: getCurrentUser() });
 var current_user = [];
 
 window.socket.on("user-update", function(data){
