@@ -38,7 +38,7 @@ var candidateScreenManagement = (function($) {
     function socketIOEventHandlers() {
 
         // Notifications
-        window.socket.on("notifier-" + $("#userId").val(), function(data){
+        window.socket.on("notifier-" + getCurrentUser(), function(data){
 
         if(data.category == "candidate") {
              if(data.tag == "invite") {
@@ -128,7 +128,7 @@ var candidateScreenManagement = (function($) {
 
     function renderNecessaryTemplate () {
           var opendayId = $("#roomId").val();
-          var userId = $("#userId").val();
+          var userId = getCurrentUser();
 
           $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
             var scheduleStatus = parseInt(schedule.status);
