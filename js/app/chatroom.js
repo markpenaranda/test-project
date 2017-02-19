@@ -338,7 +338,7 @@ var candidateScreenManagement = (function($) {
 
     function startVideoCall() {
       currentApplicant = pendingApplicant;
-      // console.log(currentApplicant);
+      console.log(currentApplicant);
       // Update Elements
       $(".invite-button-" + currentApplicant).prop( "disabled", true );
       $(".invite-button-" + currentApplicant).addClass( "disabled");
