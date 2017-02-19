@@ -365,9 +365,9 @@ var candidateScreenManagement = (function($) {
     	navigator.getUserMedia({video: true, audio: true}, function(stream) {
     	  var localVideo = document.getElementById('localVideo');
     	  localVideo.srcObject = stream;
-        console.log(window.peer);
+        var peer = window.peer;
         console.log(currentApplicant);
-    	  var call = window.peer.call('openday-' + currentApplicant, stream);
+    	  var call = peer.call('openday-' + currentApplicant, stream);
         console.log(call);
     	  call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
