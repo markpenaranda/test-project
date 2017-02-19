@@ -1,4 +1,4 @@
-$(document).ready(function(){
+
 
 //
 function getCurrentUserId() {
@@ -46,4 +46,3 @@ peer.on('disconnect', function() {
 })
 
 
-});
