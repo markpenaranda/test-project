@@ -2,11 +2,11 @@ $(document).ready(function(){
 
 //
 function getCurrentUserId() {
-  return $("#userId").val();
    var localStorageUser = localStorage.getItem('userId');
     if(localStorageUser) {
       return localStorageUser;
     }
+  return $("#userId").val();
 }
 
  var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
@@ -14,6 +14,7 @@ function getCurrentUserId() {
 window.peer = peer;
 
 peer.on('call', function(call) {
+  console.log(getCurrentUserId());
 	// var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
   navigator.getUserMedia({video: true, audio: true}, function(stream) {
   	 var localVideo = document.getElementById('localVideo');
