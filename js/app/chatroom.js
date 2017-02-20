@@ -92,7 +92,7 @@ var candidateScreenManagement = (function($) {
     // PeerJS
 
     function connectPeerJs () {
-       peer = new Peer('openday-' + getCurrentUser(),  { host: 'mjpvc.herokuapp.com', secure:true, port:443,  key: 'peerjs'});
+       peer = new Peer('openday-' + getCurrentUser(),  { host: 'openday.jobsglobal.com', secure:true, port:9000,  key: 'peerjs'});
     }
 
     function peerJs() {
@@ -214,6 +214,7 @@ var candidateScreenManagement = (function($) {
           loadCandidateQueue();
           renderNecessaryTemplate();
           socketIOEventHandlers();
+          updateOnlineMarker();
 
     }
 

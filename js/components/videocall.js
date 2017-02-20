@@ -8,7 +8,7 @@ $(document).ready(function() {
       return $("#userId").val();
     }
 
-     var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'mjpvc.herokuapp.com', secure:true, port:443, key: 'peerjs'});
+     var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'openday.jobsglobal.com', secure:true, port:9000, key: 'peerjs'});
       window.peer = peer;
 
     // function connect() {
