@@ -317,7 +317,7 @@ class OpenDay
   {
 
      $user  = $this->getUserById($userId);
-     $isScheduled =  ($timeBreakdownId > 0) ? $timeBreakdownId : 0;
+     $isScheduled =  ($timeBreakdownId > 0) ? 1 : 0;
      $timeStart = date("H:i:s", strtotime($timeStart));
      $timeEnd = date("H:i:s", strtotime($timeEnd));
      $timeBreakdown = ($isScheduled) ? $this->getTimeBreakdown($timeBreakdownId) : null;
