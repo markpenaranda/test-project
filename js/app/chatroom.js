@@ -215,6 +215,7 @@ var candidateScreenManagement = (function($) {
           renderNecessaryTemplate();
           socketIOEventHandlers();
           updateOnlineMarker(); 
+          window.reinitiateSocket($(this).val());
 
     }
 
