@@ -8,18 +8,20 @@ $(document).ready(function() {
       return $("#userId").val();
     }
 
-    function connect() {
-     var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'openday.jobsglobal.com', secure:true, port:9000, key: 'peerjs'});
+     var peer = new Peer('openday-' + getCurrentUserId(),  {host: 'mjpvc.herokuapp.com', secure:true, port:443, key: 'peerjs'});
       window.peer = peer;
-    }
 
-    connect();
+    // function connect() {
+    
+    // }
 
-    peer.on('error', function () {
-        console.log('connection-error');
-        peer.destroy();
-        connect();
-    })
+    // connect();
+
+    // peer.on('error', function () {
+    //     console.log('connection-error');
+    //     peer.destroy();
+    //     connect();
+    // })
 
     peer.on('call', function(call) {
       console.log(getCurrentUserId());
