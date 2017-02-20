@@ -145,7 +145,7 @@ var candidateScreenManagement = (function($) {
          if(data.tag == "add") {
             $.get(apiUrl + "/openday/" + getCurrentRoom() + "/schedule?user_id=" + data.user_id, function(candidate){
               addCandidate(candidate);
-
+              updateListNumber();
             });
 
          }
@@ -268,6 +268,7 @@ var candidateScreenManagement = (function($) {
           var candidate = res[i]
           addCandidate(candidate);
         }
+        updateOnlineMarker();
       });
     }
 
