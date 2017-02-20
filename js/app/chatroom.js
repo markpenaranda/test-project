@@ -11,7 +11,7 @@ var candidateScreenManagement = (function($) {
     var online_user = [];
     var openday;
     var liveOpenday = [];
-    var peer = new Peer('openday-' + getCurrentUser(),  {host: 'openday.jobsglobal.com', secure:true, key: 'peerjs'});
+    var peer;
 
     return {
         init: init
@@ -31,6 +31,7 @@ var candidateScreenManagement = (function($) {
             loadCandidateQueue();
             renderNecessaryTemplate();
             socketIOEventHandlers();
+            connectPeerJs();
             peerJs();
         });
        
@@ -90,6 +91,10 @@ var candidateScreenManagement = (function($) {
 
     // PeerJS
 
+    function connectPeerJs () {
+       peer = new Peer('openday-' + getCurrentUser(),  { host: 'openday.jobsglobal.com', secure:true, port:9000, key: 'peerjs'});
+    }
+
     function peerJs() {
       peer.on('call', function(call) {
                 console.log(getCurrentUserId());
@@ -117,6 +122,12 @@ var candidateScreenManagement = (function($) {
                   console.log('Failed to get local stream' ,err);
                 });
               });
+
+      peer.on('error', function () {
+        console.log('connection-error');
+        peer.destroy();
+        connectPeerJs();
+      });
     }
 
     // Socket IO
@@ -390,8 +401,6 @@ var candidateScreenManagement = (function($) {
              $("#liveCandidateDetails").append(renderedhtml);
       
          });
-      });
-
 
        // WebRTC
     	 navigator.getUserMedia({video: true, audio: true}, function(stream) {
@@ -409,6 +418,9 @@ var candidateScreenManagement = (function($) {
     	   }, function(err) {
     		  console.log('Failed to get local stream' ,err);
     	  });
+      });
+
+
 
     }
 
