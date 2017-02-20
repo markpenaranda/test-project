@@ -393,14 +393,14 @@ var candidateScreenManagement = (function($) {
       });
 
 
-      // WebRTC
-    	navigator.getUserMedia({video: true, audio: true}, function(stream) {
+       // WebRTC
+    	 navigator.getUserMedia({video: true, audio: true}, function(stream) {
     	  var localVideo = document.getElementById('localVideo');
     	  localVideo.srcObject = stream;
        
         console.log(currentApplicant);
-    	  var call = peer.call('openday-' + currentApplicant, stream);
-        console.log(stream);
+    	  call = peer.call('openday-' + currentApplicant, stream);
+        console.log(call);
     	  call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
     	  	  remoteVideo.srcObject = remoteStream;
