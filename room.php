@@ -209,8 +209,8 @@
 			<div class="col-lg-3 col-sm-3 col-xs-12">
 				<div class="interview_list_right_div">
 					<select id="scheduleFilter">
-						<option value="1">Chek-in Candidates with schedule</option>
-						<option value="0">Chek-in Candidates without schedule</option>
+						<option value="1">Check-in Candidates with schedule</option>
+						<option value="0">Check-in Candidates without schedule</option>
 					</select>
 				</div>
 				<div class="interview_list_right_ul_wrapper_div">
