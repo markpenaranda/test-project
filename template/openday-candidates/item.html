@@ -30,17 +30,27 @@
 										<h4 class="schedule_h4">Sched : <%= moment(moment.utc("2017-01-01 " + time.schedule_time_start).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc("2017-01-01 " + time.schedule_time_end).toDate()).local().format("hh:mmA") %></h4>
 									</div>
 								</div>
+								<% if(time.date_interviewed_end){ %>
+								<div class="col-lg-12 col-sm-12 col-xs-12">
+									<div class="row">
+										<h4 class="ended_h4">Done Interview at <span id="candidate-end-span"><%= moment(moment.utc(time.date_interviewed_end).toDate()).local().format("MM/D hh:mmA") %></span></h4>
+									</div>
+								</div>
+								<% } %>
+								
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div class="row">
 										<ul class="interview_list_btn_ul">
 											<li>
 												<button data-id="<%= time.user_id %>" class="view_btn">View CV</button>
 											</li>
-											
+											<% if(!time.date_interviewed_end) { %>
 											<li>
 												<button data-id="<%= time.user_id %>" class="reject_btn end_btn">Reject</button>
 											</li>
+											<% } %>
 										</ul>
 									</div>
 								</div>
+							
 							</li>

@@ -112,7 +112,7 @@ var opendayCandidatesScreenManagement = (function($) {
         if(opendayId) {
           var is_scheduled = $("#candidateSchedule").val()
            $("#candidateList").html("");
-          $.get(apiUrl + '/openday/' + opendayId + '/candidates?is_scheduled=' + is_scheduled, function(res){
+          $.get(apiUrl + '/openday/' + opendayId + '/candidates?with_ended=1&is_scheduled=' + is_scheduled, function(res){
               
               if(res.length > 0) {
                   $(".no-results").fadeOut();

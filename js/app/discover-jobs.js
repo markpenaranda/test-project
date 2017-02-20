@@ -60,7 +60,8 @@ var discoverJobsManagement = (function($) {
       $('#resultDetails').on('hidden.bs.modal', '#joinModal', closeJoinModal);
 
     
-      $("#resultDetails").on('click', '#joinFormBtn', openJoinForm);
+      $("#resultDetails").on('click', '.can-join', openJoinForm);
+      $("#resultDetails").on('click', '.btn-apply-waiting-list', openJoinForm);
       $("#resultDetails").on('change', '#oldCoverLetterSelect', updateCoverLetterField);
       $("#resultDetails").on('click', ".join-form-cancel", closeJoinForm);
 
@@ -239,11 +240,18 @@ var discoverJobsManagement = (function($) {
       $.get(apiUrl + "/openday/" + id + "?user_id=" + getCurrentUserId(), function(res){
         console.log(res);
         selectedOpenday = res;
+        var full = true;
         var created = moment(moment.utc(res.date_created).toDate()).fromNow();
         var event_date = moment(res.event_date).format("MMMM D YYYY");
          var start_time = moment("2013-02-08 " + res.start_time).format("HH:mm");
          var end_time = moment("2013-02-08 " + res.end_time).format("HH:mm");
         // console.log(created);
+
+        for(var i = 0; i < res.time_breakdown.length; i++) {
+          if(res.time_breakdown[i].is_filled == 0) {
+            full = false;
+          }
+        }
 
         getTemplate("details.html", function(render){
           var html = render({ user: accountInfo,
@@ -252,7 +260,8 @@ var discoverJobsManagement = (function($) {
                               start_time:  start_time,
                               end_time: end_time,
                               applied: res.applied,
-                              schedule: res.schedule
+                              schedule: res.schedule,
+                              full: full
                           });
           $("#resultDetails").html(html);
             if ( $(window).width() < 768 ) {
@@ -275,6 +284,7 @@ var discoverJobsManagement = (function($) {
       $(".jg-btn-join").removeClass("jg-btn-grey");
       $(".jg-btn-join").addClass("btn-success");
       $(".jg-btn-join").addClass("jg-btn");
+      $(".jg-btn-join").addClass("can-join");
 
       $("#timeBreakdownStart").html(moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA"));
       $("#timeBreakdownEnd").html(moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA"));
@@ -307,13 +317,27 @@ var discoverJobsManagement = (function($) {
       var userId = getCurrentUserId();
       var timeBreakdownId = selectedTime.id;
       var opendayId = selectedOpendayId;
-      var data = {
-        user_id : userId,
-        openday_time_breakdown_id: timeBreakdownId,
-        cover_letter: $("#coverLetter").val(),
-        cover_letter_title: $("#coverLetterTitle").val(),
-        time_start: selectedSchedule.data('start'),
-        time_end: selectedSchedule.data('end')
+
+      if(selectedSchedule) {
+        var data = {
+          user_id : userId,
+          openday_time_breakdown_id: timeBreakdownId,
+          cover_letter: $("#coverLetter").val(),
+          cover_letter_title: $("#coverLetterTitle").val(),
+          time_start: selectedSchedule.data('start'),
+          time_end: selectedSchedule.data('end')
+        };
+        
+      }
+      else {
+         var data = {
+          user_id : userId,
+          openday_time_breakdown_id: 0,
+          cover_letter: $("#coverLetter").val(),
+          cover_letter_title: $("#coverLetterTitle").val(),
+          time_start: "",
+          time_end: ""
+        };       
       }
 
   

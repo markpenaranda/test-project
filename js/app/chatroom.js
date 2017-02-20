@@ -363,6 +363,8 @@ var candidateScreenManagement = (function($) {
               $("#candidate-"+ userId + "-end").fadeIn();
               pauseTimer();
               $("#liveOpendaySelect").prop('disabled', false);
+                $(".waitingButton").fadeIn();
+                $(".startInterviewButton").fadeOut();
               // TODO: Add AJAX here to record that the candidate has ended in the DB.
 
           });

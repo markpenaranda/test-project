@@ -317,7 +317,7 @@ class OpenDay
   {
 
      $user  = $this->getUserById($userId);
-     $isScheduled = (boolean) $timeBreakdownId;
+     $isScheduled =  ($timeBreakdownId > 0) ? $timeBreakdownId : 0;
      $timeStart = date("H:i:s", strtotime($timeStart));
      $timeEnd = date("H:i:s", strtotime($timeEnd));
      $timeBreakdown = ($isScheduled) ? $this->getTimeBreakdown($timeBreakdownId) : null;
@@ -330,6 +330,7 @@ class OpenDay
      }
 
      $this->db->beginTransaction();
+
      try {
 
 
@@ -581,7 +582,7 @@ class OpenDay
   {
     $timeBreakDownSql = "
       SELECT designated_candidate_number FROM i_openday_time_breakdown
-      WHERE openday_id = '$openday_id'
+      WHERE openday_id = '$opendayId'
       ORDER BY designated_candidate_number DESC
       LIMIT 1
     ";
@@ -589,7 +590,7 @@ class OpenDay
     $attendeesSql = "
       SELECT COUNT(*) AS attendees FROM i_openday_attendees
       WHERE is_scheduled = 0
-      AND openday_id = '$openday_id'
+      AND openday_id = '$opendayId'
     ";
 
     try {
