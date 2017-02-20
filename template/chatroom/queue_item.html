@@ -48,7 +48,8 @@
 			<h4 class="schedule_h4">
 			<% if(data.is_scheduled > 0) { %>
 			Sched :<%= moment(moment.utc("1992-09-03 " + data.schedule_time_start).toDate()).local().format("hh:mmA") %>-<%= moment(moment.utc("1992-09-03 " + data.schedule_time_end).toDate()).local().format("hh:mmA") %>
-			<% } else { %>
+			<% } %> 
+			<% if(data.is_scheduled == 0){ %>
 			Candidate No.: <%= data.candidate_number %>
 			<% } %>
 			</h4>
