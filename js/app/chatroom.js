@@ -400,7 +400,7 @@ var candidateScreenManagement = (function($) {
        
         console.log(currentApplicant);
     	  call = peer.call('openday-' + currentApplicant, stream);
-        console.log(call);
+        console.log(call); 
     	  call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
     	  	  remoteVideo.srcObject = remoteStream;
