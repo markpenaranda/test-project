@@ -519,6 +519,7 @@ class OpenDay
       WHERE attendees.openday_id = '$opendayId'
       AND attendees.is_scheduled = '$isScheduled '
       AND attendees.status < $status
+      ORDER BY attendees.candidate_number ASC
     ";
     try {
 
