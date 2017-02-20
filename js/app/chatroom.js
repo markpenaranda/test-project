@@ -281,7 +281,7 @@ var candidateScreenManagement = (function($) {
        var user = JSON.parse(candidate.personal_info);
        var candidate_no = 1;
        getTemplate('queue_item.html', function(render) {
-            console.log(candidate);
+            console.log(candidate.is_scheduled);
 
             var renderedhtml = render({data : candidate, user_id: candidate.user_id, user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
             $("#queue-item").append(renderedhtml);
