@@ -60,7 +60,7 @@
 		<div class="row">
 			<ul class="interview_list_btn_ul">
 				<li>
-					<button data-id="<%= user_id %>"  class="viewButton view_btn">View</button>
+					<button data-id="<%= user_id %>"  class="viewButton view_btn">View<%= data.is_scheduled %></button>
 				</li>
 				<li id="invite-<%= user_id %>">
 					<button data-user="<%= user_id %>" data-room="<%= room_id %>" class="invite-button-<%= user_id %> inviteButton interviewing_btn">Interview</button>
