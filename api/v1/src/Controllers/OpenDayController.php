@@ -189,7 +189,7 @@ class OpenDayController extends BaseController
    public function createdOpenday($request, $response, $args) 
    {
      $userId = $request->getParam('user_id');
-     $items = $this->openDayResource->getOpendayByCreatedByUserId($userId);
+     $items = $this->openDayResource->getOpendayCreatedByUserPage($userId);
      return $response->withStatus(200)->withJson($items);
    }
 
@@ -289,7 +289,9 @@ class OpenDayController extends BaseController
 
    public function getLiveOpenday($request, $response, $args) 
    {
-      $items = $this->openDayResource->liveOpenday();
+      $userId    = $request->getParam('user_id'); 
+
+      $items = $this->openDayResource->liveOpenday($userId);
 
       return $response->withStatus(200)->withJson($items);
 

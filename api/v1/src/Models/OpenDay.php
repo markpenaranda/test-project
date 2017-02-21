@@ -558,6 +558,30 @@ class OpenDay
     }
   }
 
+  public function getOpendayCreatedByUserPage ($userId)
+  {
+
+    $pageId = $this->getUserPageId($userId)['page_id'];
+
+    $sql = "
+      SELECT * FROM i_openday WHERE page_id = '$pageId'
+    ";
+    try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
+  }
+
   public function getTimeBreakdown($timeBreakdownId)
   {
     $sql = "
@@ -956,16 +980,18 @@ class OpenDay
 
   }
 
-  public function liveOpenday()
+  public function liveOpenday($inChargeUserId = null)
   {
     $sql = "
       SELECT * FROM i_openday as openday
       JOIN i_openday_time as o_time on o_time.openday_id = openday.openday_id
       WHERE o_time.start_time <= CURTIME()
       AND o_time.end_time >= CURTIME()
-      AND openday.event_date = CURDATE()
+      AND openday.event_date = CURDATE()";
 
-    ";
+    if($inChargeUserId) {
+      $sql .= "AND in_charge_user_id = '$inChargeUserId'";
+    }
 
      try {
 

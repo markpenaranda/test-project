@@ -97,7 +97,6 @@ var candidateScreenManagement = (function($) {
 
     function peerJs() {
       peer.on('call', function(call) {
-                console.log(getCurrentUserId());
                 // var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
                 navigator.getUserMedia({video: true, audio: true}, function(stream) {
                    var localVideo = document.getElementById('localVideo');
@@ -196,7 +195,7 @@ var candidateScreenManagement = (function($) {
     }
 
     function loadLiveOpenday(callback) {
-      $.get(apiUrl + '/openday/live', function(results){
+      $.get(apiUrl + '/openday/live?user_id=' + getCurrentUser(), function(results){
         liveOpenday = results;
         for (var i = 0; i < results.length; i++) {
           var op = results[i];
