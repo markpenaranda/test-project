@@ -36,7 +36,7 @@
 								<div class="form-group">
 									<label>Select Openday Event</label>
 									<select id="opendayList" class="form-control">
-										<option>-- SELECT OPENDAY EVENT --</option>
+										<option value="0">-- SELECT OPENDAY EVENT --</option>
 									</select>
 								</div>
 							</li>

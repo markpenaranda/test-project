@@ -86,6 +86,7 @@ var opendayCandidatesScreenManagement = (function($) {
     }
 
     function viewOpenday() {
+        if($(this).val() == 0) { return false; }
         var opendayId = $(this).val();
         $("#opendayId").val(opendayId);
         loadOpendayDetails();
