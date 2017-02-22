@@ -198,6 +198,7 @@ var discoverJobsManagement = (function($) {
     function loadResults(results) {
         if(currentPage == 1) {
           $("#resultsUl").html('');
+          $("#resultDetails").html('<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click `View Details` to check the event.</p>');
         }
 
         for (var i = 0; i < results.length; i++) {
@@ -285,11 +286,12 @@ var discoverJobsManagement = (function($) {
       $(".jg-btn-join").addClass("btn-success");
       $(".jg-btn-join").addClass("jg-btn");
       $(".jg-btn-join").addClass("can-join");
+      console.log(moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA"));
 
       $("#timeBreakdownStart").html(moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA"));
       $("#timeBreakdownEnd").html(moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA"));
-      selectedTime.time_start = moment("1992-09-03 " + selectedSchedule.data("start")).format("hh:mmA");
-      selectedTime.time_end = moment("1992-09-03 " + selectedSchedule.data("end")).format("hh:mmA");
+      selectedTime.time_start = moment("1992-09-03 " + selectedSchedule.data("start")).format("HH:mm:ss");
+      selectedTime.time_end = moment("1992-09-03 " + selectedSchedule.data("end")).format("HH:mm:ss");
       selectedTime.id = selectedSchedule.data("id");
       selectedTime.candidate_number = selectedSchedule.data("candidate_number");
     }

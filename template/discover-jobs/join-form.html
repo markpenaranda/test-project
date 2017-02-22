@@ -15,7 +15,7 @@
 													<h4>Schedule Online Interview</h4>
 													<p class="jg-no-margin"><%= moment(openday.event_date).format("MMM D YYYY") %></p>
 													<% if(selectedSchedule.candidate_number > 0) { %> 
-													<p class="jg-no-margin"><%= moment(moment.utc("2017-01-01 " + selectedSchedule.time_start).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc("2017-01-01 " + selectedSchedule.time_end).toDate()).local().format("hh:mmA") %></p>
+													<p class="jg-no-margin"><%= moment(moment.utc(openday.event_date + ' ' + selectedSchedule.time_start).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc(openday.event_date + ' ' +selectedSchedule.time_end).toDate()).local().format("hh:mmA") %></p>
 													<p class="jg-no-margin">Candidate NO. <%= selectedSchedule.candidate_number %></p>
 													<% } %>
 												</div>

@@ -83,7 +83,7 @@ var candidateScreenManagement = (function($) {
 
          $("#liveOpendaySelect").on('change', changeOpenday);
 
-         $(".checkout_btn").on("click", extendHours);
+         $("#extendCheckout").on("click", extendHours);
 
 
     }
@@ -355,6 +355,8 @@ var candidateScreenManagement = (function($) {
               currentApplicant = 0;
               call.close();
               $(".send").prop("disabled", true);
+               $(".inviteButton").removeClass( "disabled");
+              $(".inviteButton").prop( "disabled", false );
               $(".messages").html('');
               clearInterval(lapseTimerInterval);
               var endInterviewTime = moment(moment.utc(res.date_interviewed_end).toDate()).local().format("MM/D hh:mmA");
@@ -389,6 +391,8 @@ var candidateScreenManagement = (function($) {
       // Update Elements
       $(".invite-button-" + currentApplicant).prop( "disabled", true );
       $(".invite-button-" + currentApplicant).addClass( "disabled");
+      $(".inviteButton").addClass( "disabled");
+      $(".inviteButton").prop( "disabled", true );
       $(".invite-button-" + currentApplicant).html("Interviewing");
 
       $("#reject-" + currentApplicant).hide();
@@ -551,9 +555,10 @@ var candidateScreenManagement = (function($) {
       var numberOfHours = $("#numberOfHours").val();
       var opendayId = getCurrentRoom();
 
-      $.post(apiUrl + '/openday/' + opendayId + '/extend', {numberOfHours: numberOfHours }, function(){
+      $.post(apiUrl + '/openday/' + opendayId + '/extend', {numberOfHours: numberOfHours }, function(res){
         closeExtendMore();
-        loadOpenday();
+        openday.end_time = res.end_time;
+        startTotalUsedTime();
       });
     }
 

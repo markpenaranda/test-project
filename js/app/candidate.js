@@ -210,12 +210,15 @@ var candidateScreenManagement = (function($) {
 
 
     function activateWaitingListUnderscoreTemplate(schedule) {
-       
+      $.get(apiUrl + '/openday/' + getCurrentRoom() + '/waiting-mode', function (res) {
+        var currentlyInterviewed = res['currently_interviewed']['candidate_number'];
+        var waitingListCount = res['total_waiting_list'];
         getTemplate('waiting.html', function(render) {
-                        var renderedhtml = render({data:schedule});
+                        var renderedhtml = render({data:schedule, openday: openday, waitingListCount: waitingListCount,current_interview: currentlyInterviewed});
                         $("#candidate-interview").fadeOut();
                         $("#waitingDiv").html(renderedhtml);
         });
+      });
     }
 
     function activateScheduledUnderscoreTemplate(schedule) {
@@ -233,12 +236,14 @@ var candidateScreenManagement = (function($) {
 
     function activateJoinUnderscoreTemplate(schedule) {
        
- 
-        getTemplate('join.html', function(render) {
-                        var renderedhtml = render({schedule: schedule, openday: openday});
-                        $("#candidate-interview").fadeOut();
-                        $("#waitingDiv").html(renderedhtml);
-        });
+         $.get(apiUrl + '/openday/' + getCurrentRoom() + '/waiting-mode', function (res) {
+             var waitingListCount = res['total_waiting_list'];
+            getTemplate('join.html', function(render) {
+                            var renderedhtml = render({schedule: schedule, openday: openday, waitingListCount: waitingListCount});
+                            $("#candidate-interview").fadeOut();
+                            $("#waitingDiv").html(renderedhtml);
+            });
+          });
     }
 
      function activateRejectUnderscoreTemplate(schedule) {

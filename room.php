@@ -192,7 +192,7 @@
 													<button class="close_extend_more_btn  hvr-underline-reveal">back</button>
 												</li>
 												<li>
-													<button class="close_extend_more_btn  hvr-underline-reveal">checkout and publish</button>
+													<button id="extendCheckout" class="close_extend_more_btn  hvr-underline-reveal">checkout and publish</button>
 												</li>
 											</ul>
 										</div>

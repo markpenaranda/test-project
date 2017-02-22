@@ -1087,7 +1087,7 @@ class OpenDay
   {
 
       $sql = "
-        SELECT end_time FROM i_openday_attendees
+        SELECT end_time FROM i_openday_time
         WHERE openday_id = '$opendayId'
         ";
 
@@ -1096,15 +1096,25 @@ class OpenDay
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $openday =  $statement->fetch();
-
+ 
         $extendedHours =  date("H:i:s", strtotime('+'. $numberOfHours . ' hours', strtotime($openday['end_time'])));
 
-        $updateSql = "UPDATE i_openday_time SET end_time = '$extendedHours' WHERE openday_id = '$opendayId";
+        $updateSql = "UPDATE i_openday_time SET end_time = '$extendedHours' WHERE openday_id = '$opendayId'";
 
         $updateStatement = $this->db->prepare($updateSql);
 
         $updateStatement->execute();
 
+        $resultSql = "
+        SELECT * FROM i_openday_time
+        WHERE openday_id = '$opendayId'
+        ";
+
+        $statement = $this->db->prepare($resultSql);
+        $statement->execute();
+        $openday =  $statement->fetch();
+
+        return $openday;
 
       }
       catch(PDOException $e){
