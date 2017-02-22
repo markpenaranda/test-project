@@ -888,10 +888,29 @@ class OpenDay
 
    public function endInterview($opendayId, $userId)
   {
+
+    $querySql = "SELECT date_interviewed_start
+              FROM i_openday_attendees
+              WHERE openday_id = '$opendayId'
+              AND user_id = '$userId'
+              ";
+    try {
+
+      $statement = $this->db->prepare($querySql);
+      $statement->execute();
+      $schedule = $statement->fetch();
+
+    $start_date = Carbon::createFromFormat("Y-m-d H:i:s", $schedule['date_interviewed_start']);
+
+    $end_date = Carbon::now();
+
+    $consumed_time = $start_date->diff($end_date)->format('%H:%i:%s');
+
     $sql = "
       UPDATE i_openday_attendees
       SET status = 2,
       date_interviewed_end = NOW(),
+      time_consumed = '$consumed_time',
       is_attended = 1
       WHERE openday_id = '$opendayId'
       AND user_id = '$userId'
@@ -899,7 +918,7 @@ class OpenDay
 
     $this->db->beginTransaction();
 
-    try {
+
       $updateStatement = $this->db->prepare($sql);
 
       $updateStatement->execute();
@@ -1096,7 +1115,7 @@ class OpenDay
         $statement = $this->db->prepare($sql);
         $statement->execute();
         $openday =  $statement->fetch();
- 
+
         $extendedHours =  date("H:i:s", strtotime('+'. $numberOfHours . ' hours', strtotime($openday['end_time'])));
 
         $updateSql = "UPDATE i_openday_time SET end_time = '$extendedHours' WHERE openday_id = '$opendayId'";

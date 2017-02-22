@@ -80,11 +80,14 @@ var candidateScreenManagement = (function($) {
          $(".close_extend_more_btn").on('click', closeExtendMore);
 
          $("#numberOfHours").on('keyup', calculateAmount);
+         $("#numberOfHoursModal").on('keyup', calculateAmountModal);
 
          $("#liveOpendaySelect").on('change', changeOpenday);
 
          $("#extendCheckout").on("click", extendHours);
+         $("#extendCheckoutModal").on("click", extendHours);
 
+         $("#finishRoom").on('click', finishRoom);
 
     }
 
@@ -462,6 +465,7 @@ var candidateScreenManagement = (function($) {
 
     function startTotalUsedTime() {
         var end = moment(openday.event_date + " " + openday.end_time);
+        var endLocal = moment(moment.utc(openday.event_date + " " + openday.end_time).toDate()).local();
          var start = moment(openday.event_date + " " + openday.start_time);
 
          var totalDuration = end - start;
@@ -472,12 +476,19 @@ var candidateScreenManagement = (function($) {
         var timer = setInterval(myTimer, 5000);
 
         function myTimer() {
-            var now = moment();
+            var now = moment().local();
             var then = moment(moment.utc(openday.event_date + " " + openday.start_time).toDate()).local();
-
+            console.log("now: " + now.format("Y/MM/DD HH::mm:ss"));
+            console.log("then: " + endLocal.format("Y/MM/DD HH::mm:ss"));
              var duration = now - then;
              var time = moment.utc(moment.duration(duration).asMilliseconds()).format("HH [H] mm [M]");
              $("#totalUsedTime").html(time);
+
+             isConsumed = moment(now).isAfter(endLocal);
+            
+             if(isConsumed) {
+                $("#timesUpModal").modal('show');
+             }
         }
     }
 
@@ -542,11 +553,13 @@ var candidateScreenManagement = (function($) {
 
     function showExtendMore() {
       $("#extendMore").fadeIn();
+      $("#extendMore2").fadeIn();
       $("#profileView").fadeOut();
     }
 
     function closeExtendMore() {
        $("#extendMore").fadeOut();
+       $("#extendMore2").fadeOut();
       $("#profileView").fadeIn();
 
     }
@@ -568,6 +581,22 @@ var candidateScreenManagement = (function($) {
       var amount = (amount > 0) ? amount : 0;
       $(".total-amount").html("$" + amount);
 
+    }
+
+
+
+    function calculateAmountModal() {
+      $("#numberOfHours").val($(this).val());
+      var hours = parseInt($(this).val());
+      var amount = 100 * hours;
+      var amount = (amount > 0) ? amount : 0;
+      $(".total-amount").html("$" + amount);
+
+    }
+
+
+    function finishRoom() {
+      location.reload();
     }
 
 

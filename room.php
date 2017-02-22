@@ -204,6 +204,7 @@
 				</div>
 				<div id="profileView" style="min-height:500px;" class="openday_profile_view_wrapper">
 					<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View' to review candidates.</p>
+				
 				</div>
 			</div>
 			<div class="col-lg-3 col-sm-3 col-xs-12">
@@ -223,6 +224,88 @@
 		</div>
 	</div>
 </section>
+<!-- Times Up -->
+<div class="modal fade" id="timesUpModal" tabindex="-1" role="dialog" data-backdrop="static" >
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				
+				<h4 class="modal-title">Thank You! Times up.</h4>
+			</div>
+			<div class="modal-body">
+				<p>Your alloted time for this room has been consumed.</p>
+				<p><button style="margin-left:10px; position:relative; float:inherit;" class="extend_more_btn hvr-shutter-in-horizontal">Extend More</button> to adjust your time.</p>
+					<div>
+							<ul id="extendMore2" style="display:none;" class="interview_post_form nterview_post_form_list">
+										<li>
+											<div class="row">
+												<div class="col-lg-12">
+													<ul class="checkout_ul">
+														<li>
+															<div class="col-lg-4">
+																<h3>
+																	$100 / hour
+																	<span class="pull-right">x</span>
+																</h3>
+															</div>
+															<div class="col-lg-2">
+																<input type="number" name="" id="numberOfHoursModal" class="form-control">
+															</div>
+															<div class="col-lg-4">
+																<h3>no.of hours</h3>
+															</div>
+															<div class="col-lg-3">
+																<p class="total-amount">$0.00</p>
+															</div>
+														</li>
+														<li>
+															<div class="col-lg-4"> </div>
+															<div class="col-lg-1"></div>
+															<div class="col-lg-4">
+																<h3>Total</h3>
+															</div>
+															<div class="col-lg-3">
+																<p class="checkout_total_p total-amount">$0.00</p>
+															</div>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</li>
+							<div class="row">
+										<div class="col-lg-3">
+											<div class="paypal_icon_wrapper">
+												<p>Payment Method</p>
+												<img src="images/paypal_logo.png" alt="">
+											</div>
+										</div>
+										<div class="col-lg-9">
+											<ul class="apply_page_btnset_ul">
+												<li>
+													<button class="close_extend_more_btn  hvr-underline-reveal">back</button>
+												</li>
+												<li>
+													<button id="extendCheckoutModal" data-dismiss="modal" class="close_extend_more_btn  hvr-underline-reveal">checkout and publish</button>
+												</li>
+											</ul>
+										</div>
+							</div>
+								</ul>
+						</ul>
+					</div>
+			</div>
+			<div class="modal-footer">
+				
+				<button  type="button" id="finishRoom" data-dismiss="modal" class="btn btn-success">Done</button>
+			</div>
+			</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			<!-- END -->
+
+
+<!-- Modal -->
+
 <!-- Modal -->
 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" data-backdrop="static" >
 	<div class="modal-dialog" role="document">
