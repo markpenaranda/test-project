@@ -86,7 +86,16 @@ var opendayCandidatesScreenManagement = (function($) {
     }
 
     function viewOpenday() {
-        if($(this).val() == 0) { return false; }
+        if($(this).val() == 0) { 
+          $("#opendayDetails").html('');
+          $("#candidateList").html('');
+          $(".no-results").fadeIn();
+          $("#opendayProfile").html(html);
+          $("#opendayProfile").html("<p class='click-to-view-info centered-info' ><i class='fa fa-search fa-fw'></i>Click 'View CV' to review candidates.</p>");
+        
+          return false; 
+
+        }
         var opendayId = $(this).val();
         $("#opendayId").val(opendayId);
         loadOpendayDetails();

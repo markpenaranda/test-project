@@ -565,6 +565,7 @@ class OpenDay
 
     $sql = "
       SELECT * FROM i_openday WHERE page_id = '$pageId'
+      ORDER BY date_created DESC
     ";
     try {
 
