@@ -24,7 +24,7 @@ var candidateScreenManagement = (function($) {
           var opendayId = $("#roomId").val();
           console.log(opendayId);
           if(opendayId == "") {
-            console.log(results[0].openday_id) 
+        
             $("#roomId").val(results[0].openday_id);
             window.reinitiateSocket(results[0].openday_id);
           }
@@ -168,12 +168,14 @@ var candidateScreenManagement = (function($) {
     }
 
     function updateOnlineMarker() {
-
+ 
       for (var i = online_user.length - 1; i >= 0; i--) {
         var nd = online_user[i];
+     
           $(".live-marker-" + nd).addClass("online"); 
-          console.log("inserted");
+          
       }
+      updateListNumber();
 
     }
 
@@ -216,8 +218,8 @@ var candidateScreenManagement = (function($) {
           loadCandidateQueue();
           renderNecessaryTemplate();
           socketIOEventHandlers();
-          updateOnlineMarker(); 
           window.reinitiateSocket($(this).val());
+          updateOnlineMarker(); 
 
     }
 
@@ -270,8 +272,9 @@ var candidateScreenManagement = (function($) {
        
           var candidate = res[i]
           addCandidate(candidate);
+          updateOnlineMarker();
         }
-        updateOnlineMarker();
+        
       });
     }
 
@@ -287,6 +290,7 @@ var candidateScreenManagement = (function($) {
 
             var renderedhtml = render({is_scheduled: candidate.is_scheduled, data : candidate, user_id: candidate.user_id, user: user, room_id: getCurrentRoom(), candidate_no: candidate_no});
             $("#queue-item").append(renderedhtml);
+            updateOnlineMarker();
         });
     }
 

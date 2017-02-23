@@ -203,6 +203,7 @@ var candidateScreenManagement = (function($) {
             $("#opendayDetails").fadeOut();
             $("#waitingDiv").fadeOut();
             $("#candidate-interview").fadeIn();
+            $('.messages').html('');
         });
 
 
