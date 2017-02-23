@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Models\OpenDay;
+use App\Models\User;
 use App\Validations\CreateOpenDayValidation;
 use App\Validations\UpdateOpenDayValidation;
 use App\Helpers\Request;
 use App\Helpers\Paginate;
+use App\Helpers\EmailHelper;
 
 
 /**
@@ -20,11 +22,15 @@ class OpenDayController extends BaseController
 
    public function __construct(
         OpenDay $openDayResource,
-        Paginate $paginate
+        User $userResource,
+        Paginate $paginate,
+        EmailHelper $emailHelper
    ){
 
       $this->openDayResource = $openDayResource;
+      $this->userResource = $userResource;
       $this->paginate = $paginate;
+      $this->emailHelper = $emailHelper;
    }
 
    public function index($request, $response)
@@ -131,9 +137,17 @@ class OpenDayController extends BaseController
        return $response->withStatus(400);
      }
      $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $coverLetterTitle, $timeBreakdownId, $timeStart, $timeEnd);
+
      if($result) {
+       $user = $this->userResource->getUserById($userId);
+       $scheduleDetails = $this->openDayResource->getSchedule($opendayId, $userId);
+      
+
+       $timeZone = $this->userResource->getTimeZoneByUserId($userId);
+       $this->emailHelper->sendOpendayDetailsMail($openday, $scheduleDetails, $user, $timeZone);
        return $response->withStatus(200)->withJson($result);
      }
+     
      return $response->withStatus(400);
    }
 

@@ -24,6 +24,39 @@ $container['jwt'] = function ($container) {
     return new stdClass();
 };
 
+
+// -----------------------------------------------------------------------------
+// PHP Mailer
+// -----------------------------------------------------------------------------
+
+$container['phpmailer'] = function ($c) {
+    $settings = $c->get('settings')['phpmailer'];
+
+    $phpmailer = new PHPMailer;
+
+    $phpmailer->SMTPDebug   = $settings['smtp_debug'];
+    $phpmailer->isSMTP();
+    $phpmailer->Host        = $settings['host'];
+    $phpmailer->SMTPAuth    = $settings['smtp_auth'];
+    $phpmailer->Username    = $settings['username'];
+    $phpmailer->Password    = $settings['password'];
+    $phpmailer->SMTPSecure  = $settings['smtp_secure'];
+    $phpmailer->Port        = $settings['port'];
+
+    $phpmailer->SMTPOptions = array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+    );
+
+    $phpmailer->setFrom($settings['sender_email'], $settings['sender_name']);
+
+    return $phpmailer;
+};
+
+
 // -----------------------------------------------------------------------------
 // Database connection
 // -----------------------------------------------------------------------------
@@ -52,7 +85,9 @@ $container['ResourcesController'] = function($c) {
 $container['OpenDayController'] = function($c) {
     return new \App\Controllers\OpenDayController(
       $c->get('OpenDay'),
-      $c->get('Paginate')
+      $c->get('User'),
+      $c->get('Paginate'),
+      $c->get('EmailHelper')
     );
 };
 
@@ -98,3 +133,8 @@ $container['Validation'] = function ($container) {
 $container['Paginate'] = function ($container) {
     return new App\Helpers\Paginate();
 };
+
+$container['EmailHelper'] = function ($container) {
+    return new App\Helpers\EmailHelper($container->get('phpmailer'));
+};
+

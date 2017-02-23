@@ -478,8 +478,7 @@ var candidateScreenManagement = (function($) {
         function myTimer() {
             var now = moment().local();
             var then = moment(moment.utc(openday.event_date + " " + openday.start_time).toDate()).local();
-            console.log("now: " + now.format("Y/MM/DD HH::mm:ss"));
-            console.log("then: " + endLocal.format("Y/MM/DD HH::mm:ss"));
+           
              var duration = now - then;
              var time = moment.utc(moment.duration(duration).asMilliseconds()).format("HH [H] mm [M]");
              $("#totalUsedTime").html(time);

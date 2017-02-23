@@ -68,4 +68,56 @@ class User
         return $e;
         }
     }
+
+    public function getTimeZoneByUserId($userId)
+    {
+        $sql = "SELECT * FROM i_users
+            JOIN i_city ON i_users.city_id = i_city.city_id
+            WHERE i_users.user_id='$userId'
+            ";
+
+        try {
+
+
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        $city = $statement->fetch();
+
+        $timezone = $this->getTimeZoneByCoordinates(
+                              $city['longitude'],
+                              $city['latitude'],
+                              "AIzaSyBxkwfU2Xdm9pT6J1xGVmBOca9J04TeirE"
+                        );
+
+        return $timezone;
+
+        }
+        catch(PDOException $e) {
+             return $e;
+        }
+
+    }
+
+    private function getTimeZoneByCoordinates($long, $lat, $googleMapApiKey)
+    {
+        $url = "https://maps.googleapis.com/maps/api/timezone/json?location=". $lat .",". $long ."&timestamp=" . time() ."&key=" . $googleMapApiKey;
+
+        $curl = curl_init();
+
+        $action_url = $url;
+
+
+
+        curl_setopt_array($curl, array(
+              CURLOPT_RETURNTRANSFER => 1,
+              CURLOPT_URL => $url
+          ));
+        $resp = curl_exec($curl);
+
+
+           $result = json_decode($resp, true);
+
+        return $result;
+
+    }
 }
