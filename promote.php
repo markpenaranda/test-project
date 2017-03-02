@@ -99,7 +99,7 @@
          <?php
             include 'include/js.php';
         ?>
-            <script src="http://maps.google.com/maps/api/js?key=AIzaSyChnFIHR10bZX3PlyVMVorh3Jxj-zTEE7k"></script>
+            <script src="https://maps.google.com/maps/api/js?key=AIzaSyChnFIHR10bZX3PlyVMVorh3Jxj-zTEE7k"></script>
             <script type="text/javascript" src="js/gmaps.js"></script>
             <script type="text/javascript" src="js/app/ad-management.js"></script>
     </body>
