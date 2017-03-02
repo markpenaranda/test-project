@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="css/components/jquery-ui.min.css" type="text/css" />
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <link rel="stylesheet" href="css/raymund_styles.css" type="text/css" />
+<link rel="stylesheet" href="css/easy-autocomplete.min.css" type="text/css" />
+
 
 <!-- Bootstrap Data Table Plugin -->
 

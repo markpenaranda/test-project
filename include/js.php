@@ -3,6 +3,7 @@
 <script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/components/jquery.timepicker.min.js"></script>
+<script type="text/javascript" src="js/jquery.easy-autocomplete.min.js"></script>
 <script type="text/javascript" src="js/components/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="js/components/datepair.min.js"></script>
 <script type="text/javascript" src="js/components/jquery.datepair.min.js"></script>
