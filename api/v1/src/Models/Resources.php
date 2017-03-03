@@ -24,7 +24,7 @@ class Resources {
                 SELECT
                     industry_id, industry
                 FROM
-                    i_zconnected_industry
+                    i_industry
                 WHERE
                     1 = 1
                     $whereClause
@@ -369,6 +369,32 @@ class Resources {
         }
     }
 
+
+    public function getIndustryKeyword($keyword) 
+    {
+
+        $whereClause = (!empty($keyword)) ? "WHERE industry LIKE '%$keyword%' LIMIT 10" : null;
+
+        try {
+            $sql = "
+                SELECT
+                    industry as id,
+                    industry as value
+                FROM
+                    i_industry
+                $whereClause
+            ";
+
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetchAll();
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
     
 
 

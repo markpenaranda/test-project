@@ -16,6 +16,19 @@
     </head>
 
     <body>
+
+
+     <!-- MUST DECLARE HERE THE FF -->
+  
+      <input type="hidden" id="tbp_id" value="<?php echo $_GET['tbp'] ?>">
+      <input type="hidden" id="promotion_type" value="<?php echo $_GET['type'] ?>">
+      <input type="hidden" id="userId" value="05582c0b47a4aab16bcd">
+
+      <!-- END MUST DECLARE HERE THE FF -->
+
+
+
+
         <header>
             <div class="container">
                 <div class="row">

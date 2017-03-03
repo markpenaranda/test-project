@@ -29,7 +29,7 @@
                                         <p>Industry</p>
                                     </div>
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
-                                        <input type="text">
+                                        <input id="industry" type="text">
                                     </div>
                                 </div>
                             </li>
@@ -41,15 +41,15 @@
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
                                         <ul class="gender_ul">
                                             <li>
-                                                <input value="Male" type="radio">
+                                                <input value="Male" name="gender" type="radio">
                                                 <p>Male</p>
                                             </li>
                                             <li>
-                                                <input value="Female" type="radio">
+                                                <input value="Female"  name="gender" type="radio">
                                                 <p>Female</p>
                                             </li>
                                             <li>
-                                                <input value="Other" type="radio">
+                                                <input value="Other" name="gender" type="radio">
                                                 <p>Other</p>
                                             </li>
                                         </ul>
@@ -64,11 +64,28 @@
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
                                         <ul class="two_column_ul">
                                             <li class="col-lg-6 col-sm-6 col-xs-6">
-                                                <input type="text">
+                                                <input id="budgetPerDay" type="number" class="costField">
                                             </li>
                                             <li class="col-lg-6 col-sm-6 col-xs-6">
-                                                <input type="text">
+                                                <select class="form-control" id="currency">
+                                                    <option value="0">Select Currency</option>
+                                                </select>
                                             </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-3 col-xs-12">
+                                        <p>Bid per Engagement/Click</p>
+                                    </div>
+                                    <div class="col-lg-9 col-sm-9 col-xs-12">
+                                        <ul class="two_column_ul">
+                                            <li class="col-lg-8 col-sm-8 col-xs-8">
+                                                <input type="number" id="bidPerClick" ><span class="selectedCurrency"></span>
+                                            </li>
+                               
                                         </ul>
                                     </div>
                                 </div>
@@ -78,13 +95,13 @@
                                     <div class="col-lg-3 col-sm-3 col-xs-12">
                                         <p>Schedule</p>
                                     </div>
-                                    <div class="col-lg-9 col-sm-9 col-xs-12">
+                                    <div id="dateRange" class="input-daterange col-lg-9 col-sm-9 col-xs-12">
                                         <h6>
-                                            <input type="radio">
+                                            <input class="schedule_type" name="schedule_type" value="continuous"  type="radio">
                                             Run my ad set continuously starting today
                                         </h6>
                                         <h6>
-                                            <input type="radio">
+                                            <input class="schedule_type" name="schedule_type" value="limited"  type="radio">
                                             Set start and end date
                                         </h6>
                                         <ul class="promote_post_schedule_ul">
@@ -92,10 +109,10 @@
                                                 <p>From</p>
                                             </li>
                                             <li class="col-lg-5 col-sm-5 col-xs-6">
-                                                <input type="text">
+                                                <input  id="startDate" class="date start costField" type="text">
                                             </li>
                                             <li class="col-lg-5 col-sm-5 col-xs-6">
-                                                <input type="text">
+                                                <input id="startTime" class="time start" />
                                             </li>
                                         </ul>
                                         <ul class="promote_post_schedule_ul">
@@ -103,13 +120,13 @@
                                                 <p>To</p>
                                             </li>
                                             <li class="col-lg-5 col-sm-5 col-xs-6">
-                                                <input type="text">
+                                                <input  id="endDate"  class="date end costField" type="text">
                                             </li>
                                             <li class="col-lg-5 col-sm-5 col-xs-6">
-                                                <input type="text">
+                                                <input id="endTIme" class="time end jg-timepicker" />
                                             </li>
                                         </ul>
-                                        <h4 class="ad_note_h4">Your ad will run for 18 days. you'll spend no more than AED 14,000.<br>Estimated reach 1000 - 2000.</h4>
+                                        <h4 class="ad_note_h4">Your ad will run for <span class="adDays">0</span> days. you'll spend no more than <span class="selectedCurrency">AED</span> <span class="adCost">0.00</span>.<br>Estimated reach 1000 - 2000.</h4>
                                     </div>
                                 </div>
                             </li>
@@ -126,18 +143,18 @@
                                         <p>Keywords</p>
                                     </div>
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
-                                        <textarea></textarea>
+                                        <textarea id="keyword"></textarea>
                                         <ul class="ads_include_list_ul">
                                             <li>
-                                                <input type="checkbox">
+                                                <input id="is_people_applied_included" type="checkbox">
                                                 <p>Include people who applied to my job post.</p>
                                             </li>
                                             <li>
-                                                <input type="checkbox">
+                                                <input id="is_people_viewed_job_included" type="checkbox">
                                                 <p>Include people who viewed to my job post.</p>
                                             </li>
                                             <li>
-                                                <input type="checkbox">
+                                                <input id="is_people_viewed_page_included" type="checkbox">
                                                 <p>Include people who applied to my company page.</p>
                                             </li>
                                         </ul>
@@ -145,10 +162,50 @@
                                 </div>
                             </li>
                             <li>
-                                <button class="promote_post_btn hvr-shutter-in-horizontal">
+                                <button id="promoteBtn" class="promote_post_btn hvr-shutter-in-horizontal">
                                     Promote
                                 </button>
                             </li>
+                            <li>
+          <div>
+          <p id="location-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Location is required</p>
+          </div>
+          <div>
+           <p id="radius-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i> Radius is required</p>
+
+          </div>
+          <div>
+             <p id="budget-per-day-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Budget Per Day is required</p>
+
+          </div>
+
+            <div>
+             <p id="bid-per-click-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Bid Per Click is required</p>
+
+          </div>
+           <div>
+             <p id="currency-id-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Currency is required</p>
+
+          </div>
+            <div>
+             <p id="schedule-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Select Schedule of your ad.</p>
+
+          </div>
+           <div>
+             <p id="start-date-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Start Date is required</p>
+
+          </div>
+
+          <div>
+             <p id="end-date-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>End Date is required</p>
+
+          </div>
+
+       
+
+
+      </li>
+
                         </ul>
                     </div>
                 </div>

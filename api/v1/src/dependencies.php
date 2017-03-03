@@ -97,6 +97,12 @@ $container['UserController'] = function($c) {
     );
 };
 
+$container['PromotionController'] = function($c) {
+    return new \App\Controllers\PromotionController(
+      $c->get('Promotion')
+    );
+};
+
 // -----------------------------------------------------------------------------
 // Model factories
 // -----------------------------------------------------------------------------
@@ -117,7 +123,9 @@ $container['OpenDay'] = function($container) {
   return new App\Models\OpenDay($container->get('db'));
 };
 
-
+$container['Promotion'] = function($container) {
+  return new App\Models\Promotion($container->get('db'));
+};
 
 
 

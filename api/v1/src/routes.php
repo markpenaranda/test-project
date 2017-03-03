@@ -46,6 +46,10 @@ $app->group('/openday', function(){
 	});
 });
 
+$app->group('/promotion', function () {
+	$this->map(['POST'], '', 'PromotionController:store');
+});
+
 $app->group('/validate', function () {
 	$this->post('/email', 'ExamController:checkIfEmailAvailableUser');
 });
@@ -75,6 +79,8 @@ $app->group('/resources', function () {
 	});
 
 	$this->map(['GET'], '/keyword', 'ResourcesController:getKeyword');
+
+	$this->map(['GET'], '/industry-keyword', 'ResourcesController:getIndustryKeyword');
 
 	$this->group('/filterjob', function() {
 		$this->map(['GET'] ,'', 'ResourcesController:getFilterJob');
