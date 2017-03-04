@@ -1,0 +1,44 @@
+                <li>
+                                <div class="col-lg-3 col-sm-3 col-xs-3">
+                                    <div class="row">
+                                        <div class="widget_pic_wrapper">
+                                            <img src="https://s-media-cache-ak0.pinimg.com/736x/71/2d/f1/712df1d9aee7e80a0be32b7cc00a3f0e.jpg">
+                                            <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-sm-9 col-xs-9">
+                                    <div class="row">
+                                        <ul class="suggested_widget_text_ul">
+                                            <li>
+                                                <h4><%= data.event_name %></h4>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                   <%= data.page_name %>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                   <%= moment(data.event_date).format("MMM D, YYYY") %>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <%= moment(moment.utc(data.event_date + " " + data.start_time).toDate()).local().format("hh:mmA") %> - <%= moment(moment.utc(data.event_date + " " + data.end_time).toDate()).local().format("hh:mmA") %> 
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <ul class="skip_and_connect_btnset">
+                                    <li>
+                                        <button class="skip">Skip</button>
+                                    </li>
+                                    <li>
+                                        <button class="connect">Book Schedule</button>
+                                    </li>
+                                </ul>
+                            </li>

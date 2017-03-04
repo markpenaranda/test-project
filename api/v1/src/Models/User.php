@@ -38,6 +38,7 @@ class User
             $sql = "
                 SELECT * from i_users 
                 JOIN i_country on i_users.nationality = i_country.country_id
+                JOIN i_city ON i_users.city_id = i_city.city_id
                 WHERE i_users.user_id = '$userId'
             ";
             $statement = $this->db->prepare($sql);
@@ -52,11 +53,31 @@ class User
         }
     }
 
+    public function getUserPage ($userId) 
+    {
+       try {
+        $sql = "
+            SELECT *  FROM i_page_connection as con
+            JOIN i_page as page on page.page_id = con.page_id
+             JOIN i_city ON page.city_id = i_city.city_id
+            where user_id = '$userId' limit 1
+        ";
+
+        $statement = $this->db->prepare($sql);
+        $statement->execute();
+        return $statement->fetch();
+
+        } 
+        catch(PDOException $e) {
+        return $e;
+        } 
+    }
+
     public function getUserPageId($userId)
     {
         try {
         $sql = "
-            SELECT page_id FROM i_page_connection where user_id = '$userId' limit 1
+            SELECT page_id  FROM i_page_connection where user_id = '$userId' limit 1
         ";
 
         $statement = $this->db->prepare($sql);

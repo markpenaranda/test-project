@@ -47,6 +47,7 @@ $app->group('/openday', function(){
 });
 
 $app->group('/promotion', function () {
+	$this->map(['GET'], '/{type}', 'PromotionController:getPromotedItems');
 	$this->map(['POST'], '', 'PromotionController:store');
 });
 

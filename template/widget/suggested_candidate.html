@@ -1,0 +1,39 @@
+ <li>
+    <div class="col-lg-3 col-sm-3 col-xs-3">
+        <div class="row">
+            <div class="widget_pic_wrapper">
+                <img src="http://csgobuff.pro/img/upload/player/58.png">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-sm-9 col-xs-9">
+        <div class="row">
+            <ul class="suggested_widget_text_ul">
+                <li>
+                    <h4><%= JSON.parse(data.personal_info).first_name %> <%= JSON.parse(data.personal_info).last_name %></h4>
+                </li>
+                <li>
+                    <p>
+                        <i class="fa fa-suitcase" aria-hidden="true"></i>
+                        <%= JSON.parse(data.personal_info).positionpreferred %>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                         <%= data.location %>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <ul class="skip_and_connect_btnset">
+        <li>
+            <button class="skip">Skip</button>
+        </li>
+        <li>
+            <button class="connect">Connect</button>
+        </li>
+    </ul>
+</li>

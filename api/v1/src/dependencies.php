@@ -99,7 +99,9 @@ $container['UserController'] = function($c) {
 
 $container['PromotionController'] = function($c) {
     return new \App\Controllers\PromotionController(
-      $c->get('Promotion')
+      $c->get('Promotion'),
+      $c->get('User')
+
     );
 };
 

@@ -1,12 +1,14 @@
 <?php namespace App\Controllers;
 
-use App\Models\Promotion; 
+use App\Models\Promotion;
+use App\Models\User;
 
 class PromotionController extends BaseController 
 {
-	public function __construct(Promotion $promotion) 
+	public function __construct(Promotion $promotion, User $user) 
 	{
 		$this->promotionResource = $promotion;
+		$this->userResource 	 = $user;
 	}
 	public function store($request, $response)
 	{
@@ -57,6 +59,36 @@ class PromotionController extends BaseController
 				break;
 		}
 
+	}
+
+	public function getPromotedItems($request, $response, $args)
+	{
+		$type = $args['type'];
+		$userId = $request->getParam('user_id');
+		$user = ($userId > 0 ) ? $this->userResource->getUserById($userId) : null;
+
+		switch ($type) {
+			case 'openday':
+				$output = $this->promotionResource->getPromotedOpenday($user);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'job':
+				$output = $this->promotionResource->getPromotedJobPost($user);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'page':
+				$output = $this->promotionResource->getPromotedPage($user);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'user':
+				$page = ($userId > 0 ) ? $this->userResource->getUserPage($userId) : null;
+				$output = $this->promotionResource->getPromotedUser($page);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			default:
+				# code...
+				break;
+		}
 	}
 
 }
