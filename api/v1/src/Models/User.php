@@ -141,4 +141,22 @@ class User
         return $result;
 
     }
+
+    public  function getAll() 
+    {
+        $sql = "SELECT * from i_users limit 30";
+
+        try {
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetchAll();
+
+        } catch(PDOException $e) {
+            return $e;
+        }
+    }
+
 }

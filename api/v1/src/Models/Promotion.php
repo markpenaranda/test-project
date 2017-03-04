@@ -472,6 +472,105 @@ class Promotion
 
 	}
 
+	public function checkIfPromotedOpenday($opendayId)
+	{
+		$sql = "
+			SELECT COUNT(*) as total FROM i_promote_openday
+			WHERE is_active = 1
+			AND openday_id = '$opendayId'
+			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
+			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function checkIfPromotedJobPost($jobPostId)
+	{
+		$sql = "
+			SELECT COUNT(*) as total FROM i_promote_job_post
+			WHERE is_active = 1
+			AND job_post_id = '$jobPostId'
+			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
+			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function checkIfPromotedPage($pageId)
+	{
+		$sql = "
+			SELECT COUNT(*) as total FROM i_promote_page
+			WHERE is_active = 1
+			AND page_id = '$pageId'
+			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
+			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+	public function checkIfPromotedUser($userId)
+	{
+		$sql = "
+			SELECT COUNT(*) as total FROM i_promote_user_profile
+			WHERE is_active = 1
+			AND user_id = '$userId'
+			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
+			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
 	private function  getUniqueId() {
 
         $sql       = "SELECT SUBSTRING(UUID(), 1, 8) as uniqueId";

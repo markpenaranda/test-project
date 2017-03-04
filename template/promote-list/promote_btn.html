@@ -1,0 +1,12 @@
+<% if(!promoted) { %>
+<a href="/promote.php?tbp=<%= id %>&type=<%= type %>" id="promoteBtn" class="promote_btn">
+    <i class="fa fa-star" aria-hidden="true"></i>
+    Promote
+</a>
+<% } else { %>
+<button id="promoteBtn" disabled class="promote_btn">
+    <i class="fa fa-star" aria-hidden="true"></i>
+    Promoted
+</button>
+
+<% } %>

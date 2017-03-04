@@ -91,4 +91,33 @@ class PromotionController extends BaseController
 		}
 	}
 
+	public function checkIfPromoted($request, $response, $args)
+	{
+		$type = $args['type'];
+		$id = $args['id'];
+
+		switch ($type) {
+				case 'openday':
+				$output = $this->promotionResource->checkIfPromotedOpenday($id);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'job':
+				$output = $this->promotionResource->checkIfPromotedJobPost($id);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'page':
+				$output = $this->promotionResource->checkIfPromotedPage($id);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'user':
+				
+				$output = $this->promotionResource->checkIfPromotedUser($id);
+				return $response->withStatus(200)->withJson($output);
+				break;
+			default:
+				# code...
+				break;
+		}
+	}
+
 }

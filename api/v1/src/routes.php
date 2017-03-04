@@ -6,6 +6,7 @@
 
 
 $app->group('/users', function () {
+	$this->map(['GET'], '', 'UserController:getAll');
 	$this->group('/{user_id}', function() {
 		$this->map(['GET'], '', 'UserController:show');
 		$this->map(['GET'], '/workmates', 'UserController:getUserBySamePage');
@@ -48,6 +49,7 @@ $app->group('/openday', function(){
 
 $app->group('/promotion', function () {
 	$this->map(['GET'], '/{type}', 'PromotionController:getPromotedItems');
+	$this->map(['GET'], '/{type}/{id}', 'PromotionController:checkIfPromoted');
 	$this->map(['POST'], '', 'PromotionController:store');
 });
 

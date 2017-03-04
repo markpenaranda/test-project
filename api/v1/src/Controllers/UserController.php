@@ -37,5 +37,11 @@ class UserController extends BaseController
 
    }
 
+   public function getAll($request, $response, $args)
+   {
+      $users = $this->user->getAll();
+      return $response->withStatus(200)->withJson($users);
+   }
+
 }
 

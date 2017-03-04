@@ -60,38 +60,34 @@
             </div>
         </header>
         <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9 col-sm-8 col-xs-12">
-                        
-                    </div>
-                    <div class="col-lg-3 col-sm-3 col-xs-12">
-                        <ul id="suggestedCandidatesList" class="suggested_widget_ul">
-                            <li>
-                                <h4>Featured Candidates</h4>
-                            </li>
-                         	
-                           
-                        </ul>
-                        <ul id="suggestedJobList"  class="suggested_widget_ul">
-                            <li>
-                                <h4>Suggested Jobs</h4>
-                            </li>
-                           
-                    
-                        </ul>
-                        <ul id="suggestedOpendayList" class="suggested_widget_ul">
-                            <li>
-                                <h4>Open Day Events</h4>
-                            </li>
-            
-                         
-                        </ul>
-                    </div>
-                </div>
+            <div class="container row">
+                  <div class="col-md-4">
+                      <h5>Openday List To Be Promoted</h5>
+                      <ul  id="opendayList">
+                          
+                      </ul>
+
+                  </div>
+
+                  <div class="col-md-4">
+                      <h5>Job List To Be Promoted</h5>
+                      <ul  id="jobList">
+                          
+                      </ul>
+
+                  </div>
+
+                   <div class="col-md-4">
+                      <h5>Candidate List To Be Promoted</h5>
+                      <ul  id="candidateList">
+                          
+                      </ul>
+
+                  </div>
             </div>
         </section>
         
+
         <footer>
             <div class="container">
                 <div class="row">
@@ -115,6 +111,6 @@
             <?php
             include 'include/js.php';
         ?>
-            <script type="text/javascript" src="js/app/widget.js"></script>
+            <script type="text/javascript" src="js/app/promote-list.js"></script>
     </body>
 </html>

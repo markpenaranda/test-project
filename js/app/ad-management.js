@@ -348,7 +348,7 @@ var adManagement = (function($) {
         if(validateData(data)) { 
 
             $.post(apiUrl + "/promotion", data, function(data) {
-                console.log(data);
+                window.location = "/promote-list.php";
             });
         }
     }
