@@ -120,4 +120,55 @@ class PromotionController extends BaseController
 		}
 	}
 
+	public function recordEngagement($request, $response, $args)
+	{
+		$promotionId = $args['id'];
+		$type = $args['type'];
+		$userId = $request->getParam('user_id');
+
+		$this->promotionResource->recordEngagement($promotionId, $type, $userId);
+
+		return $response->withStatus(200)->withJson(true);
+
+
+	}
+
+	public function computeTotalConsumedAmount($request, $response, $args)
+	{
+		$promotionId = $args['id'];
+		$type = $args['type'];
+
+
+		$consumedAmount = $this->promotionResource->computeTotalConsumedAmount($promotionId, $type);
+
+		return $response->withStatus(200)->withJson($consumedAmount);
+	}
+
+	public function getAllPromotion($request, $response, $args)
+	{
+		$type = $args['type'];
+		switch ($type) {
+				case 'openday':
+				$output = $this->promotionResource->getAllOpendayPromotion();
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'job':
+				$output = $this->promotionResource->getAllJobPromotion();
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'page':
+				$output = $this->promotionResource->getAllPagePromotion();
+				return $response->withStatus(200)->withJson($output);
+				break;
+			case 'user':
+				
+				$output = $this->promotionResource->getAllUserPromotion();
+				return $response->withStatus(200)->withJson($output);
+				break;
+			default:
+				# code...
+				break;
+		}
+	}
+
 }

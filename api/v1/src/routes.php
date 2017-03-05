@@ -49,7 +49,12 @@ $app->group('/openday', function(){
 
 $app->group('/promotion', function () {
 	$this->map(['GET'], '/{type}', 'PromotionController:getPromotedItems');
+	$this->map(['GET'], '/{type}/all', 'PromotionController:getAllPromotion');
 	$this->map(['GET'], '/{type}/{id}', 'PromotionController:checkIfPromoted');
+
+	$this->map(['POST'], '/{type}/{id}/record-engagement', 'PromotionController:recordEngagement');
+	$this->map(['GET'], '/{type}/{id}/compute-amount', 'PromotionController:computeTotalConsumedAmount');
+
 	$this->map(['POST'], '', 'PromotionController:store');
 });
 

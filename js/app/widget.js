@@ -41,7 +41,7 @@ var widgetManagement = (function($) {
     // Event Handler
     function addEventHandlers() {
         
-
+        $("body").on("click", ".promotion-engage",recordEngagement)
 
     }
 
@@ -109,7 +109,16 @@ var widgetManagement = (function($) {
 
 
    
-
+    function recordEngagement(e) {
+      e.preventDefault();
+      var type = $(this).data("promotion-type");
+      var id = $(this).data("promotion-id");
+      var href = $(this).data('href');
+      var userId = getCurrentUserId();
+      $.post(apiUrl + "/promotion/" + type +"/" + id + "/record-engagement", {user_id: userId}, function(data) {
+          window.location = href;
+      });
+    }
 
 
 

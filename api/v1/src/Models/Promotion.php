@@ -13,6 +13,117 @@ class Promotion
       $this->db = $db;
 	}
 
+	public function getAllOpendayPromotion()
+	{
+		$sql = "
+			SELECT * FROM i_promote_openday as promote
+			JOIN i_openday as openday on openday.openday_id = promote.openday_id
+			JOIN i_openday_time as openday_time on openday.openday_id = openday_time.openday_id
+			JOIN i_page as page on page.page_id = openday.page_id
+			WHERE promote.is_active = 1
+			AND promote.is_deleted = 0
+		
+		";
+
+		try {
+	      $statement = $this->db->prepare($sql);
+
+	      $statement->execute();
+	      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+	      $results = $statement->fetchAll();
+	    
+
+	      return $results;
+
+	    }
+	    catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function getAllJobPromotion()
+	{
+		$sql = "
+			SELECT * FROM i_promote_job_post as promote
+			JOIN i_job_post as job_post on job_post.job_post_id = promote.job_post_id
+			JOIN i_page as page on page.page_id = promote.page_id
+			WHERE promote.is_active = 1
+			AND promote.is_deleted = 0
+		";
+		try {
+	      $statement = $this->db->prepare($sql);
+
+	      $statement->execute();
+	      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+	      $results = $statement->fetchAll();
+	    
+
+	      return $results;
+
+	    }
+	    catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function getAllPagePromotion()
+	{
+		$sql = "
+			SELECT * FROM i_promote_page as promote
+			JOIN i_page as page on page.page_id = promote.page_id
+			WHERE promote.is_active = 1
+			AND promote.is_deleted = 0
+		";
+
+		try {
+	      $statement = $this->db->prepare($sql);
+
+	      $statement->execute();
+	      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+	      $results = $statement->fetchAll();
+	    
+
+	      return $results;
+
+	    }
+	    catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function getAllUserPromotion()
+	{
+		$sql = "
+			SELECT * FROM i_promote_user_profile as promote
+			JOIN i_users_object_data as user on user.user_id = promote.user_id
+			WHERE promote.is_active = 1
+			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
+			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
+			AND promote.is_deleted = 0
+		";
+
+		try {
+	      $statement = $this->db->prepare($sql);
+
+	      $statement->execute();
+	      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+	      $results = $statement->fetchAll();
+	    
+
+	      return $results;
+
+	    }
+	    catch(PDOException $e){
+	      return $e;
+	    }
+
+
+	}
+
 
 	public function saveOpendayPromotion($data) 
 	{
@@ -596,6 +707,169 @@ class Promotion
 	    $d = $earth_radius * $c;  
 
 	    return $d;  
+	}
+
+	public function getProductId() 
+	{
+		$sql = "
+			SELECT product_id FROM i_product 
+			WHERE product_name = 'Promotion'
+			LIMIT 1 
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $product = $statement->fetch();
+
+		    return $product['product_id'];
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function getPromotionDetails($id, $type) 
+	{
+		switch ($type) {
+			case 'openday':
+				$tableName = "i_promote_openday";
+				break;
+			case 'job':
+				$tableName = "i_promote_job_post";
+				break;
+			case 'page':
+				$tableName = "i_promote_page";
+				break;
+			case 'user':
+				$tableName = "i_promote_user_profile";
+				break;
+			default:
+				return false;
+				break;
+		}
+
+		$sql = "
+			SELECT * FROM $tableName 
+			WHERE promote_id = '$id'
+			LIMIT 1 
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $promotion = $statement->fetch();
+
+		    return $promotion;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+	}
+
+	public function recordEngagement($promotionId, $promotionType, $created_by_user_id)
+	{
+		$productId = $this->getProductId();
+		$promotion = $this->getPromotionDetails($promotionId, $promotionType);
+		$pageId = (array_key_exists("page_id", $promotion)) ? $promotion['page_id'] : '';
+		$sql = "
+			INSERT INTO `i_billing_transaction` (
+				`transaction_id`,
+				`page_id`,
+				`promote_id`,
+				`promote_type`,
+				`product_id`,
+				`amount`,
+				`created_by_user_id`,
+				`date_created`
+			)
+			VALUES (
+				'". $this->getUniqueId() ."',
+				'". $pageId . "',
+				'". $promotionId . "',
+				'". $promotionType . "',
+				'". $productId . "',
+				'". $promotion['bid_per_engagement'] . "',
+				'". $created_by_user_id . "',
+				NOW() 
+
+			)
+		";
+
+
+		$this->db->beginTransaction();
+		try {
+			$opendayPromotionStatment = $this->db->prepare($sql);
+			$opendayPromotionStatment->execute();
+
+			$this->db->commit();
+			return true;
+		}
+		catch(PDOException $e) {
+	      $this->db->rollBack();
+	      return false;
+	    }
+	}
+
+	public function computeTotalConsumedAmount($promote_id, $type) 
+	{
+		$sqltotalTransactions = "
+			SELECT SUM(amount) as totalConsumedAmount FROM i_billing_transaction
+			WHERE promote_id = '$promote_id'
+			AND promote_type = '$type'
+		";
+		$this->db->beginTransaction();
+
+		try {
+		    $statement = $this->db->prepare($sqltotalTransactions);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $totalTransactions = $statement->fetch();
+
+			switch ($type) {
+				case 'openday':
+					$tableName = "i_promote_openday";
+					break;
+				case 'job':
+					$tableName = "i_promote_job_post";
+					break;
+				case 'page':
+					$tableName = "i_promote_page";
+					break;
+				case 'user':
+					$tableName = "i_promote_user_profile";
+					break;
+				default:
+					return false;
+					break;
+			}
+
+			$consumedAmount = ($totalTransactions['totalConsumedAmount'] > 0) ? $totalTransactions['totalConsumedAmount'] : 0;
+			$sql  = "
+				UPDATE $tableName 
+				SET consumed_amount = '". $consumedAmount ."'
+				WHERE promote_id = '$promote_id' 
+			";
+
+			$updateStatement = $this->db->prepare($sql);
+			$updateStatement->execute();
+
+			$this->db->commit();
+			return $consumedAmount;
+		}
+		 catch(PDOException $e){
+	      return $e;
+	    }
+
+
 	}
 
 }
