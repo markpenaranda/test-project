@@ -87,6 +87,7 @@ $app->group('/resources', function () {
 	});
 
 	$this->map(['GET'], '/keyword', 'ResourcesController:getKeyword');
+	$this->map(['GET'], '/page', 'ResourcesController:getAllPage');
 
 	$this->map(['GET'], '/industry-keyword', 'ResourcesController:getIndustryKeyword');
 

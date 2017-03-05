@@ -61,7 +61,7 @@
         </header>
         <section>
             <div class="container row">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                       <h5>Openday List To Be Promoted</h5>
                       <ul  id="opendayList">
                           
@@ -69,7 +69,7 @@
 
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                       <h5>Job List To Be Promoted</h5>
                       <ul  id="jobList">
                           
@@ -77,9 +77,17 @@
 
                   </div>
 
-                   <div class="col-md-4">
+                   <div class="col-md-3">
                       <h5>Candidate List To Be Promoted</h5>
                       <ul  id="candidateList">
+                          
+                      </ul>
+
+                  </div>
+
+                 <div class="col-md-3">
+                      <h5>Page List To Be Promoted</h5>
+                      <ul  id="companyList">
                           
                       </ul>
 

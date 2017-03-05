@@ -20,6 +20,7 @@ var widgetManagement = (function($) {
         loadOpenday();
         loadJobs();
         loadCandidate();
+        loadPage();
 
     }
 
@@ -135,6 +136,29 @@ var widgetManagement = (function($) {
           var $html = $(html);
           $html.find("#buttonSection-" + id).append(promoteHtml);
           $("#candidateList").append($html);
+        });
+      })
+    }
+
+    function loadPage() {
+        $.get(apiUrl + '/resources/page', function(results) {
+            for(var x = 0; x < results.length; x++) {
+               var data = results[x];
+               renderPage(data);
+            }
+        });
+
+    }
+
+    function renderPage(data) {
+      getTemplate("list.html", function(render){
+        var id = data.page_id;
+        var html = render({name: data.page_name, id: data.page_id});
+        
+        renderPromoteButton(id, "page", function(promoteHtml){
+          var $html = $(html);
+          $html.find("#buttonSection-" + id).append(promoteHtml);
+          $("#companyList").append($html);
         });
       })
     }

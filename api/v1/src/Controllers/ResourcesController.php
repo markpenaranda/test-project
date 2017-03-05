@@ -445,5 +445,11 @@ class ResourcesController {
 
 	}
 
-    
+
+    public function getAllPage($request, $response, $args) 
+    {
+        $result = $this->resource->getAllPage();
+          return $response->withStatus(200)->withJson($result);
+    }
+
 }

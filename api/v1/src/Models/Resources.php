@@ -397,5 +397,28 @@ class Resources {
     }
     
 
+    public function getAllPage()
+    {
+
+        try {
+            $sql = "
+                SELECT
+                    *
+                FROM
+                    i_page
+            ";
+
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetchAll();
+        } catch (PDOException $e) {
+            return $e;
+        }
+
+    }
+
 
 }
