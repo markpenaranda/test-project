@@ -25,7 +25,7 @@ class PromotionController extends BaseController
 						'location_radius'		  			=> $request->getParam("radius"),
 						'industry'		  					=> $request->getParam("industry"),
 						'gender'		  					=> $request->getParam("gender"),
-						'budget_per_day'		  			=> $request->getParam("budget_per_day"),
+						'budget_per_day'		  			=> ($request->getParam("budget_per_day") != NULL) ? $request->getParam("budget_per_day"): NULL,
 						'bid_per_engagement'				=> $request->getParam("bid_per_engagement"),
 						'to_be_promoted_id'					=> $request->getParam("to_be_promoted_id"),
 						'run_start_date'					=> date("Y-m-d", strtotime($start_date)),
