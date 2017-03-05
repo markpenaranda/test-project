@@ -305,7 +305,7 @@ var adManagement = (function($) {
                $("#end-date-required").fadeOut();
             }
         }
-
+        $("#location-required").fadeOut();
         if(data['lat'] <= 0 || data['lng'] <= 0) {
              $("#location-required").fadeIn();
               valid = false;
@@ -316,7 +316,7 @@ var adManagement = (function($) {
                $("#end-date-required").fadeOut();
         } 
 
-        console.log(data);
+       
 
         return valid;
     }
@@ -347,8 +347,19 @@ var adManagement = (function($) {
 
         if(validateData(data)) { 
 
-            $.post(apiUrl + "/promotion", data, function(data) {
-                window.location = "/promote-list.php";
+         
+
+            $.ajax({
+                type: "POST",
+                url: apiUrl + "/promotion",
+                data: data,
+                
+                success: function(data) {
+                   // window.location = "/promote-list.php";
+                },
+                error: function(data){
+                    alert("Cannot Proccess your request make sure that this item does not have a currently running promotion.");
+                }
             });
         }
     }

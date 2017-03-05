@@ -129,6 +129,11 @@ class Promotion
 	{
 
 		$promotion_id = $this->getUniqueId();
+		$checkIfHaveActivePromotion = $this->checkIfPromotedOpenday($data['to_be_promoted_id']);
+
+		if($checkIfHaveActivePromotion) {
+			return false;
+		}
 		$sqlInsert = "
 			INSERT INTO i_promote_openday (
 				`promote_id`,
@@ -204,6 +209,11 @@ class Promotion
 	public function saveJobPostPromotion($data) 
 	{
 		$promotion_id = $this->getUniqueId();
+		$checkIfHaveActivePromotion = $this->checkIfPromotedJobPost($data['to_be_promoted_id']);
+	
+		if($checkIfHaveActivePromotion) {
+			return false;
+		}
 		$sqlInsert = "
 			INSERT INTO i_promote_job_post (
 				`promote_id`,
@@ -280,6 +290,13 @@ class Promotion
 	public function savePagePromotion($data) 
 	{
 		$promotion_id = $this->getUniqueId();
+
+		$checkIfHaveActivePromotion = $this->checkIfPromotedPage($data['to_be_promoted_id']);
+
+		if($checkIfHaveActivePromotion) {
+			return false;
+		}
+
 		$sqlInsert = "
 			INSERT INTO i_promote_page (
 				`promote_id`,
@@ -355,6 +372,12 @@ class Promotion
 	public function saveUserPromotion($data) 
 	{
 		$promotion_id = $this->getUniqueId();
+		$checkIfHaveActivePromotion = $this->checkIfPromotedUser($data['to_be_promoted_id']);
+
+		if($checkIfHaveActivePromotion) {
+			return false;
+		}
+
 		$sqlInsert = "
 			INSERT INTO i_promote_user_profile (
 				`promote_id`,

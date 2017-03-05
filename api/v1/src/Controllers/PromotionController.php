@@ -43,22 +43,29 @@ class PromotionController extends BaseController
 
 		switch ($type) {
 			case 'openday':
-					$this->promotionResource->saveOpendayPromotion($data);
+					$result = $this->promotionResource->saveOpendayPromotion($data);
 				break;
 			case 'user':
-					$this->promotionResource->saveUserPromotion($data);
+					$result = $this->promotionResource->saveUserPromotion($data);
 				break;
 			case 'job':
-					$this->promotionResource->saveJobPostPromotion($data);
+					$result = $this->promotionResource->saveJobPostPromotion($data);
+					
 				break;
 			case 'page':
-					$this->promotionResource->savePagePromotion($data);
+					$result = $this->promotionResource->savePagePromotion($data);
 				break;
 			default:
 
 				break;
 		}
 
+		if($result) {
+				return $response->withStatus(200)->withJson($result);
+		}
+		else {
+				return $response->withStatus(400)->withJson($result);
+		}
 	}
 
 	public function getPromotedItems($request, $response, $args)
