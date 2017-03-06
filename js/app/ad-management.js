@@ -288,6 +288,22 @@ var adManagement = (function($) {
             }
         });
 
+        if(isNaN(data['bid_per_engagement'])) {
+          valid = false;
+          $("#bid_per_engagement-must-be-decimal-required").fadeIn();
+        }
+        else {
+          $("#bid_per_engagement-must-be-decimal-required").fadeOut();
+        }
+
+        if(isNaN(data['budget_per_day'])) {
+          valid = false;
+          $("#budget_per_day-must-be-decimal-required").fadeIn();
+        }
+        else {
+          $("#budget_per_day-must-be-decimal-required").fadeOut();
+        }
+
         if(data['schedule'] == "limited") {
             if(data['start_date'] == "" || data['start_date'] == undefined || data['start_date'] == 0) {
               $("#start-date-required").fadeIn();

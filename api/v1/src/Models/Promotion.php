@@ -210,7 +210,7 @@ class Promotion
 	{
 		$promotion_id = $this->getUniqueId();
 		$checkIfHaveActivePromotion = $this->checkIfPromotedJobPost($data['to_be_promoted_id']);
-	
+
 		if($checkIfHaveActivePromotion) {
 			return false;
 		}
@@ -536,6 +536,7 @@ class Promotion
 		$sql = "
 			SELECT * FROM i_promote_page as promote
 			JOIN i_page as page on page.page_id = promote.page_id
+			JOIN i_country as country on country.country_id = page.country_id
 			WHERE promote.is_active = 1
 			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
 			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()

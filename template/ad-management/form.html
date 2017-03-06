@@ -82,7 +82,7 @@
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
                                         <ul class="two_column_ul">
                                             <li class="col-lg-6 col-sm-6 col-xs-6">
-                                                <input id="budgetPerDay" type="number" class="costField"><span class="selectedCurrency"></span>
+                                                <input id="budgetPerDay" type="text" class="costField"><span class="selectedCurrency"></span>
                                             </li>
                                         
                                         </ul>
@@ -97,7 +97,7 @@
                                     <div class="col-lg-9 col-sm-9 col-xs-12">
                                         <ul class="two_column_ul">
                                             <li class="col-lg-8 col-sm-8 col-xs-8">
-                                                <input type="number" id="bidPerClick" ><span class="selectedCurrency"></span>
+                                                <input type="text" id="bidPerClick" ><span class="selectedCurrency"></span>
                                             </li>
                                
                                         </ul>
@@ -201,6 +201,15 @@
              <p id="currency_id-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Currency is required</p>
 
           </div>
+            <div>
+             <p id="bid_per_engagement-must-be-decimal-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Bid Per Click must be a decimal value</p>
+
+          </div>
+          <div>
+             <p id="budget_per_day-must-be-decimal-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Budget Per Day must be a decimal value</p>
+
+          </div>
+   
             <div>
              <p id="schedule-required" class="required-tag text-danger"><i class="fa fa-info-circle"></i>Select Schedule of your ad.</p>
 

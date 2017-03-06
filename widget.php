@@ -87,6 +87,13 @@
             
                          
                         </ul>
+                        <ul id="suggestedPageList" class="suggested_widget_ul">
+                            <li>
+                                <h4>Suggested Page</h4>
+                            </li>
+            
+                         
+                        </ul>
                     </div>
                 </div>
             </div>
