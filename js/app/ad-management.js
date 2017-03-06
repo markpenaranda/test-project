@@ -109,7 +109,7 @@ var adManagement = (function($) {
                 'format': 'm/d/yyyy',
                 'autoclose': true
             });
-         $('#dateRange .time').timepicker({timeFormat: 'g:ia', showDuration:true, useSelect: true});
+         $('#dateRange .time').timepicker({timeFormat: 'g:ia', useSelect: true});
          $('#dateRange').datepair();
 
          $('.promote_post_schedule_ul').fadeOut();
@@ -117,7 +117,6 @@ var adManagement = (function($) {
 
    
 
-          $('.ui-timepicker-select').addClass('col-lg-12 col-xs-12 col-sm-12 col-md-12 jg-select');
           var uluru = {lat: -25.363, lng: 131.044};
            map = new google.maps.Map(document.getElementById('maps'), {
               zoom: 4,
