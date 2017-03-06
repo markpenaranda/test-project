@@ -41,6 +41,7 @@ class PromotionController extends BaseController
 
 					);
 
+
 		switch ($type) {
 			case 'openday':
 					$result = $this->promotionResource->saveOpendayPromotion($data);
@@ -72,7 +73,7 @@ class PromotionController extends BaseController
 	{
 		$type = $args['type'];
 		$userId = $request->getParam('user_id');
-		$user = ($userId > 0 ) ? $this->userResource->getUserById($userId) : null;
+		$user = ($userId > 0 ) ? $this->userResource->getUserWithObjectById($userId) : null;
 
 		switch ($type) {
 			case 'openday':
@@ -89,7 +90,7 @@ class PromotionController extends BaseController
 				break;
 			case 'user':
 				$page = ($userId > 0 ) ? $this->userResource->getUserPage($userId) : null;
-				$output = $this->promotionResource->getPromotedUser($page);
+				$output = $this->promotionResource->getPromotedUser($page, $userId);
 				return $response->withStatus(200)->withJson($output);
 				break;
 			default:

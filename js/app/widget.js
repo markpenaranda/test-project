@@ -112,6 +112,7 @@ var widgetManagement = (function($) {
       $.get(apiUrl + '/promotion/page?user_id=' + getCurrentUserId(), function(results){
         for (var i = 0; i < results.length; i++) {
           var data = results[i];
+
           renderSuggestedPage(data);
         }
       });
@@ -119,6 +120,7 @@ var widgetManagement = (function($) {
     }
 
     function renderSuggestedPage(data) {
+      console.log(data);
       getTemplate('suggested_page.html', function(render){
         var html = render({data: data});
         $("#suggestedPageList").append(html);

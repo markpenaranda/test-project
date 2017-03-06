@@ -363,6 +363,7 @@ var adManagement = (function($) {
         };
 
 
+
         if(validateData(data)) { 
 
          

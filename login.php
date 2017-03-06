@@ -19,6 +19,10 @@
 		<li>
 			<a href="/my-openday.php">My Openday</a>
 		</li>
+
+		<li>
+			<a href="/widget.php">View Widget Page for the logged in user</a>
+		</li>
 	</ul>
 
 <?php include 'include/js.php'; ?>

@@ -464,6 +464,11 @@ class Promotion
 			AND promote.is_deleted = 0
 		";
 
+		$industryQuery = $this->generateIndustryFullTextQuery($user);
+		if($industryQuery != "") {
+			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		}
+
 	   try {
 	   	  $output = [];
 	      $statement = $this->db->prepare($sql);
@@ -476,7 +481,9 @@ class Promotion
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
 
-	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
+	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
+	      	   && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -505,6 +512,12 @@ class Promotion
 			AND promote.is_deleted = 0
 		";
 
+
+		$industryQuery = $this->generateIndustryFullTextQuery($user);
+		if($industryQuery != "") {
+			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		}
+
 	   try {
 	   	  $output = [];
 	      $statement = $this->db->prepare($sql);
@@ -516,7 +529,9 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
-	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
+	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
+	      	   && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -544,6 +559,11 @@ class Promotion
 			AND promote.is_deleted = 0
 		";
 
+		$industryQuery = $this->generateIndustryFullTextQuery($user);
+		if($industryQuery != "") {
+			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		}
+
 	   try {
 	   	  $output = [];
 	      $statement = $this->db->prepare($sql);
@@ -555,7 +575,9 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
-	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
+	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
+	      	   && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -570,7 +592,7 @@ class Promotion
 
 	}
 
-	public function getPromotedUser($page)
+	public function getPromotedUser($page, $userId)
 	{
 
 		$sql = "
@@ -580,7 +602,7 @@ class Promotion
 			AND CONCAT(`run_start_date`,' ',`run_start_time`) <= NOW()
 			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
 			AND promote.is_deleted = 0
-		";
+			AND promote.industry = '". $page['industry']. "'";
 
 	   try {
 	   	  $output = [];
@@ -593,7 +615,8 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $page['latitude'], $page['longitude']);
-	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
+	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $userId)
+	      	   && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -928,4 +951,35 @@ class Promotion
 
 	}
 
+	private function checkIfGenderQualified($user, $promotion) {
+		switch ($promotion['gender']) {
+			case 'Male':
+				return (strtolower($user['gender']) == "male") ? true : false;
+				break;
+			case 'Female':
+				return (strtolower($user['gender']) == "female") ? true : false;
+				break;
+
+			default:
+				// var_dump("default")
+				return true;
+				break;
+		}
+	}
+
+	private function generateIndustryFullTextQuery($user)
+	{
+
+		$industryArray = json_decode($user['industry']); 
+		$output = "";
+		if($user['industry']) {
+			foreach ($industryArray as $industry) {
+				$output .= $industry . " ";
+			}
+		}
+
+		return $output;
+	}
+
+	 
 }

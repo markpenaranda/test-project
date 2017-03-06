@@ -53,6 +53,29 @@ class User
         }
     }
 
+
+    public function getUserWithObjectById($userId)
+    {
+        try {
+            $sql = "
+                SELECT i_users.*, i_city.*, i_country.*, i_users_object_data.industry from i_users 
+                JOIN i_users_object_data on i_users.user_id = i_users_object_data.user_id
+                JOIN i_country on i_users.nationality = i_country.country_id
+                JOIN i_city ON i_users.city_id = i_city.city_id
+                WHERE i_users.user_id = '$userId'
+            ";
+            $statement = $this->db->prepare($sql);
+
+            $statement->execute();
+            $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+            return $statement->fetch();
+
+        } catch(PDOException $e) {
+            return $e;
+        }
+    }
+
     public function getUserPage ($userId) 
     {
        try {
@@ -60,6 +83,7 @@ class User
             SELECT *  FROM i_page_connection as con
             JOIN i_page as page on page.page_id = con.page_id
              JOIN i_city ON page.city_id = i_city.city_id
+             JOIN i_industry as industry ON page.industry_id = industry.industry_id
             where user_id = '$userId' limit 1
         ";
 
