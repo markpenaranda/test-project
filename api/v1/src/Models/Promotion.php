@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use PDO;
+use Carbon\Carbon;	
 
 class Promotion
 {
@@ -475,7 +476,7 @@ class Promotion
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
 
-	      	if($distance <= $promotion['location_radius']) {
+	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -515,7 +516,7 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
-	      	if($distance <= $promotion['location_radius']) {
+	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -554,7 +555,7 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
-	      	if($distance <= $promotion['location_radius']) {
+	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -592,7 +593,7 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $page['latitude'], $page['longitude']);
-	      	if($distance <= $promotion['location_radius']) {
+	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) && $distance <= $promotion['location_radius']) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -893,6 +894,37 @@ class Promotion
 	      return $e;
 	    }
 
+
+	}
+
+	private function checkIfAlreadyClicked($promotionId, $userId)
+	{
+		$dubaiStartTime = Carbon::createFromFormat('Y-m-d H:i:s', date("Y-m-d H:i:s", strtotime(date("Y-m-d") . " 00:00:00")), "Asia/Dubai");
+		$dubaiStartTime->tz('UTC');
+		$dubaiEndTime = Carbon::createFromFormat('Y-m-d H:i:s', date("Y-m-d H:i:s", strtotime(date("Y-m-d") . " 23:59:59")), "Asia/Dubai");
+		$dubaiEndTime->tz('UTC');
+
+		$sql = " 
+			SELECT COUNT(*) as total FROM i_billing_transaction
+			WHERE promote_id = '$promotionId'
+			AND created_by_user_id = '$userId'
+			AND date_created >= '" . $dubaiStartTime->format("Y-m-d H:i:s") ."'
+			AND date_created <= '" . $dubaiEndTime->format("Y-m-d H:i:s") ."'
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+			}
+			 catch(PDOException $e){
+		      return $e;
+		    }
 
 	}
 
