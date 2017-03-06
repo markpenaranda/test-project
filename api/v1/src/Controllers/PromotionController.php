@@ -17,7 +17,7 @@ class PromotionController extends BaseController
 		$end_date 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_date") : date("Y-m-d", strtotime('+100 years'));
 		$start_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_time") : date("H:i:s", strtotime("00:00:00"));
 		$end_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("end_time") : date("H:i:s", strtotime("00:00:00"));
-		
+	
 		$data = array(
 						'currency_id' 						=> $request->getParam("currency_id"),
 						'location_lat'		  				=> $request->getParam("lat"),

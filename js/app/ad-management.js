@@ -265,6 +265,7 @@ var adManagement = (function($) {
     
         var diffInDays = endDate.diff(startDate, 'days'); 
         console.log(diffInDays);
+        diffInDays = (diffInDays > 0) ? diffInDays : 1;
         $(".adDays").html(diffInDays);
         var cost = diffInDays * budgetPerDay;
         $(".adCost").html(cost);
@@ -343,6 +344,8 @@ var adManagement = (function($) {
             'schedule' : $(".schedule_type:checked").val(),
             'start_date': $("#startDate").val(),
             'end_date': $("#endDate").val(),
+            'start_time': $("#startTime").val(),
+            'end_time': $("#endTime").val(),
             'radius': $("#radius").val(),
             'lat': (place) ? place.geometry.location.lat : null,
             'lng': (place) ? place.geometry.location.lng : null,
