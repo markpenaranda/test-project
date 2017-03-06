@@ -371,10 +371,12 @@ var adManagement = (function($) {
                 data: data,
                 
                 success: function(data) {
-                   // window.location = "/promote-list.php";
+                   $("#post-error").fadeOut();
+                   window.location = "/promote-list.php";
                 },
                 error: function(data){
-                    alert("Cannot Proccess your request make sure that this item does not have a currently running promotion.");
+                  $("#post-error").fadeIn();
+
                 }
             });
         }
