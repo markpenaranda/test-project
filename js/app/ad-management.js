@@ -11,7 +11,7 @@ var adManagement = (function($) {
     var selectedCurrency = null;
     var FORM_REQUIRED_FIELDS = [
         "bid_per_engagement",
-        // "budget_per_day",
+        "industry",
         "schedule",
         "currency_id"
     ];
