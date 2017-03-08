@@ -529,10 +529,19 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
+
 	      	if($this->checkIfGenderQualified($user, $promotion) && 
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
-	      	   && $distance <= $promotion['location_radius']) {
-	      		array_push($output, $promotion);
+	      	   && $distance <= $promotion['location_radius']
+	      	   ) {
+	      	   	$userApplied = $this->checkIfUserAlreadyAppliedForTheJob($promotion['job_post_id'], $user['user_id']);
+	      	   	if(!$userApplied) {
+	      	   		array_push($output, $promotion);
+	      	   	}
+	      	   	else if($userApplied && $promotion['is_people_applied_include']) {
+		      		array_push($output, $promotion);
+	      	   	}
+	      	   
 	      	}
 	      }
 
@@ -981,5 +990,29 @@ class Promotion
 		return $output;
 	}
 
+	private function checkIfUserAlreadyAppliedForTheJob($jobId, $userId) 
+	{
+		$sql = "
+			SELECT COUNT(*) as total 
+			FROM i_user_applied_jobs
+			WHERE  user_id = '$userId'
+			AND job_id = '$jobId'
+			LIMIT 1
+		";
+
+		try {
+		    $statement = $this->db->prepare($sql);
+
+		    $statement->execute();
+		    $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+		    $count = $statement->fetch();
+
+		    return ($count['total'] > 0) ? true : false;
+			}
+			 catch(PDOException $e){
+		      return $e;
+		    }
+	}
 	 
 }
