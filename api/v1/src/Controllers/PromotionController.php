@@ -2,6 +2,7 @@
 
 use App\Models\Promotion;
 use App\Models\User;
+use Carbon\Carbon;
 
 class PromotionController extends BaseController 
 {
@@ -16,8 +17,13 @@ class PromotionController extends BaseController
 		$start_date 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_date") : date("Y-m-d");
 		$end_date 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_date") : date("Y-m-d", strtotime('+100 years'));
 		$start_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_time") : date("H:i:s", strtotime("00:00:00"));
-		$end_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("end_time") : date("H:i:s", strtotime("00:00:00"));
-	
+		$end_time 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_time") : date("H:i:s", strtotime("00:00:00"));
+		$startTimeCarbon = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime(date("H:i:s", strtotime($start_time)))), "Asia/Dubai");
+		$startTimeCarbon->tz('UTC');
+
+		$endTimeCarbon = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime(date("H:i:s", strtotime($end_time)))), "Asia/Dubai");
+		$endTimeCarbon->tz('UTC');
+
 		$data = array(
 						'currency_id' 						=> $request->getParam("currency_id"),
 						'location_lat'		  				=> $request->getParam("lat"),
@@ -30,8 +36,8 @@ class PromotionController extends BaseController
 						'to_be_promoted_id'					=> $request->getParam("to_be_promoted_id"),
 						'run_start_date'					=> date("Y-m-d", strtotime($start_date)),
 						'run_end_date'						=> date("Y-m-d", strtotime($end_date)),
-						'run_start_time'					=> date("H:i:s", strtotime($start_time)),
-						'run_end_time'						=> date("H:i:s", strtotime($end_time)),
+						'run_start_time'					=> $startTimeCarbon->format("H:i:s"),
+						'run_end_time'						=> $endTimeCarbon->format("H:i:s"),
 						'keyword'							=> $request->getParam('keyword'),
 						'is_people_applied_include'			=> ($request->getParam('is_people_applied_included') != NULL) ? 1 : 0 ,
 						'is_people_viewed_job_include'		=> ($request->getParam('is_people_viewed_job_included') != NULL) ? 1 : 0 ,
