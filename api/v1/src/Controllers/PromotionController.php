@@ -16,8 +16,8 @@ class PromotionController extends BaseController
 		$type 			= $request->getParam('promotion_type');
 		$start_date 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_date") : date("Y-m-d");
 		$end_date 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_date") : date("Y-m-d", strtotime('+100 years'));
-		$start_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_time") : date("H:i:s", strtotime("00:00:00"));
-		$end_time 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_time") : date("H:i:s", strtotime("00:00:00"));
+		$start_time 	= ($request->getParam("schedule") == "limited") ? $request->getParam("start_time") : date("H:i:s", strtotime("04:00:00"));
+		$end_time 		= ($request->getParam("schedule") == "limited") ? $request->getParam("end_time") : date("H:i:s", strtotime("04:00:00"));
 		$startTimeCarbon = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime(date("H:i:s", strtotime($start_time)))), "Asia/Dubai");
 		$startTimeCarbon->tz('UTC');
 
