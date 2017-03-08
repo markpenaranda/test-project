@@ -484,6 +484,10 @@ class Promotion
 	      	if($this->checkIfGenderQualified($user, $promotion) && 
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $distance <= $promotion['location_radius']) {
+
+	      	   	// $userAlreadyAppliedforJobInThisPage = $this->$checkIfUSerAlreadyAppliedForAnyJobOfThePage($promotion['page_id'], $user['user_id']);
+
+	      	   	// if($promotion[''])
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -1014,5 +1018,48 @@ class Promotion
 		      return $e;
 		    }
 	}
+
+	// private function checkIfUSerAlreadyAppliedForAnyJobOfThePage($pageId, $userId)
+	// {
+	// 	$jobPostSql = "
+	// 		SELECT job_post_id FROM i_job_post as job_post
+	// 		JOIN i_job_group as job_group on job_group.job_group_id = job_post.job_group_id
+	// 		WHERE page_id = '$pageId'
+	// 	";
+
+	// 	$userAppliedSql = "
+	// 		SELECT job_id FROM i_user_applied_jobs
+	// 		WHERE user_id = '$userId'
+	// 	";
+
+	// 	try {
+	//       $jobPostStatement = $this->db->prepare($jobPostSql);
+
+	//       $jobPostStatement->execute();
+	//       $jobPostStatement->setFetchMode(PDO::FETCH_ASSOC);
+
+	//       $jobPostResults = $jobPostStatement->fetchAll();
+
+
+	//       $userAppliedStatement = $this->db->prepare($userAppliedSql);
+
+	//       $userAppliedStatement->execute();
+	//       $userAppliedStatement->setFetchMode(PDO::FETCH_ASSOC);
+
+	//       $userAppliedResults = $userAppliedStatement->fetchAll();
+	    
+	//       foreach ($userAppliedResults as $userApplication) {
+	//       		if(in_array($userApplication['job_id'], $jobPostResults, true)) {
+	//       			return true;
+	//       		}
+	//       }
+
+	//       return false;
+
+	//     }
+	//     catch(PDOException $e){
+	//       return $e;
+	//     }
+	// }
 	 
 }
