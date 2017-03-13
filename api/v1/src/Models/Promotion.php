@@ -529,7 +529,7 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
-
+					var_dump($isWithinRadius);
 	      	if($this->checkIfGenderQualified($user, $promotion) &&
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $isWithinRadius
