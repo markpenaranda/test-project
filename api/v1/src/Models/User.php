@@ -4,7 +4,7 @@ namespace App\Models;
 
 use PDO;
 
-class User 
+class User
 {
     protected $db;
     public function __construct(PDO $db)
@@ -12,7 +12,7 @@ class User
         $this->db = $db;
     }
 
-    public function getUsersByPageId($pageId) 
+    public function getUsersByPageId($pageId)
     {
         try {
             $sql = "
@@ -36,7 +36,7 @@ class User
     {
         try {
             $sql = "
-                SELECT * from i_users 
+                SELECT * from i_users
                 JOIN i_country on i_users.nationality = i_country.country_id
                 JOIN i_city ON i_users.city_id = i_city.city_id
                 WHERE i_users.user_id = '$userId'
@@ -58,7 +58,7 @@ class User
     {
         try {
             $sql = "
-                SELECT i_users.*, i_city.*, i_country.*, i_users_object_data.industry from i_users 
+                SELECT i_users.*, i_city.*, i_country.*, i_users_object_data.industry from i_users
                 JOIN i_users_object_data on i_users.user_id = i_users_object_data.user_id
                 JOIN i_country on i_users.nationality = i_country.country_id
                 JOIN i_city ON i_users.city_id = i_city.city_id
@@ -76,7 +76,7 @@ class User
         }
     }
 
-    public function getUserPage ($userId) 
+    public function getUserPage ($userId)
     {
        try {
         $sql = "
@@ -84,17 +84,18 @@ class User
             JOIN i_page as page on page.page_id = con.page_id
              JOIN i_city ON page.city_id = i_city.city_id
              JOIN i_industry as industry ON page.industry_id = industry.industry_id
-            where user_id = '$userId' limit 1
+            where con.user_id = '$userId' limit 1
         ";
 
         $statement = $this->db->prepare($sql);
         $statement->execute();
-        return $statement->fetch();
+        $output = $statement->fetch();
+        return $output;
 
-        } 
+        }
         catch(PDOException $e) {
         return $e;
-        } 
+        }
     }
 
     public function getUserPageId($userId)
@@ -108,7 +109,7 @@ class User
         $statement->execute();
         return $statement->fetch();
 
-        } 
+        }
         catch(PDOException $e) {
         return $e;
         }
@@ -166,7 +167,7 @@ class User
 
     }
 
-    public  function getAll() 
+    public  function getAll()
     {
         $sql = "SELECT * from i_users limit 30";
 

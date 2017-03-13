@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use PDO;
-use Carbon\Carbon;	
+use Carbon\Carbon;
 
 class Promotion
 {
@@ -23,7 +23,7 @@ class Promotion
 			JOIN i_page as page on page.page_id = openday.page_id
 			WHERE promote.is_active = 1
 			AND promote.is_deleted = 0
-		
+
 		";
 
 		try {
@@ -33,7 +33,7 @@ class Promotion
 	      $statement->setFetchMode(PDO::FETCH_ASSOC);
 
 	      $results = $statement->fetchAll();
-	    
+
 
 	      return $results;
 
@@ -59,7 +59,7 @@ class Promotion
 	      $statement->setFetchMode(PDO::FETCH_ASSOC);
 
 	      $results = $statement->fetchAll();
-	    
+
 
 	      return $results;
 
@@ -85,7 +85,7 @@ class Promotion
 	      $statement->setFetchMode(PDO::FETCH_ASSOC);
 
 	      $results = $statement->fetchAll();
-	    
+
 
 	      return $results;
 
@@ -113,7 +113,7 @@ class Promotion
 	      $statement->setFetchMode(PDO::FETCH_ASSOC);
 
 	      $results = $statement->fetchAll();
-	    
+
 
 	      return $results;
 
@@ -126,7 +126,7 @@ class Promotion
 	}
 
 
-	public function saveOpendayPromotion($data) 
+	public function saveOpendayPromotion($data)
 	{
 
 		$promotion_id = $this->getUniqueId();
@@ -203,7 +203,7 @@ class Promotion
 	    }
 	}
 
-	public function saveJobPostPromotion($data) 
+	public function saveJobPostPromotion($data)
 	{
 		$promotion_id = $this->getUniqueId();
 		$checkIfHaveActivePromotion = $this->checkIfPromotedJobPost($data['to_be_promoted_id']);
@@ -280,7 +280,7 @@ class Promotion
 	}
 
 
-	public function savePagePromotion($data) 
+	public function savePagePromotion($data)
 	{
 		$promotion_id = $this->getUniqueId();
 
@@ -342,7 +342,7 @@ class Promotion
 
 		";
 
-	
+
 
 		$this->db->beginTransaction();
 		try {
@@ -358,7 +358,7 @@ class Promotion
 	    }
 	}
 
-	public function saveUserPromotion($data) 
+	public function saveUserPromotion($data)
 	{
 		$promotion_id = $this->getUniqueId();
 		$checkIfHaveActivePromotion = $this->checkIfPromotedUser($data['to_be_promoted_id']);
@@ -471,7 +471,7 @@ class Promotion
 	      foreach ($results as $promotion) {
 	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 
-	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	if($this->checkIfGenderQualified($user, $promotion) &&
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $isWithinRadius) {
 
@@ -529,7 +529,7 @@ class Promotion
 	      foreach ($results as $promotion) {
 	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 
-	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	if($this->checkIfGenderQualified($user, $promotion) &&
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $isWithinRadius
 	      	   ) {
@@ -540,7 +540,7 @@ class Promotion
 	      	   	else if($userApplied && $promotion['is_people_applied_include']) {
 		      		array_push($output, $promotion);
 	      	   	}
-	      	   
+
 	      	}
 	      }
 
@@ -588,7 +588,7 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
-	      	if($this->checkIfGenderQualified($user, $promotion) && 
+	      	if($this->checkIfGenderQualified($user, $promotion) &&
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $isWithinRadius) {
 	      		array_push($output, $promotion);
@@ -607,7 +607,6 @@ class Promotion
 
 	public function getPromotedUser($page, $userId)
 	{
-
 		$sql = "
 			SELECT * FROM i_promote_user_profile as promote
 			JOIN i_users_object_data as user on user.user_id = promote.user_id
@@ -616,6 +615,8 @@ class Promotion
 			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
 			AND promote.is_deleted = 0
 			AND promote.industry = '". $page['industry']. "'";
+
+
 
 	   try {
 	   	  $output = [];
@@ -627,7 +628,7 @@ class Promotion
 	      $results = $statement->fetchAll();
 
 	      foreach ($results as $promotion) {
-	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
+	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $page['latitude'], $page['longitude']);
 	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $userId)
 	      	   && $isWithinRadius) {
 	      		array_push($output, $promotion);
@@ -756,24 +757,24 @@ class Promotion
         return $results[0]['uniqueId'];
     }
 
-    private function getDistance( $latitude1, $longitude1, $latitude2, $longitude2 ) 
-    {  
+    private function getDistance( $latitude1, $longitude1, $latitude2, $longitude2 )
+    {
 	    $earth_radius = 6371;
 
-	    $dLat = deg2rad( $latitude2 - $latitude1 );  
-	    $dLon = deg2rad( $longitude2 - $longitude1 );  
+	    $dLat = deg2rad( $latitude2 - $latitude1 );
+	    $dLon = deg2rad( $longitude2 - $longitude1 );
 
-	    $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * sin($dLon/2) * sin($dLon/2);  
-	    $c = 2 * asin(sqrt($a));  
-	    $d = $earth_radius * $c;  
+	    $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * sin($dLon/2) * sin($dLon/2);
+	    $c = 2 * asin(sqrt($a));
+	    $d = $earth_radius * $c;
 
-	    return $d;  
+	    return $d;
 	}
 
-	private function checkIfWithinRadius($coordinates, $latitude2, $longitude2) 
+	private function checkIfWithinRadius($coordinates, $latitude2, $longitude2)
 	{
 		foreach ($coordinates as $coordinate) {
-		
+
 			$distance = $this->getDistance($coordinate->lat, $coordinate->lng, $latitude2, $longitude2);
 
 			if($distance <= $coordinate->radius) {
@@ -784,12 +785,12 @@ class Promotion
 		return false;
 	}
 
-	public function getProductId() 
+	public function getProductId()
 	{
 		$sql = "
-			SELECT product_id FROM i_product 
+			SELECT product_id FROM i_product
 			WHERE product_name = 'Promotion'
-			LIMIT 1 
+			LIMIT 1
 		";
 
 		try {
@@ -807,7 +808,7 @@ class Promotion
 	    }
 	}
 
-	public function getPromotionDetails($id, $type) 
+	public function getPromotionDetails($id, $type)
 	{
 		switch ($type) {
 			case 'openday':
@@ -828,9 +829,9 @@ class Promotion
 		}
 
 		$sql = "
-			SELECT * FROM $tableName 
+			SELECT * FROM $tableName
 			WHERE promote_id = '$id'
-			LIMIT 1 
+			LIMIT 1
 		";
 
 		try {
@@ -872,7 +873,7 @@ class Promotion
 				'". $productId . "',
 				'". $promotion['bid_per_engagement'] . "',
 				'". $created_by_user_id . "',
-				NOW() 
+				NOW()
 
 			)
 		";
@@ -892,7 +893,7 @@ class Promotion
 	    }
 	}
 
-	public function computeTotalConsumedAmount($promote_id, $type) 
+	public function computeTotalConsumedAmount($promote_id, $type)
 	{
 		$sqltotalTransactions = "
 			SELECT SUM(amount) as totalConsumedAmount FROM i_billing_transaction
@@ -929,9 +930,9 @@ class Promotion
 
 			$consumedAmount = ($totalTransactions['totalConsumedAmount'] > 0) ? $totalTransactions['totalConsumedAmount'] : 0;
 			$sql  = "
-				UPDATE $tableName 
+				UPDATE $tableName
 				SET consumed_amount = '". $consumedAmount ."'
-				WHERE promote_id = '$promote_id' 
+				WHERE promote_id = '$promote_id'
 			";
 
 			$updateStatement = $this->db->prepare($sql);
@@ -954,7 +955,7 @@ class Promotion
 		$dubaiEndTime = Carbon::createFromFormat('Y-m-d H:i:s', date("Y-m-d H:i:s", strtotime(date("Y-m-d") . " 23:59:59")), "Asia/Dubai");
 		$dubaiEndTime->tz('UTC');
 
-		$sql = " 
+		$sql = "
 			SELECT COUNT(*) as total FROM i_billing_transaction
 			WHERE promote_id = '$promotionId'
 			AND created_by_user_id = '$userId'
@@ -997,7 +998,7 @@ class Promotion
 	private function generateIndustryFullTextQuery($user)
 	{
 
-		$industryArray = json_decode($user['industry']); 
+		$industryArray = json_decode($user['industry']);
 		$output = "";
 		if($user['industry']) {
 			foreach ($industryArray as $industry) {
@@ -1032,10 +1033,10 @@ class Promotion
 
 	}
 
-	private function checkIfUserAlreadyAppliedForTheJob($jobId, $userId) 
+	private function checkIfUserAlreadyAppliedForTheJob($jobId, $userId)
 	{
 		$sql = "
-			SELECT COUNT(*) as total 
+			SELECT COUNT(*) as total
 			FROM i_user_applied_jobs
 			WHERE  user_id = '$userId'
 			AND job_id = '$jobId'
@@ -1085,7 +1086,7 @@ class Promotion
 	//       $userAppliedStatement->setFetchMode(PDO::FETCH_ASSOC);
 
 	//       $userAppliedResults = $userAppliedStatement->fetchAll();
-	    
+
 	//       foreach ($userAppliedResults as $userApplication) {
 	//       		if(in_array($userApplication['job_id'], $jobPostResults, true)) {
 	//       			return true;
@@ -1099,5 +1100,5 @@ class Promotion
 	//       return $e;
 	//     }
 	// }
-	 
+
 }

@@ -4,9 +4,9 @@ use App\Models\Promotion;
 use App\Models\User;
 use Carbon\Carbon;
 
-class PromotionController extends BaseController 
+class PromotionController extends BaseController
 {
-	public function __construct(Promotion $promotion, User $user) 
+	public function __construct(Promotion $promotion, User $user)
 	{
 		$this->promotionResource = $promotion;
 		$this->userResource 	 = $user;
@@ -60,7 +60,7 @@ class PromotionController extends BaseController
 				break;
 			case 'job':
 					$result = $this->promotionResource->saveJobPostPromotion($data);
-					
+
 				break;
 			case 'page':
 					$result = $this->promotionResource->savePagePromotion($data);
@@ -127,7 +127,7 @@ class PromotionController extends BaseController
 				return $response->withStatus(200)->withJson($output);
 				break;
 			case 'user':
-				
+
 				$output = $this->promotionResource->checkIfPromotedUser($id);
 				return $response->withStatus(200)->withJson($output);
 				break;
@@ -178,7 +178,7 @@ class PromotionController extends BaseController
 				return $response->withStatus(200)->withJson($output);
 				break;
 			case 'user':
-				
+
 				$output = $this->promotionResource->getAllUserPromotion();
 				return $response->withStatus(200)->withJson($output);
 				break;
