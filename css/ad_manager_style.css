@@ -7521,6 +7521,34 @@ body.front {
 
 }
 
+.location_add_more_btn {
+  float: left;
+  margin: 8px 0;
+}
+
+.location_add_more_btn i{
+  font-size: 21px;
+  color: #00C27E;
+}
+
+.location_remove_more_btn {
+  float: left;
+  margin: 8px 0;
+}
+
+.location_remove_more_btn i{
+  font-size: 21px;
+  color: #00C27E;
+}
+
+.show-label {
+  display: block !important;
+}
+.hidden-label {
+  display: none;
+}
+
+
 /************************************************* tabs landscape ends here *********************************************************************/
 
 

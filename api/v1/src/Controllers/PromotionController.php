@@ -24,11 +24,14 @@ class PromotionController extends BaseController
 		$endTimeCarbon = Carbon::createFromFormat('H:i:s', date("H:i:s", strtotime(date("H:i:s", strtotime($end_time)))), "Asia/Dubai");
 		$endTimeCarbon->tz('UTC');
 
+
+
 		$data = array(
 						'currency_id' 						=> $request->getParam("currency_id"),
-						'location_lat'		  				=> $request->getParam("lat"),
-						'location_lng'		  				=> $request->getParam("lng"),
-						'location_radius'		  			=> $request->getParam("radius"),
+						'coordinates'						=> json_encode($request->getParam('coordinates')),
+						// 'location_lat'		  				=> $request->getParam("lat"),
+						// 'location_lng'		  				=> $request->getParam("lng"),
+						// 'location_radius'		  			=> $request->getParam("radius"),
 						'industry'		  					=> $request->getParam("industry"),
 						'gender'		  					=> $request->getParam("gender"),
 						'budget_per_day'		  			=> ($request->getParam("budget_per_day") != NULL) ? $request->getParam("budget_per_day"): NULL,

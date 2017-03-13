@@ -140,9 +140,7 @@ class Promotion
 				`promote_id`,
 				`page_id`,
 				`openday_id`,
-				`location_lat`,
-				`location_lng`,
-				`location_radius`,
+				`coordinates`,
 				`industry`,
 				`gender`,
 				`budget_per_day`,
@@ -167,9 +165,7 @@ class Promotion
 				'". $promotion_id ."',
 				'". $data['page_id'] . "',
 				'". $data['to_be_promoted_id'] . "',
-				'". $data['location_lat'] . "',
-				'". $data['location_lng'] . "',
-				'". $data['location_radius'] . "',
+				'". $data['coordinates'] . "',
 				'". $data['industry'] . "',
 				'". $data['gender'] . "',
 				". $data['budget_per_day'] . ",
@@ -220,9 +216,7 @@ class Promotion
 				`promote_id`,
 				`page_id`,
 				`job_post_id`,
-				`location_lat`,
-				`location_lng`,
-				`location_radius`,
+				`coordinates`,
 				`industry`,
 				`gender`,
 				`budget_per_day`,
@@ -247,9 +241,7 @@ class Promotion
 				'". $promotion_id ."',
 				'". $data['page_id'] . "',
 				'". $data['to_be_promoted_id'] . "',
-				'". $data['location_lat'] . "',
-				'". $data['location_lng'] . "',
-				'". $data['location_radius'] . "',
+				'". $data['coordinates'] . "',
 				'". $data['industry'] . "',
 				'". $data['gender'] . "',
 				". $data['budget_per_day'] . ",
@@ -302,9 +294,7 @@ class Promotion
 			INSERT INTO i_promote_page (
 				`promote_id`,
 				`page_id`,
-				`location_lat`,
-				`location_lng`,
-				`location_radius`,
+				`coordinates`,
 				`industry`,
 				`gender`,
 				`budget_per_day`,
@@ -328,9 +318,7 @@ class Promotion
 			VALUES (
 				'". $promotion_id ."',
 				'". $data['to_be_promoted_id'] . "',
-				'". $data['location_lat'] . "',
-				'". $data['location_lng'] . "',
-				'". $data['location_radius'] . "',
+				'". $data['coordinates'] . "',
 				'". $data['industry'] . "',
 				'". $data['gender'] . "',
 				". $data['budget_per_day'] . ",
@@ -383,9 +371,7 @@ class Promotion
 			INSERT INTO i_promote_user_profile (
 				`promote_id`,
 				`user_id`,
-				`location_lat`,
-				`location_lng`,
-				`location_radius`,
+				`coordinates`,
 				`industry`,
 				`gender`,
 				`budget_per_day`,
@@ -409,9 +395,7 @@ class Promotion
 			VALUES (
 				'". $promotion_id ."',
 				'". $data['to_be_promoted_id'] . "',
-				'". $data['location_lat'] . "',
-				'". $data['location_lng'] . "',
-				'". $data['location_radius'] . "',
+				'". $data['coordinates'] . "',
 				'". $data['industry'] . "',
 				'". $data['gender'] . "',
 				". $data['budget_per_day'] . ",
@@ -479,11 +463,11 @@ class Promotion
 	      $results = $statement->fetchAll();
 	      // var_dump($results);
 	      foreach ($results as $promotion) {
-	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
+	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 
 	      	if($this->checkIfGenderQualified($user, $promotion) && 
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
-	      	   && $distance <= $promotion['location_radius']) {
+	      	   && $isWithinRadius) {
 
 	      	   	// $userAlreadyAppliedforJobInThisPage = $this->$checkIfUSerAlreadyAppliedForAnyJobOfThePage($promotion['page_id'], $user['user_id']);
 
@@ -532,11 +516,11 @@ class Promotion
 	      $results = $statement->fetchAll();
 
 	      foreach ($results as $promotion) {
-	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
+	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 
 	      	if($this->checkIfGenderQualified($user, $promotion) && 
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
-	      	   && $distance <= $promotion['location_radius']
+	      	   && $isWithinRadius
 	      	   ) {
 	      	   	$userApplied = $this->checkIfUserAlreadyAppliedForTheJob($promotion['job_post_id'], $user['user_id']);
 	      	   	if(!$userApplied) {
@@ -587,10 +571,10 @@ class Promotion
 	      $results = $statement->fetchAll();
 
 	      foreach ($results as $promotion) {
-	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $user['latitude'], $user['longitude']);
+	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 	      	if($this->checkIfGenderQualified($user, $promotion) && 
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
-	      	   && $distance <= $promotion['location_radius']) {
+	      	   && $isWithinRadius) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -627,9 +611,9 @@ class Promotion
 	      $results = $statement->fetchAll();
 
 	      foreach ($results as $promotion) {
-	      	$distance = $this->getDistance($promotion['location_lat'], $promotion['location_lng'], $page['latitude'], $page['longitude']);
+	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
 	      	if(!$this->checkIfAlreadyClicked($promotion['promote_id'], $userId)
-	      	   && $distance <= $promotion['location_radius']) {
+	      	   && $isWithinRadius) {
 	      		array_push($output, $promotion);
 	      	}
 	      }
@@ -768,6 +752,20 @@ class Promotion
 	    $d = $earth_radius * $c;  
 
 	    return $d;  
+	}
+
+	private function checkIfWithinRadius($coordinates, $latitude2, $longitude2) 
+	{
+		foreach ($coordinates as $coordinate) {
+		
+			$distance = $this->getDistance($coordinate->lat, $coordinate->lng, $latitude2, $longitude2);
+
+			if($distance <= $coordinate->radius) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function getProductId() 

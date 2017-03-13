@@ -7,7 +7,9 @@ var adManagement = (function($) {
     var map = null;
     var searchedResults = [];
     var place = null;
+    var places = [];
     var currencies = [];
+    var circles = [];
     var selectedCurrency = null;
     var FORM_REQUIRED_FIELDS = [
         "bid_per_engagement",
@@ -15,6 +17,7 @@ var adManagement = (function($) {
         "schedule",
         "currency_id"
     ];
+    var locationBarCount = 0;
 
     return {
         init: init
@@ -55,14 +58,20 @@ var adManagement = (function($) {
 
 
       // $("#mainPromoteManagement").on("change", "#addressName", setMap);
-      $("#mainPromoteManagement").on("keyup", "#radius", changeRadius);
+      $("#mainPromoteManagement").on("keyup", ".radius", changeRadius);
       $("#mainPromoteManagement").on("change", "#currency", selectCurrency);
 
       $("#mainPromoteManagement").on("change", "input[type=radio][name=schedule_type]", scheduleTypeSelect);
    
       $("#mainPromoteManagement").on("change", ".costField", calculateCost);
 
+
+      // Add Location Bar
+      $("#mainPromoteManagement").on("click", ".add-location", addLocationBar);
+      $("#mainPromoteManagement").on("click", ".remove-location", removeLocationBar);
+
     }
+
 
     function getToBePromotedId() {
         return $("#tbp_id").val();
@@ -123,22 +132,7 @@ var adManagement = (function($) {
               center: uluru
             });
 
-            var options = {
-                url: function(phrase) {
-                    return "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCkfUcSAl_ZPvpEUxobYJbumX260FEQTn0&address=" + phrase;
-                },
-                listLocation: 'results',
-                requestDelay: 500,
-                getValue: "formatted_address",
-                list: {
-
-                        onSelectItemEvent: function() {
-                            drawSelectedLocation($("#addressName").getSelectedItemData());
-                        }
-                }
-            };
-
-            $("#addressName").easyAutocomplete(options);
+           
             loadCurrency();
             $('#industry').tagEditor({ 
               delimiter: ',', /* space and comma */
@@ -153,19 +147,73 @@ var adManagement = (function($) {
               placeholder: 'Type your keywords and press enter'
            
             });
-
+            addLocationBar();
        
         });
     }
 
-    function arePointsNear(checkPoint, centerPoint, km) {
-      var ky = 40000 / 360;
-      var kx = Math.cos(Math.PI * centerPoint.lat / 180.0) * ky;
-      var dx = Math.abs(centerPoint.lng - checkPoint.lng) * kx;
-      var dy = Math.abs(centerPoint.lat - checkPoint.lat) * ky;
-      return Math.sqrt(dx * dx + dy * dy) <= km;
+
+///////////////////////////////////////////////////////////////////////////
+  /**
+   *
+   * Location Bar Functions
+   *
+   */
+
+   // Add Location Bar
+    function addLocationBar() {
+      locationBarCount += 1;
+      var locationInputSelector = "#location-input-" + locationBarCount;
+      var radiusSelector = "#radius-" + locationBarCount;
+      getTemplate('partial/location_bar.html', function(render) {
+        var html = render({ location_number : locationBarCount });
+        $("#location-bar").append(html);
+
+         var options = {
+                url: function(phrase) {
+                    return "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCkfUcSAl_ZPvpEUxobYJbumX260FEQTn0&address=" + phrase;
+                },
+                listLocation: 'results',
+                requestDelay: 500,
+                getValue: "formatted_address",
+                list: {
+
+                        onSelectItemEvent: function() {
+                            drawSelectedLocation($(locationInputSelector).getSelectedItemData(), $(radiusSelector).val(), locationBarCount);
+                        }
+                }
+            };
+
+          $(locationInputSelector).easyAutocomplete(options);
+          hideLocationLabels();
+      });
+
     }
 
+
+    // Remove Location Bar
+    function removeLocationBar() {
+      var locationNumber = $(this).data('location');
+
+      delete places[locationNumber];
+      $("#location-" + locationNumber).remove();
+      if(circles[locationNumber] != null) {
+          circles[locationNumber].setMap(null);
+        }
+      hideLocationLabels();
+
+
+    }
+
+    function hideLocationLabels() {
+      $(".hidden-label:lt(2)").addClass("show-label"); 
+      $(".remove-location").removeClass("hidden-label");
+      if($(".remove-location").length == 1) {
+        $(".remove-location:lt(1)").addClass("hidden-label");
+      }
+    }
+
+   // Search GeoCode
     function searchGeoCode() {
 
         var geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCkfUcSAl_ZPvpEUxobYJbumX260FEQTn0&address=Manila";
@@ -175,20 +223,27 @@ var adManagement = (function($) {
         })
     }
 
-
-    function drawSelectedLocation(placeVar) {
-   
-        place = (placeVar) ? placeVar : place;
-        var radius = $("#radius").val();
+    // Draw GeoCode
+    function drawSelectedLocation(placeVar, radius, locationNumber) {
+        console.log(radius);
+        if(placeVar) {
+          place = (placeVar) ? placeVar : place;
+          places[locationNumber] = place;
+        }
+        if(places.length == 0) {
+          map = new google.maps.Map(document.getElementById('maps'));
+        }
         var zoomSize = (radius > 9) ? 10 : 12;
-        console.log(place);
         var coordinates = {lat: place.geometry.location.lat, lng: place.geometry.location.lng};
         var mapOptions = { zoom: 4, center: coordinates };
-        map = new google.maps.Map(document.getElementById('maps'));
         map.setCenter(new google.maps.LatLng(place.geometry.location.lat, place.geometry.location.lng));
         
         map.setZoom(zoomSize);
-        var cityCircle = new google.maps.Circle({
+        if(circles[locationNumber] != null) {
+          circles[locationNumber].setMap(null);
+        }
+
+        circles[locationNumber] = new google.maps.Circle({
           strokeColor: '#E77400',
           strokeOpacity: 0.8,
           strokeWeight: 2,
@@ -200,14 +255,19 @@ var adManagement = (function($) {
         });
                         
     }
-
+  
+    // Set Radius 
     function changeRadius (e) {
-        var keycode = (event.keyCode ? event.keyCode : event.which);
+        var locationNumber = $(this).data('location');
+        var keycode = (e.keyCode ? e.keyCode : e.which);
         if(keycode == '13'){
-            drawSelectedLocation(null);
+          var place = places[locationNumber];
+          drawSelectedLocation(place, $("#radius-" + locationNumber).val(), locationNumber);
+            
         }
     }
 
+   // set Map
     function setMap() {
         console.log($(this).val());
         // for (var i = searchedResults.length - 1; i >= 0; i--) {
@@ -215,6 +275,10 @@ var adManagement = (function($) {
 
         // }
     }
+
+
+  ///////////////////////////////////////////////////////////////////
+
 
 
     function loadCurrency() {
@@ -271,7 +335,12 @@ var adManagement = (function($) {
         $(".adCost").html(cost);
     }
 
-
+    /**
+     *
+     * Sumbit Functions
+     *
+     */
+    
 
     function validateData(data) {
         var valid = true;
@@ -322,7 +391,7 @@ var adManagement = (function($) {
             }
         }
         $("#location-required").fadeOut();
-        if(data['lat'] <= 0 || data['lng'] <= 0) {
+        if(data['coordinates'].length <= 0) {
              $("#location-required").fadeIn();
               valid = false;
             
@@ -338,6 +407,22 @@ var adManagement = (function($) {
     }
 
     function submit() {
+
+        var coordinates = [];
+
+        for (var i = 0; i < places.length; i++) {
+          if(places[i] == null) { continue; }
+          var object = {
+            'lat' : places[i].geometry.location.lat,
+            'lng' : places[i].geometry.location.lng,
+            'radius' : $("#radius-" + i).val()
+          };
+
+          coordinates.push(object);
+        }
+
+        console.log(coordinates);
+
         var data = {
             'budget_per_day' : $("#budgetPerDay").val(),
             'bid_per_engagement' : $("#bidPerClick").val(),
@@ -346,9 +431,7 @@ var adManagement = (function($) {
             'end_date': $("#endDate").val(),
             'start_time': $("#startTime").val(),
             'end_time': $("#endTime").val(),
-            'radius': $("#radius").val(),
-            'lat': (place) ? place.geometry.location.lat : null,
-            'lng': (place) ? place.geometry.location.lng : null,
+            'coordinates': coordinates,
             'currency_id': $("#currency").val(),
             'industry': $("#industry").val(),
             'gender': $(".gender:checked").val(),

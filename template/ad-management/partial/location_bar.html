@@ -1,0 +1,15 @@
+<div id="location-<%= location_number %>" class="row">
+	<div class="form-group col-sm-7">
+		<label  class="hidden-label">Search Address</label>
+		<input id="location-input-<%= location_number %>" type="text" class="form-control" name="">
+	</div>
+	<div class="form-group col-sm-3">
+		<label class="hidden-label">Radius(km)</label>
+		<input type="number" data-location="<%= location_number %>" id="radius-<%= location_number %>" value="3" class="form-control radius" name="">
+	</div>
+	 <div class="form-group col-sm-2" <% if(location_number == 1) { %> style="padding-top: 20px;" <% } %>>
+        <a data-location="<%= location_number %>" style="margin-left:5px;" class="openday_add_more_btn remove-location " href="#"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+        <a data-location="<%= location_number %>" style="margin-left:5px;" class="location_add_more_btn add-location" href="#"><i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
+
+      </div>
+</div>
