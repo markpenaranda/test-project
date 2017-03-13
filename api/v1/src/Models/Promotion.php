@@ -512,10 +512,11 @@ class Promotion
 			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
 		}
 
-		$industryQuery = $this->generateIndustryFullTextQuery($user);
-		if($industryQuery != "") {
-			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		$keywordQuery = $this->generateKeywordFullTextQuery($user);
+		if($keywordQuery != "") {
+			$sql .= "AND (MATCH(keyword) AGAINST('$keywordQuery' IN BOOLEAN MODE) OR `keyword` = '')";
 		}
+
 
 	   try {
 	   	  $output = [];
@@ -572,10 +573,11 @@ class Promotion
 			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
 		}
 
-		$industryQuery = $this->generateIndustryFullTextQuery($user);
-		if($industryQuery != "") {
-			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		$keywordQuery = $this->generateKeywordFullTextQuery($user);
+		if($keywordQuery != "") {
+			$sql .= "AND (MATCH(keyword) AGAINST('$keywordQuery' IN BOOLEAN MODE) OR `keyword` = '')";
 		}
+
 
 	   try {
 	   	  $output = [];

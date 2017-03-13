@@ -58,7 +58,7 @@ class User
     {
         try {
             $sql = "
-                SELECT i_users.*, i_city.*, i_country.*, i_users_object_data.industry from i_users
+                SELECT i_users.*, i_city.*, i_country.*, i_users_object_data.industry, i_users_object_data.nationality from i_users
                 JOIN i_users_object_data on i_users.user_id = i_users_object_data.user_id
                 JOIN i_country on i_users.nationality = i_country.country_id
                 JOIN i_city ON i_users.city_id = i_city.city_id
