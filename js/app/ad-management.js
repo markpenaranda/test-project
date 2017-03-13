@@ -62,13 +62,15 @@ var adManagement = (function($) {
       $("#mainPromoteManagement").on("change", "#currency", selectCurrency);
 
       $("#mainPromoteManagement").on("change", "input[type=radio][name=schedule_type]", scheduleTypeSelect);
-   
+
       $("#mainPromoteManagement").on("change", ".costField", calculateCost);
 
 
       // Add Location Bar
       $("#mainPromoteManagement").on("click", ".add-location", addLocationBar);
       $("#mainPromoteManagement").on("click", ".remove-location", removeLocationBar);
+
+      $("#mainPromoteManagement").on("keyup", ".location-input", hideLocationLabelIfAddressFieldIsNull);
 
     }
 
@@ -124,7 +126,7 @@ var adManagement = (function($) {
          $('.promote_post_schedule_ul').fadeOut();
          $('.ad_note_h4').fadeOut();
 
-   
+
 
           var uluru = {lat: -25.363, lng: 131.044};
            map = new google.maps.Map(document.getElementById('maps'), {
@@ -132,23 +134,23 @@ var adManagement = (function($) {
               center: uluru
             });
 
-           
+
             loadCurrency();
-            $('#industry').tagEditor({ 
+            $('#industry').tagEditor({
               delimiter: ',', /* space and comma */
               autocomplete: { 'source': apiUrl + '/resources/industry-keyword', delay: 1000 },
               placeholder: 'Type Industry and press enter',
-           
+
               forceLowercase: false
              });
-            $('#keyword').tagEditor({ 
+            $('#keyword').tagEditor({
               delimiter: ',', /* space and comma */
               autocomplete: { 'source': apiUrl + '/resources/keyword', delay: 1000 },
               placeholder: 'Type your keywords and press enter'
-           
+
             });
             addLocationBar();
-       
+
         });
     }
 
@@ -180,6 +182,7 @@ var adManagement = (function($) {
 
                         onSelectItemEvent: function() {
                             drawSelectedLocation($(locationInputSelector).getSelectedItemData(), $(radiusSelector).val(), locationBarCount);
+                            hideLocationLabels();
                         }
                 }
             };
@@ -206,10 +209,25 @@ var adManagement = (function($) {
     }
 
     function hideLocationLabels() {
-      $(".hidden-label:lt(2)").addClass("show-label"); 
+      $(".hidden-label:lt(2)").addClass("show-label");
       $(".remove-location").removeClass("hidden-label");
       if($(".remove-location").length == 1) {
         $(".remove-location:lt(1)").addClass("hidden-label");
+      }
+      $(".add-location").removeClass("show-label").addClass("hidden-label");
+      if($(".location-input:last").val() != "") {
+              $(".add-location:last").removeClass("hidden-label").addClass("show-label");
+      }
+    }
+
+    function hideLocationLabelIfAddressFieldIsNull() {
+      var locationNumber = $(this).data('location');
+      console.log($(this).val());
+      if($(this).val() == "") {
+        $(".add-location-" + locationNumber).removeClass("show-label").addClass("hidden-label");
+      }
+      else {
+        $(".add-location-" + locationNumber).removeClass("hidden-label").addClass("show-label");
       }
     }
 
@@ -237,7 +255,7 @@ var adManagement = (function($) {
         var coordinates = {lat: place.geometry.location.lat, lng: place.geometry.location.lng};
         var mapOptions = { zoom: 4, center: coordinates };
         map.setCenter(new google.maps.LatLng(place.geometry.location.lat, place.geometry.location.lng));
-        
+
         map.setZoom(zoomSize);
         if(circles[locationNumber] != null) {
           circles[locationNumber].setMap(null);
@@ -253,17 +271,17 @@ var adManagement = (function($) {
           center: new google.maps.LatLng(place.geometry.location.lat, place.geometry.location.lng),
           radius:  radius * 1000
         });
-                        
+
     }
-  
-    // Set Radius 
+
+    // Set Radius
     function changeRadius (e) {
         var locationNumber = $(this).data('location');
         var keycode = (e.keyCode ? e.keyCode : e.which);
         if(keycode == '13'){
           var place = places[locationNumber];
           drawSelectedLocation(place, $("#radius-" + locationNumber).val(), locationNumber);
-            
+
         }
     }
 
@@ -313,7 +331,7 @@ var adManagement = (function($) {
         if($(this).val() == "limited") {
              $('.promote_post_schedule_ul').fadeIn();
              $('.ad_note_h4').fadeIn();
-            
+
         }
         else {
              $('.promote_post_schedule_ul').fadeOut();
@@ -326,8 +344,8 @@ var adManagement = (function($) {
         var budgetPerDay = ($("#budgetPerDay").val()) ? $("#budgetPerDay").val() : 0;
         var startDate = ($("#startDate").val()) ? moment($("#startDate").val()) : moment();
         var endDate = ($("#startDate").val()) ? moment($("#endDate").val()) : moment();
-    
-        var diffInDays = endDate.diff(startDate, 'days'); 
+
+        var diffInDays = endDate.diff(startDate, 'days');
         console.log(diffInDays);
         diffInDays = (diffInDays > 0) ? diffInDays : 1;
         $(".adDays").html(diffInDays);
@@ -340,7 +358,7 @@ var adManagement = (function($) {
      * Sumbit Functions
      *
      */
-    
+
 
     function validateData(data) {
         var valid = true;
@@ -392,7 +410,7 @@ var adManagement = (function($) {
         }
         else {
                $("#end-date-required").fadeOut();
-        } 
+        }
 
 
         $("#location-required").fadeOut();
@@ -400,9 +418,9 @@ var adManagement = (function($) {
         if(data['coordinates'].length <= 0) {
              $("#location-required").fadeIn();
               valid = false;
-            
-            
-        }       
+
+
+        }
 
         $(".location-input").each(function(){
            var value = $(this).val();
@@ -456,15 +474,15 @@ var adManagement = (function($) {
 
 
 
-        if(validateData(data)) { 
+        if(validateData(data)) {
 
-         
+
 
             $.ajax({
                 type: "POST",
                 url: apiUrl + "/promotion",
                 data: data,
-                
+
                 success: function(data) {
                    $("#post-error").fadeOut();
                    window.location = "/promote-list.php";

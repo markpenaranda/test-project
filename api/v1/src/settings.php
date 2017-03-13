@@ -34,7 +34,7 @@ return [
                             'username' => 'recruitementtools@gmail.com', /* email host here */
                             'password' => 'recruitementtools123', /* password host here */
                             'smtp_secure' => 'ssl',
-                            // 'port' => 587, 
+                            // 'port' => 587,
                             'port' => 465, /* port host here */
                             'sender_email' => 'no-reply@jobsglobal.com',
                             'sender_name' => 'JobsGlobal.com'
