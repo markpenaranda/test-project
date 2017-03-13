@@ -535,7 +535,8 @@ class Promotion
 	      	   && $isWithinRadius
 	      	   ) {
 	      	   	$userApplied = $this->checkIfUserAlreadyAppliedForTheJob($promotion['job_post_id'], $user['user_id']);
-	      	   	if(!$userApplied) {
+							var_dump("applied:" . $userApplied)
+							if(!$userApplied) {
 								var_dump('user_applied');
 	      	   		array_push($output, $promotion);
 	      	   	}
