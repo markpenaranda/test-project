@@ -529,20 +529,16 @@ class Promotion
 
 	      foreach ($results as $promotion) {
 	      	$isWithinRadius = $this->checkIfWithinRadius(json_decode($promotion['coordinates']), $user['latitude'], $user['longitude']);
-					var_dump($this->checkIfGenderQualified($user, $promotion) ." " .$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id']) . " " . $isWithinRadius);
-	      	if($this->checkIfGenderQualified($user, $promotion) &&
+					if($this->checkIfGenderQualified($user, $promotion) &&
 	      	   !$this->checkIfAlreadyClicked($promotion['promote_id'], $user['user_id'])
 	      	   && $isWithinRadius
 	      	   ) {
 	      	   	$userApplied = $this->checkIfUserAlreadyAppliedForTheJob($promotion['job_post_id'], $user['user_id']);
-							var_dump("applied:" . $userApplied);
 							if(!$userApplied) {
-								var_dump('user_applied');
-	      	   		array_push($output, $promotion);
+						 		array_push($output, $promotion);
 	      	   	}
 	      	   	else if($userApplied && $promotion['is_people_applied_include']) {
-								var_dump('user_not_applied');
-		      		array_push($output, $promotion);
+							array_push($output, $promotion);
 	      	   	}
 
 	      	}
