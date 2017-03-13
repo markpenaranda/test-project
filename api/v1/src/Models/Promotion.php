@@ -453,6 +453,12 @@ class Promotion
 			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
 		}
 
+		$keywordQuery = $this->generateKeywordFullTextQuery($user);
+
+		if($keywordQuery != "") {
+			$sql .= "AND (MATCH(keyword) AGAINST('$keywordQuery' IN BOOLEAN MODE) OR `keyword` = '')";
+		}
+
 	   try {
 	   	  $output = [];
 	      $statement = $this->db->prepare($sql);
@@ -500,6 +506,11 @@ class Promotion
 			AND promote.is_deleted = 0
 		";
 
+
+		$industryQuery = $this->generateIndustryFullTextQuery($user);
+		if($industryQuery != "") {
+			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		}
 
 		$industryQuery = $this->generateIndustryFullTextQuery($user);
 		if($industryQuery != "") {
@@ -555,6 +566,11 @@ class Promotion
 			AND CONCAT(`run_end_date`,' ',`run_end_time`) >= NOW()
 			AND promote.is_deleted = 0
 		";
+
+		$industryQuery = $this->generateIndustryFullTextQuery($user);
+		if($industryQuery != "") {
+			$sql .= "AND MATCH(industry) AGAINST('$industryQuery' IN BOOLEAN MODE)";
+		}
 
 		$industryQuery = $this->generateIndustryFullTextQuery($user);
 		if($industryQuery != "") {
@@ -990,6 +1006,30 @@ class Promotion
 		}
 
 		return $output;
+	}
+
+	private function generateKeywordFullTextQuery($user)
+	{
+		 // Nationality, Position Preferred, Gender
+		$positionArray = json_decode($user['position_preferred']);
+		$output = "";
+		if($user['position_preferred']) {
+			foreach ($positionArray as $postion) {
+				$output .= $postion . " ";
+			}
+		}
+
+		if($user['nationality']) {
+			$output .= $user['nationality'] . " ";
+		}
+
+
+		if($user['gender']) {
+			$output .= $user['gender'] . " ";
+		}
+
+		return $output;
+
 	}
 
 	private function checkIfUserAlreadyAppliedForTheJob($jobId, $userId) 
