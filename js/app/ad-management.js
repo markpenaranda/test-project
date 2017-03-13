@@ -390,18 +390,27 @@ var adManagement = (function($) {
                $("#end-date-required").fadeOut();
             }
         }
+        else {
+               $("#end-date-required").fadeOut();
+        } 
+
+
         $("#location-required").fadeOut();
+        $("#all-location-required").fadeOut();
         if(data['coordinates'].length <= 0) {
              $("#location-required").fadeIn();
               valid = false;
             
             
-        }
-        else {
-               $("#end-date-required").fadeOut();
-        } 
+        }       
 
-       
+        $(".location-input").each(function(){
+           var value = $(this).val();
+           if(value == "") {
+            valid =false;
+             $("#all-location-required").fadeIn();
+           }
+        });
 
         return valid;
     }
