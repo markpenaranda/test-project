@@ -59,11 +59,12 @@ var discoverJobsManagement = (function($) {
 
       $('#resultDetails').on('hidden.bs.modal', '#joinModal', closeJoinModal);
 
-    
+
       $("#resultDetails").on('click', '.can-join', openJoinForm);
       $("#resultDetails").on('click', '.btn-apply-waiting-list', openJoinForm);
       $("#resultDetails").on('change', '#oldCoverLetterSelect', updateCoverLetterField);
       $("#resultDetails").on('click', ".join-form-cancel", closeJoinForm);
+      $("#resultDetails").on('click', ".reload-openday-span", reloadSelectedOpenday);
 
       $("body").on('click', '#back', back);
 
@@ -73,7 +74,7 @@ var discoverJobsManagement = (function($) {
         if($(window).width() > 768) {
            $("#resultsUl").removeClass("animated bounceOutLeft hide_me").addClass("animated bounceInLeft");
           $("#resultDetails").removeClass("animated bounceOutRight hide_me").addClass("animated bounceInRight");
-        
+
         }
 
          if($(window).width() < 768) {
@@ -82,7 +83,7 @@ var discoverJobsManagement = (function($) {
             $("#back").addClass("hide_me");
          }
       });
-      $('#search').tagEditor({ 
+      $('#search').tagEditor({
           delimiter: ',', /* space and comma */
           autocomplete: { 'source': apiUrl + '/resources/keyword', delay: 1000 },
           placeholder: 'Type your keywords and press enter',
@@ -92,12 +93,12 @@ var discoverJobsManagement = (function($) {
 
       $("#search").on('change', manualSearch);
 
-    
+
     }
 
 
 
- 
+
     function initialTemplate() {
       loadAccountInfo();
       loadCoverLetter();
@@ -125,7 +126,7 @@ var discoverJobsManagement = (function($) {
     function initialOpenday() {
       $.get(apiUrl + '/openday?page=' + currentPage, function(res) {
         $("#resultsContainer").fadeIn();
-        countResult = parseInt(res.count_result); 
+        countResult = parseInt(res.count_result);
         totalResults = parseInt(res.total);
         if(currentPage > 1) {
           var currentSize = $("#resultsSize").html();
@@ -163,7 +164,7 @@ var discoverJobsManagement = (function($) {
       currentPage = 1;
       $(".loading-results").fadeIn();
       var q = input.val();
-      if(q.length == 0) { 
+      if(q.length == 0) {
         initialOpenday();
       }
       loadQuery(q);
@@ -174,13 +175,13 @@ var discoverJobsManagement = (function($) {
       if(q.length == 0) {
         initialOpenday();
       }
-      
+
           if (searchRequest != null)
               searchRequest.abort();
           var searchRequest = $.get(apiUrl + "/openday/search?page="+ currentPage +"&q=" + q, function(res){
             $(".loading-results").fadeOut();
             $("#resultsContainer").fadeIn();
-            countResult = parseInt(res.count_result); 
+            countResult = parseInt(res.count_result);
             totalResults = parseInt(res.total);
             if(currentPage > 1) {
               var currentSize = $("#resultsSize").html();
@@ -192,7 +193,7 @@ var discoverJobsManagement = (function($) {
               loadResults(res.results);
               $(".jg-load-on-scroll ").fadeOut();
           });
-      
+
     }
 
     function loadResults(results) {
@@ -202,17 +203,17 @@ var discoverJobsManagement = (function($) {
         }
 
         for (var i = 0; i < results.length; i++) {
-        
+
             loadResultItem(results[i]);
-         
-          
+
+
         }
     }
 
     function loadResultItem(result) {
        var event_date = moment(result.event_date).format("MMMM D YYYY");
       getTemplate("results.html", function(render){
-             
+
             var html = render({ data: result, event_date: event_date });
             $("#resultsUl").append(html);
           });
@@ -225,13 +226,13 @@ var discoverJobsManagement = (function($) {
       if ( $(window).width() < 768 ) {
         $("#resultsUl").removeClass("animated bounceInLeft").addClass("animated bounceOutLeft hide_me");
         $("#back").removeClass("hide_me");
-      
+
       }
       loadDetails(selectedOpendayId);
     }
 
     function back() {
-       $("#resultDetails").removeClass("animated bounceInRight").addClass("animated bounceOutRight hide_me"); 
+       $("#resultDetails").removeClass("animated bounceInRight").addClass("animated bounceOutRight hide_me");
        $("#resultsUl").removeClass("animated bounceOutLeft hide_me").addClass("animated bounceInLeft");
        $(this).addClass("hide_me");
     }
@@ -256,8 +257,8 @@ var discoverJobsManagement = (function($) {
 
         getTemplate("details.html", function(render){
           var html = render({ user: accountInfo,
-                              data: res, created_at: created, 
-                              event_date: event_date, 
+                              data: res, created_at: created,
+                              event_date: event_date,
                               start_time:  start_time,
                               end_time: end_time,
                               applied: res.applied,
@@ -267,7 +268,7 @@ var discoverJobsManagement = (function($) {
           $("#resultDetails").html(html);
             if ( $(window).width() < 768 ) {
              $("#resultDetails").removeClass("animated bounceOutRight hide_me").addClass("animated bounceInRight");
-        
+
             }
         });
       });
@@ -313,7 +314,7 @@ var discoverJobsManagement = (function($) {
       loadDetails(selectedOpenday.openday_id);
     }
 
-    function join() { 
+    function join() {
       $(this).attr("disabled", true);
       $(this).find(".loading").fadeIn();
       var userId = getCurrentUserId();
@@ -329,7 +330,7 @@ var discoverJobsManagement = (function($) {
           time_start: selectedSchedule.data('start'),
           time_end: selectedSchedule.data('end')
         };
-        
+
       }
       else {
          var data = {
@@ -339,10 +340,10 @@ var discoverJobsManagement = (function($) {
           cover_letter_title: $("#coverLetterTitle").val(),
           time_start: "",
           time_end: ""
-        };       
+        };
       }
 
-  
+
 
 
       $.ajax({
@@ -358,12 +359,13 @@ var discoverJobsManagement = (function($) {
 
             loadDetails(selectedOpendayId);
           });
-         
+
         },
         error:  function (error) {
           $("#joinError").fadeIn();
-            $("#joinForm").fadeOut();
-             $("#joinSubmit").fadeOut();
+          $("#joinFormDiv").fadeOut();
+           $("#joinSubmit").fadeOut();
+
         }
         });
 
@@ -374,6 +376,11 @@ var discoverJobsManagement = (function($) {
       loadDetails(selectedOpendayId);
 
 
+    }
+
+
+    function reloadSelectedOpenday() {
+          loadDetails(selectedOpendayId);
     }
 
 

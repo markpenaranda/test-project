@@ -19,7 +19,7 @@
           <p class="jg-center">The employer has stopped accepting waiting list</p>
         </div>
       <% } %>
-      <% if(!applied  && full) { %>
+      <% if(!applied  && full && data.stopped_adding_queue != "1") { %>
         <div class="col-sm-10 pull-right">
             <div class="jg-mar-btm">
               <a href="#">
@@ -48,7 +48,7 @@
     <div class="col-sm-12">
       <h3 class="jg-bold">Job Positions - <%= data.employment_type %></h3>
       <ul class="jg-job-positions jg-bold">
-        <% _.each(data.jobs, function(i) { %> 
+        <% _.each(data.jobs, function(i) { %>
         <li class="clearfix"><span class="jg-mar-btm jg-mar-top"><%= i.job_title %></span><a href="#" class="jg-btn-plain pull-right jg-normal jg-underline">View Job Details</a></li>
         <% }) %>
       </ul>
@@ -81,9 +81,9 @@
         <p class="centered-info">
             You've applied for this event.<br>
             <% if(schedule.is_scheduled > 0) { %>
-            
+
               <i class="fa fa-calendar"></i> Your Online Interview is scheduled on:<br> <%= moment(schedule.event_date).format("MMM DD YYYY") %> <%= moment(moment.utc(schedule.event_date + " " + schedule.schedule_time_start).toDate()).local().format("hh:mmA") %>-<%= moment(moment.utc(schedule.event_date + " " + schedule.schedule_time_end).toDate()).local().format("hh:mmA") %>
-            
+
             <% } %>
             <% if(schedule.is_scheduled == 0) { %>
               Your Candidate Queue No.: <%= schedule.candidate_number %>
@@ -92,5 +92,3 @@
     </div>
   </div>
   <% } %>
-
-  

@@ -38,7 +38,7 @@ class OpenDayController extends BaseController
 
       $paginate = $this->paginate->init($request->getParam('page'));
       $items = $this->openDayResource->getLatestEvents($paginate);
-                    
+
 
       return $response->withStatus(200)->withJson($items);
    }
@@ -69,8 +69,8 @@ class OpenDayController extends BaseController
 
    public function store($request, $response)
    {
-     
-    
+
+
 
       $createParams = array(
         'event_name' => $request->getParam('event_name'),
@@ -92,8 +92,8 @@ class OpenDayController extends BaseController
 
    public function update($request, $response, $args)
    {
-   
-    
+
+
 
      $updateParams = array(
         'event_name' => $request->getParam('event_name'),
@@ -134,20 +134,20 @@ class OpenDayController extends BaseController
 
      $timeBreakdown = $this->openDayResource->getTimeBreakdown($timeBreakdownId);
      if($timeBreakdown['is_filled'] == 1) {
-       return $response->withStatus(400);
+       return $response->withStatus(400)->withJson(array('message' => 'This schedules is already taken.'));
      }
      $result = $this->openDayResource->join($opendayId, $userId, $coverLetter, $coverLetterTitle, $timeBreakdownId, $timeStart, $timeEnd);
 
      if($result) {
        $user = $this->userResource->getUserById($userId);
        $scheduleDetails = $this->openDayResource->getSchedule($opendayId, $userId);
-      
+
 
        $timeZone = $this->userResource->getTimeZoneByUserId($userId);
        $this->emailHelper->sendOpendayDetailsMail($openday, $scheduleDetails, $user, $timeZone);
        return $response->withStatus(200)->withJson($result);
      }
-     
+
      return $response->withStatus(400);
    }
 
@@ -172,7 +172,7 @@ class OpenDayController extends BaseController
       }
       else {
         $items = $this->openDayResource->getEndOpendayByAttendeeUSerId($userId, $status);
-        
+
       }
 
       return $response->withStatus(200)->withJson($items);
@@ -182,7 +182,7 @@ class OpenDayController extends BaseController
    public function suggestedUsers($request, $response, $args)
    {
      $opendayId       = $args['openday_id'];
-    
+
      $items = $this->openDayResource->getSuggestedUsersByOpendayId($opendayId);
 
      return $response->withStatus(200)->withJson($items);
@@ -200,7 +200,7 @@ class OpenDayController extends BaseController
       return $response->withStatus(200)->withJson($items);
    }
 
-   public function createdOpenday($request, $response, $args) 
+   public function createdOpenday($request, $response, $args)
    {
      $userId = $request->getParam('user_id');
      $items = $this->openDayResource->getOpendayCreatedByUserPage($userId);
@@ -236,7 +236,7 @@ class OpenDayController extends BaseController
 
    }
 
-   public function rejectCandidate($request, $response, $args) 
+   public function rejectCandidate($request, $response, $args)
    {
       $opendayId = $args['openday_id'];
       $userId    = $request->getParam('user_id');
@@ -267,13 +267,13 @@ class OpenDayController extends BaseController
 
       $schedule = $this->openDayResource->endInterview($opendayId, $userId);
       return $response->withStatus(200)->withJson($schedule);
-  
+
    }
 
    public function getListOfCandidateId($request, $response, $args)
    {
      $opendayId = $args['openday_id'];
-     $status    = $request->getParam('status'); 
+     $status    = $request->getParam('status');
 
 
      $scheduled = $this->openDayResource->getListOfCandidateId($opendayId, $status, 1);
@@ -293,7 +293,7 @@ class OpenDayController extends BaseController
    public function setInterviewing($request, $response, $args)
    {
      $opendayId = $args['openday_id'];
-     $userId    = $request->getParam('user_id'); 
+     $userId    = $request->getParam('user_id');
 
      $this->openDayResource->setInterviewing($opendayId, $userId);
 
@@ -301,9 +301,9 @@ class OpenDayController extends BaseController
 
    }
 
-   public function getLiveOpenday($request, $response, $args) 
+   public function getLiveOpenday($request, $response, $args)
    {
-      $userId    = $request->getParam('user_id'); 
+      $userId    = $request->getParam('user_id');
 
       $items = $this->openDayResource->liveOpenday($userId);
 
