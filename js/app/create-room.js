@@ -7,7 +7,9 @@ var createRoomScreenManagement = (function($) {
     var dataStore = [];
     var numberOfTimeRange = 0;
     var currentRoom = 0;
+    var selectedRoom = 0;
     var newRoomTrigger = false;
+    var jobTypeChangeTrigger = false;
 
     var FORM_REQUIRED_FIELDS = [
         "event_name",
@@ -153,11 +155,14 @@ var createRoomScreenManagement = (function($) {
     function jobTypeChange() {
       // console.log("change");
       var roomNumber = $(this).data("room-number");
+      selectedRoom = $(this).data("room-number");
       var currentRoom = numberOfRooms - 1;
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
       $('group#jobSelect-' + roomNumber).html('');
+      jobTypeChangeTrigger = true;
       addNewJob();
+      jobTypeChangeTrigger = false;
 
     }
 
@@ -169,6 +174,10 @@ var createRoomScreenManagement = (function($) {
       }
       else {
         currentRoom = $(this).data("room-number");
+      }
+
+      if(jobTypeChangeTrigger) {
+        currentRoom = selectedRoom;
       }
 
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
