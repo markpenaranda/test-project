@@ -14,7 +14,7 @@
 		<input type="hidden" id="initialTime" value="0">
 		<!-- END MUST DECLATE HERE THE FF -->
 		<!-- MUST DECLARE HERE THE FF -->
-		
+
 		<?php
 		include 'include/business-navigation.php';
 		?>
@@ -38,13 +38,15 @@
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div style="margin-top: 5px; width: 100%; height: 280px; position: relative; background-color: black;">
-									<video id="remoteVideo" autoplay style="width: : 100% !important; position:absolute; left: 0; top:0"></video>
-								<video id="localVideo" autoplay muted style="height: 100px; position:absolute; right: 0; bottom:0"></video>
+									<i class="fa fa-expand fullscreen-toggle"  aria-hidden="true"></i>
+									<i class="fa fa-compress not-fullscreen-toggle hide" aria-hidden="true"></i>
+									<video id="remoteVideo" autoplay class="remote-vc-not-fullscreen"></video>
+									<video id="localVideo" autoplay muted class="local-vc-not-fullscreen"></video>
 							</div>
 						</div>
 						<div class="chat col-lg-12 col-sm-12 col-xs-12">
 							<ul class="messages openday_chatbox_ul">
-								
+
 							</ul>
 							<div class="chat_text_fied_wrapper">
 								<div class="col-lg-9">
@@ -89,7 +91,7 @@
 												<h6 class="message_date_time">Sent Nov-2-2016 5:36 PM</h6>
 											</div>
 										</div>
-										
+
 									</li>
 								</div>
 							</div>
@@ -204,7 +206,7 @@
 				</div>
 				<div id="profileView" style="min-height:500px;" class="openday_profile_view_wrapper">
 					<p class="click-to-view-info centered-info" ><i class="fa fa-search fa-fw"></i>Click 'View' to review candidates.</p>
-				
+
 				</div>
 			</div>
 			<div class="col-lg-3 col-sm-3 col-xs-12">
@@ -216,8 +218,8 @@
 				</div>
 				<div class="interview_list_right_ul_wrapper_div">
 					<ul id="queue-item" class="interview_list_right_ul">
-						
-						
+
+
 					</ul>
 				</div>
 			</div>
@@ -229,7 +231,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				
+
 				<h4 class="modal-title">Thank You! Times up.</h4>
 			</div>
 			<div class="modal-body">
@@ -295,7 +297,7 @@
 					</div>
 			</div>
 			<div class="modal-footer">
-				
+
 				<button  type="button" id="finishRoom" data-dismiss="modal" class="btn btn-success">Done</button>
 			</div>
 			</div><!-- /.modal-content -->

@@ -6837,7 +6837,7 @@ body.front {
 .successbox h1:before, .successbox h1:after { background: #cad8a9; }
 .errorbox h1:before, .errorbox h1:after { background: #d6b8b7; }
 
-.notify .alerticon { 
+.notify .alerticon {
   display: block;
   text-align: center;
   margin-bottom: 10px;
@@ -6848,6 +6848,9 @@ body.front {
 .stop_queue_btn_disabled { background: grey !important;  }
 
 .online { color: #83c954 !important; }
+
+
+
 
 
 
@@ -6869,4 +6872,52 @@ body.front {
 /************************************************** Responsive Design ends Here   ***************************************************************/
 /**************************************************************************************************************************************************/
 
-    
+.fullscreen-toggle {
+  color: white;
+font-size: 30px;
+right: 20;
+position: absolute;
+top: 10;
+cursor:pointer;
+z-index: 99;
+}
+
+.not-fullscreen-toggle {
+  color: white;
+font-size: 30px;
+right: 27%;
+position: fixed;
+top: 120px;
+cursor:pointer;
+z-index: 99;
+}
+
+.remote-vc-fullscreen {
+  position: fixed;
+left: 0px;
+top: 0px;
+width: 75% !important;
+z-index: 1;
+}
+
+.local-vc-fullscreen {
+  height: 100px;
+position: fixed;
+right: 25%;
+bottom: 0;
+z-index: 2;
+}
+
+.remote-vc-not-fullscreen {
+  position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+}
+
+.local-vc-not-fullscreen {
+  height: 100px;
+position: absolute;
+right: 0;
+bottom: 0;
+}

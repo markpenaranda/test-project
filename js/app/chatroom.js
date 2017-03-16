@@ -90,9 +90,28 @@ var candidateScreenManagement = (function($) {
 
          $("#finishRoom").on('click', finishRoom);
 
+         $(".fullscreen-toggle").on('click', fullscreen);
+         $(".not-fullscreen-toggle" ).on('click',notFullscreen);
+
+    }
+
+    // fullscreen
+    function fullscreen () {
+      $(".fullscreen-toggle").addClass("hide");
+      $(".not-fullscreen-toggle").removeClass("hide");
+      $("#remoteVideo").removeClass("remote-vc-not-fullscreen").addClass("remote-vc-fullscreen");
+      $("#localVideo").removeClass("local-vc-not-fullscreen").addClass("local-vc-fullscreen");
     }
 
 
+    function notFullscreen() {
+      $(".fullscreen-toggle").removeClass("hide");
+      $(".not-fullscreen-toggle").addClass("hide");
+
+      $("#remoteVideo").removeClass("remote-vc-fullscreen").addClass("remote-vc-not-fullscreen");
+      $("#localVideo").removeClass("local-vc-fullscreen").addClass("local-vc-not-fullscreen");
+
+    }
     // PeerJS
 
     function connectPeerJs () {

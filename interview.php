@@ -3,12 +3,12 @@
 	<?php include 'include/css.php'; ?>
 	</head>
 
-	<body class="inside">	
+	<body class="inside">
 
 
   <!-- MUST DECLARE HERE THE FF -->
       <!-- User ID -->
-      
+
       <!--  ROOM ID -->
       <input type="hidden" id="roomId" value="<?php echo $_GET['openday']; ?>">
       <!-- User ID -->
@@ -41,13 +41,16 @@
 								</div>
 								<div class="col-lg-12 col-sm-12 col-xs-12">
 									<div  style="margin-top: 5px; width: 100%; background-color: black; position:relative; height: 350px;">
-							            <video id="remoteVideo" autoplay style="width: : 100%; position:absolute; left: 0; top:0"></video>
-							            <video id="localVideo" autoplay muted style="height: 100px; position:absolute; right: 0; bottom:0"></video>
+													<i class="fa fa-expand fullscreen-toggle"  aria-hidden="true"></i>
+													<i class="fa fa-compress not-fullscreen-toggle hide" aria-hidden="true"></i>
+
+													<video id="remoteVideo" autoplay class="remote-vc-not-fullscreen"></video>
+							            <video id="localVideo" autoplay muted class="local-vc-not-fullscreen"></video>
 							        </div>
 								</div>
 								<div class="chat col-lg-12 col-sm-12 col-xs-12">
 									<ul class="messages openday_chatbox_ul">
-										
+
 									</ul>
 									<div class="chat_text_fied_wrapper">
 										<div class="col-lg-9">
@@ -91,7 +94,7 @@
 												<h6 class="message_date_time">Sent Nov-2-2016 5:36 PM</h6>
 											</div>
 										</div>
-										
+
 									</li>
 								</div>
 										</div>
@@ -103,10 +106,10 @@
 				</div>
 				<div class="col-lg-12 col-sm-12 col-xs-12">
 					<div id="opendayDetails" class="row">
-					
+
 					</div>
 					<div id="waitingDiv" class="row">
-						
+
 					</div>
 				</div>
 			</div>
@@ -130,7 +133,7 @@
 						</ul>
 					</div>
 				</div>
-			</div> 
+			</div>
 		</footer>
 
 
@@ -143,4 +146,3 @@
 	<script type="text/javascript" src="js/app/candidate.js"></script>
 	</body>
 </html>
-

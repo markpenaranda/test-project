@@ -5,7 +5,7 @@ var candidateScreenManagement = (function($) {
     var onInterview = false;
     var apiUrl = '/api/v1/public/index.php';
     var openday = null;
- 
+
     return {
         init: init
     };
@@ -17,7 +17,7 @@ var candidateScreenManagement = (function($) {
             socketIOEventHandlers();
             addEventHandlers();
             renderNecessaryTemplate();
-        
+
         });
     }
 
@@ -30,6 +30,27 @@ var candidateScreenManagement = (function($) {
         // Chat Functions
         $('.send').on('click', sendChat);
         $('#message').keypress(sendChatOnEnter);
+
+        $(".fullscreen-toggle").on('click', fullscreen);
+        $(".not-fullscreen-toggle" ).on('click',notFullscreen);
+    }
+
+    // fullscreen
+    function fullscreen () {
+      $(".fullscreen-toggle").addClass("hide");
+      $(".not-fullscreen-toggle").removeClass("hide");
+      $("#remoteVideo").removeClass("remote-vc-not-fullscreen").addClass("remote-vc-fullscreen");
+      $("#localVideo").removeClass("local-vc-not-fullscreen").addClass("local-vc-fullscreen");
+    }
+
+
+    function notFullscreen() {
+      $(".fullscreen-toggle").removeClass("hide");
+      $(".not-fullscreen-toggle").addClass("hide");
+
+      $("#remoteVideo").removeClass("remote-vc-fullscreen").addClass("remote-vc-not-fullscreen");
+      $("#localVideo").removeClass("local-vc-fullscreen").addClass("local-vc-not-fullscreen");
+
     }
 
 
@@ -89,7 +110,7 @@ var candidateScreenManagement = (function($) {
                 callback();
             });
 
-          
+
 
         });
     }
@@ -110,7 +131,7 @@ var candidateScreenManagement = (function($) {
     function getCurrentUser() {
 
         var userId = $('#userId').val();
-        
+
         var localStorageUser = localStorage.getItem('userId');
         if(localStorageUser) {
           return localStorageUser;
@@ -143,7 +164,7 @@ var candidateScreenManagement = (function($) {
 
             var currentTime = getCurrentUTCTime();
             var eventSchedule = moment(schedule.event_date + " " + schedule.schedule_time_end, "YYYY-M-D H:mm:ss");
-            // Missed  
+            // Missed
             // if(eventSchedule.isBefore(currentTime) && schedule.is_attended == 0) {
 
             //     console.log(eventSchedule.isBefore(currentTime));
@@ -188,12 +209,12 @@ var candidateScreenManagement = (function($) {
                 }
 
             // }
-          
+
 
            updateCurrentlyInterviewedCandidate();
 
           });
-     
+
     }
 
 
@@ -236,7 +257,7 @@ var candidateScreenManagement = (function($) {
     }
 
     function activateJoinUnderscoreTemplate(schedule) {
-       
+
          $.get(apiUrl + '/openday/' + getCurrentRoom() + '/waiting-mode', function (res) {
              var waitingListCount = res['total_waiting_list'];
             getTemplate('join.html', function(render) {
@@ -248,7 +269,7 @@ var candidateScreenManagement = (function($) {
     }
 
      function activateRejectUnderscoreTemplate(schedule) {
-       
+
         getTemplate('reject.html', function(render) {
                         var renderedhtml = render({openday : openday});
                         $("#candidate-interview").fadeOut();
@@ -257,8 +278,8 @@ var candidateScreenManagement = (function($) {
     }
 
     function activateEndUnderscoreTemplate(schedule) {
-      
-      
+
+
        getTemplate('end.html', function(render) {
                        var renderedhtml = render({openday: openday});
                        $("#waitingDiv").html(renderedhtml);
@@ -303,5 +324,3 @@ $(candidateScreenManagement.init);
 
 
 //
-
-
