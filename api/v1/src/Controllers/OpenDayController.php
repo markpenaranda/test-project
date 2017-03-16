@@ -244,6 +244,10 @@ class OpenDayController extends BaseController
        $saved = $this->openDayResource->rejectCandidate($opendayId, $userId);
 
        if($saved) {
+         $user = $this->userResource->getUserById($userId);
+         $scheduleDetails = $this->openDayResource->getSchedule($opendayId, $userId);
+         $this->emailHelper->sendRejectedCandidateMail($scheduleDetails, $user);
+
         return $response->withStatus(200);
        }
 

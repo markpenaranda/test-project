@@ -32,8 +32,9 @@ class EmailHelper {
             return true;
     }
 
-    public function sendOpendayDetailsMail($openday, $schedule, $user, $userTimezone) {
-        
+    public function sendOpendayDetailsMail($openday, $schedule, $user, $userTimezone)
+    {
+
          $this->phpmailer->addAddress($user['primary_email'], 'Sample Recepient');
             $this->phpmailer->isHTML(true);
 
@@ -42,8 +43,8 @@ class EmailHelper {
 
             $endTimeUTC  = Carbon::createFromFormat("H:i:s", $schedule['schedule_time_end'], 'UTC');
             $endTime = $endTimeUTC->tz($userTimezone['timeZoneId'])->format("h:iA");
-            
-            
+
+
             if($schedule['is_scheduled']) {
                    $theBody = "
                Dear " . $user['name'] . ", <br><br>
@@ -71,14 +72,14 @@ class EmailHelper {
                     Your Candidate No: " . $schedule['candidate_number'] . "<br>
                     <br><br>
                     Best regards,<br>" .
-                        $schedule["page_name"]; 
+                        $schedule["page_name"];
             }
 
-         
 
 
 
-           
+
+
 
             $this->phpmailer->Subject = 'Openday Join Event';
             $this->phpmailer->Body    = $theBody;
@@ -88,5 +89,32 @@ class EmailHelper {
             }
 
             return true;
+    }
+
+    public function sendRejectedCandidateMail ($schedule, $user)
+    {
+      $this->phpmailer->addAddress($user['primary_email'], $user['name']);
+      $this->phpmailer->isHTML(true);
+
+      $theBody = "
+             Dear " . $user['name'] . ",
+             <br><br>
+             Sorry your application for Open Day Online Interview on ".  $schedule['event_date']  . " - " . $schedule['event_name'] . " of " . $schedule['page_name'] . " has been rejected.
+
+             <br>
+             You're CV does not fit on the qualification.
+
+             <br><br>
+             Best regards,<br>" .
+                 $schedule["page_name"];
+       $this->phpmailer->Subject = 'Openday Application Rejected';
+       $this->phpmailer->Body    = $theBody;
+
+       if(!$this->phpmailer->send()) {
+           return $this->phpmailer->ErrorInfo;
+       }
+
+       return true;
+
     }
 }

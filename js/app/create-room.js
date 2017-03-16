@@ -6,6 +6,8 @@ var createRoomScreenManagement = (function($) {
     var apiUrl = '/api/v1/public/index.php';
     var dataStore = [];
     var numberOfTimeRange = 0;
+    var currentRoom = 0;
+    var newRoomTrigger = false;
 
     var FORM_REQUIRED_FIELDS = [
         "event_name",
@@ -134,16 +136,17 @@ var createRoomScreenManagement = (function($) {
           $('.datepicker').datepicker();
           $('.ui-timepicker-select').addClass('col-lg-12');
           ++numberOfRooms;
-
+          newRoomTrigger = true;
           addNewJob();
           addTimeRange();
           loadResponsibleUserOption();
-
+          newRoomTrigger = false;
       });
     }
 
     function removeForm() {
       var roomNumber = $(this).data('room-number');
+      console.log("#room-form-" + roomNumber);
       $("#room-form-" + roomNumber).remove();
     }
 
@@ -158,14 +161,19 @@ var createRoomScreenManagement = (function($) {
 
     }
 
+
     function addNewJob() {
-      var currentRoom = numberOfRooms - 1;
-      // console.log($(this).data("room-number"));
-      if ($(this).data("room-number")) {
-       currentRoom = $(this).data("room-number");
+
+      if(newRoomTrigger) {
+        currentRoom = numberOfRooms - 1;
       }
+      else {
+        currentRoom = $(this).data("room-number");
+      }
+
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
+      console.log(currentRoom);
       // console.log(".job-type-radio-"+ currentRoom + ":checked");
       var employment_type_id = $(".job-type-radio-"+ currentRoom+ ":checked").val();
 
@@ -177,6 +185,7 @@ var createRoomScreenManagement = (function($) {
             $('group#jobSelect-' + currentRoom).append(html);
 
             reinitializeJobOptionButtons(currentRoom);
+
         });
       });
 
@@ -213,11 +222,13 @@ var createRoomScreenManagement = (function($) {
     function addTimeRange() {
       numberOfTimeRange += 1;
 
-      var currentRoom = numberOfRooms - 1;
-      // console.log($(this).data("room-number"));
-      if (typeof $(this).data("room-number") !== "undefined") {
-       currentRoom = $(this).data("room-number");
+      if(newRoomTrigger) {
+        var currentRoom = numberOfRooms - 1;
       }
+      else {
+        var currentRoom = $(this).data("room-number");
+      }
+
       // console.log(currentRoom);
       currentRoom = (currentRoom < 0) ? 0 : currentRoom;
 
@@ -227,10 +238,10 @@ var createRoomScreenManagement = (function($) {
         // console.log("#timeRangeList-" + currentRoom);
         $("#timeRangeList-" + currentRoom).append(html);
 
-        $("a.add-time-range").css("display", "none");
-        $("a.remove-time-range").css("display", "block");
-        $("a.remove-time-range").last().css("display", "block");
-        $("a.add-time-range").last().css("display", "none");
+        $("a.add-time-range-" + currentRoom ).css("display", "none");
+        $("a.remove-time-range-" + currentRoom ).css("display", "block");
+        $("a.remove-time-range-" + currentRoom ).last().css("display", "block");
+        $("a.add-time-range-" + currentRoom ).last().css("display", "none");
 
         if(numberOfTimeRange == 1) {
           $("a.remove-time-range").last().css("display", "none");

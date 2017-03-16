@@ -12,6 +12,7 @@ var candidateScreenManagement = (function($) {
     var openday;
     var liveOpenday = [];
     var peer;
+    var mainTimer;
 
     return {
         init: init
@@ -24,7 +25,7 @@ var candidateScreenManagement = (function($) {
           var opendayId = $("#roomId").val();
           console.log(opendayId);
           if(opendayId == "") {
-        
+
             $("#roomId").val(results[0].openday_id);
             window.reinitiateSocket(results[0].openday_id);
           }
@@ -34,7 +35,7 @@ var candidateScreenManagement = (function($) {
             connectPeerJs();
             peerJs();
         });
-       
+
 
 
     }
@@ -72,7 +73,7 @@ var candidateScreenManagement = (function($) {
          $("#scheduleFilter").on('change', loadCandidateQueue);
 
 
-         // Stop Adding Queue 
+         // Stop Adding Queue
          $(".stop_queue_btn").on('click', stopAddingQueue);
 
 
@@ -138,7 +139,7 @@ var candidateScreenManagement = (function($) {
 
         // Notifications
         window.socket.on("room-" + getCurrentRoom(), function(data){
-      
+
          if(data.tag == "accept" && data.user_id == pendingApplicant) {
                 $(".waitingButton").fadeOut();
                 $(".startInterviewButton").fadeIn();
@@ -156,7 +157,7 @@ var candidateScreenManagement = (function($) {
 
         });
 
-        window.socket.on("user-update", function(data){ 
+        window.socket.on("user-update", function(data){
 
             online_user = [];
             for (var i = data.length - 1; i >= 0; i--) {
@@ -168,12 +169,12 @@ var candidateScreenManagement = (function($) {
     }
 
     function updateOnlineMarker() {
- 
+
       for (var i = online_user.length - 1; i >= 0; i--) {
         var nd = online_user[i];
-     
-          $(".live-marker-" + nd).addClass("online"); 
-          
+
+          $(".live-marker-" + nd).addClass("online");
+
       }
       updateListNumber();
 
@@ -219,7 +220,7 @@ var candidateScreenManagement = (function($) {
           renderNecessaryTemplate();
           socketIOEventHandlers();
           window.reinitiateSocket($(this).val());
-          updateOnlineMarker(); 
+          updateOnlineMarker();
 
     }
 
@@ -267,14 +268,14 @@ var candidateScreenManagement = (function($) {
       var is_scheduled = $("#scheduleFilter").val();
 
       $.get(apiUrl + '/openday/' + opendayId + '/candidates?with_ended=1&is_scheduled=' + is_scheduled, function(res){
-       
+
         for (var i = 0; i < res.length; i++) {
-       
+
           var candidate = res[i]
           addCandidate(candidate);
           updateOnlineMarker();
         }
-        
+
       });
     }
 
@@ -308,7 +309,7 @@ var candidateScreenManagement = (function($) {
     function inviteCandidate() {
         var userId = $(this).data('user');
         var roomId = $(this).data('room');
-       
+
         var message = "Your interview is now ready";
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
@@ -342,7 +343,7 @@ var candidateScreenManagement = (function($) {
               $("#candidate-" + userId).remove();
             });
         });
-        
+
     }
 
     function endCandidate() {
@@ -356,7 +357,7 @@ var candidateScreenManagement = (function($) {
         }
         var link = location.origin + "/interview.php?openday=" + roomId;
         $.post(apiUrl + '/openday/' + roomId + '/end', { user_id: userId }, function(res){
-          
+
           $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
               removeCandidate(userId);
               currentApplicant = 0;
@@ -414,17 +415,17 @@ var candidateScreenManagement = (function($) {
         getTemplate('live_candidate_details.html', function(render) {
              var renderedhtml = render({user: user, room_id: getCurrentRoom()});
              $("#liveCandidateDetails").append(renderedhtml);
-      
+
          });
 
        // WebRTC
     	 navigator.getUserMedia({video: true, audio: true}, function(stream) {
     	  var localVideo = document.getElementById('localVideo');
     	  localVideo.srcObject = stream;
-       
+
         console.log(currentApplicant);
     	  call = peer.call('openday-' + currentApplicant, stream);
-        console.log(call); 
+        console.log(call);
     	  call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
     	  	  remoteVideo.srcObject = remoteStream;
@@ -468,8 +469,15 @@ var candidateScreenManagement = (function($) {
     }
 
     function startTotalUsedTime() {
+        console.log(openday.end_time);
         var end = moment(openday.event_date + " " + openday.end_time);
+
+        // For Production End Local Time
         var endLocal = moment(moment.utc(openday.event_date + " " + openday.end_time).toDate()).local();
+
+        // For Dev End Local Time
+          // var endLocal = moment(openday.event_date + " " + openday.end_time);
+
          var start = moment(openday.event_date + " " + openday.start_time);
 
          var totalDuration = end - start;
@@ -477,19 +485,25 @@ var candidateScreenManagement = (function($) {
          $("#totalDuration").html(tD);
 
         myTimer();
-        var timer = setInterval(myTimer, 5000);
+        mainTimer = setInterval(myTimer, 5000);
 
         function myTimer() {
             var now = moment().local();
+
+            // For Production
             var then = moment(moment.utc(openday.event_date + " " + openday.start_time).toDate()).local();
-           
+
+            // For Dev
+            // var then = moment(openday.event_date + " " + openday.start_time);
+
              var duration = now - then;
              var time = moment.utc(moment.duration(duration).asMilliseconds()).format("HH [H] mm [M]");
              $("#totalUsedTime").html(time);
 
              isConsumed = moment(now).isAfter(endLocal);
-            
+
              if(isConsumed) {
+                clearInterval(mainTimer);
                 $("#timesUpModal").modal('show');
              }
         }
@@ -508,7 +522,7 @@ var candidateScreenManagement = (function($) {
         **/
         var roomId = $("#roomId").val();
         $.get(apiUrl + '/openday/' + roomId + '/candidates-id', function(result){
-     
+
           var scheduled = result.scheduled;
           var checkInScheduled = intersect(scheduled, window.online_user);
           var notCheckInScheduled = scheduled.length - checkInScheduled.length;
@@ -525,7 +539,7 @@ var candidateScreenManagement = (function($) {
             d[b[i]] = true;
         }
         for (var j = 0; j < a.length; j++) {
-            if (d[a[j]]) 
+            if (d[a[j]])
                 results.push(a[j]);
         }
         return results;
@@ -605,5 +619,3 @@ var candidateScreenManagement = (function($) {
 
 })($);
 $(candidateScreenManagement.init);
-
-
