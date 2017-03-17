@@ -35,6 +35,7 @@ $app->group('/openday', function(){
 			$this->map(['GET'], '/suggested', 'OpenDayController:suggestedUsers');
 			$this->map(['GET'], '', 'OpenDayController:show');
 			$this->map(['POST'], '/join', 'OpenDayController:join');
+			$this->map(['POST'], '/set-waiting', 'OpenDayController:setWaiting');
 			$this->map(['POST'], '/set-interviewing', 'OpenDayController:setInterviewing');
 			$this->map(['POST'], '/stop', 'OpenDayController:stopQueue');
 			$this->map(['POST'], '/end', 'OpenDayController:endInterview');
@@ -43,7 +44,7 @@ $app->group('/openday', function(){
 			$this->map(['PUT'], '', 'OpenDayController:update');
 
 
-		
+
 	});
 });
 

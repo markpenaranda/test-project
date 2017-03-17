@@ -33,6 +33,18 @@ var candidateScreenManagement = (function($) {
 
         $(".fullscreen-toggle").on('click', fullscreen);
         $(".not-fullscreen-toggle" ).on('click',notFullscreen);
+
+
+
+
+        $(window).on("unload", function (e) {
+          $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+            window.call.close();
+          
+
+          });
+        });
+
     }
 
     // fullscreen

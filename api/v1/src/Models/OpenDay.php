@@ -973,6 +973,31 @@ class OpenDay
     }
   }
 
+  public function setWaiting ($opendayId, $userId)
+  {
+    $sql = "
+      UPDATE i_openday_attendees
+      SET status = 1,
+      date_interviewed_start = NOW()
+      WHERE openday_id = '$opendayId'
+      AND user_id = '$userId'
+    ";
+
+    $this->db->beginTransaction();
+
+    try {
+      $updateStatement = $this->db->prepare($sql);
+
+      $updateStatement->execute();
+
+
+      $this->db->commit();
+    }
+    catch(PDOException $e) {
+      $this->db->rollBack();
+    }
+  }
+
   public function setInterviewing($opendayId, $userId)
   {
 

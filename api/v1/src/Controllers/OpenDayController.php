@@ -294,6 +294,14 @@ class OpenDayController extends BaseController
 
    }
 
+   public function setWaiting($request, $response, $args)
+   {
+     $opendayId = $args['openday_id'];
+     $userId    = $request->getParam('user_id');
+
+     $this->openDayResource->setWaiting($opendayId, $userId);
+   }
+
    public function setInterviewing($request, $response, $args)
    {
      $opendayId = $args['openday_id'];

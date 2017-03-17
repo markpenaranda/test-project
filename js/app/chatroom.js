@@ -93,6 +93,14 @@ var candidateScreenManagement = (function($) {
          $(".fullscreen-toggle").on('click', fullscreen);
          $(".not-fullscreen-toggle" ).on('click',notFullscreen);
 
+
+         $(window).on('unload', function(e){
+           $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + currentApplicant, function() {
+             window.call.close();
+           });
+         });
+
+
     }
 
     // fullscreen
@@ -116,6 +124,8 @@ var candidateScreenManagement = (function($) {
 
     function connectPeerJs () {
        peer = new Peer('openday-' + getCurrentUser(),  { host: 'openday.jobsglobal.com', secure:true, port:9000,  key: 'peerjs'});
+
+
     }
 
     function peerJs() {
@@ -150,6 +160,10 @@ var candidateScreenManagement = (function($) {
         peer.destroy();
         connectPeerJs();
       });
+
+
+
+
     }
 
     // Socket IO
@@ -412,6 +426,17 @@ var candidateScreenManagement = (function($) {
 
     }
 
+    function resetCandidateInterviewButton(applicantId) {
+      $(".invite-button-" + applicantId).prop( "disabled", false );
+      $(".invite-button-" + applicantId).removeClass( "disabled");
+      $(".inviteButton").removeClass( "disabled");
+      $(".inviteButton").prop( "disabled", false );
+      $(".invite-button-" + applicantId).html("Start Interview");
+      clearInterval(lapseTimerInterval);
+      pauseTimer();
+
+    }
+
     function startVideoCall() {
       currentApplicant = pendingApplicant;
       console.log(currentApplicant);
@@ -443,9 +468,16 @@ var candidateScreenManagement = (function($) {
     	  localVideo.srcObject = stream;
 
         console.log(currentApplicant);
-    	  call = peer.call('openday-' + currentApplicant, stream);
+    	  window.call = peer.call('openday-' + currentApplicant, stream);
         console.log(call);
-    	  call.on('stream', function(remoteStream) {
+        window.call.on('close', function (err) {
+          alert("Applicant has been disconnected from the chat. Press the 'Start Interview' button again to start the interview.");
+          resetCandidateInterviewButton(currentApplicant);
+          $(".startInterviewButton").fadeOut();
+          $(".waitingButton").fadeIn();
+
+        });
+    	  window.call.on('stream', function(remoteStream) {
     	      var remoteVideo = document.getElementById('remoteVideo');
     	  	  remoteVideo.srcObject = remoteStream;
     	      $("#remoteVideo").css("width", "100%");
@@ -453,6 +485,8 @@ var candidateScreenManagement = (function($) {
     	   }, function(err) {
     		  console.log('Failed to get local stream' ,err);
     	  });
+
+
       });
 
 
@@ -554,12 +588,15 @@ var candidateScreenManagement = (function($) {
     function intersect(a, b) {
         var d = {};
         var results = [];
-        for (var i = 0; i < b.length; i++) {
+        if(a && b) {
+          for (var i = 0; i < b.length; i++) {
             d[b[i]] = true;
-        }
-        for (var j = 0; j < a.length; j++) {
+          }
+          for (var j = 0; j < a.length; j++) {
             if (d[a[j]])
-                results.push(a[j]);
+            results.push(a[j]);
+          }
+
         }
         return results;
     }

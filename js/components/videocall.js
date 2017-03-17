@@ -12,7 +12,7 @@ $(document).ready(function() {
       window.peer = peer;
 
     // function connect() {
-    
+
     // }
 
     // connect();
@@ -24,12 +24,17 @@ $(document).ready(function() {
     // })
 
     peer.on('call', function(call) {
+      window.call = call;
       console.log(getCurrentUserId());
       // var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
       navigator.getUserMedia({video: true, audio: true}, function(stream) {
          var localVideo = document.getElementById('localVideo');
         localVideo.srcObject = stream;
         call.answer(stream); // Answer the call with an A/V stream.
+        call.on('close', function(){
+            alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
+            location.reload();
+        });
         call.on('stream', function(remoteStream) {
             var remoteVideo = document.getElementById('remoteVideo');
           remoteVideo.srcObject = remoteStream;
@@ -50,6 +55,13 @@ $(document).ready(function() {
       });
     });
 
+    // $(window).bind('beforeunload', function(){
+    //   console.log("Bye");
+    //   var conf = confirm("Are you sure you want to leave this page? NOTE: You will be disconnected from this interview.");
+    //   if(conf){ peer.destroy(); }
+    // });
+
+
 });
 
 //
@@ -59,5 +71,3 @@ $(document).ready(function() {
 // peer.on('disconnect', function() {
 //   alert('Disconnected');
 // })
-
-
