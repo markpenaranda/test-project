@@ -75,7 +75,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									
+
 								</tbody>
 							</table>
 
@@ -94,12 +94,12 @@
 
 					<div id="add-view" class="hidden">
 
-						<div class="col_two_third nobottommargin">	
+						<div class="col_two_third nobottommargin">
 
 							<div class="fancy-title title-border">
 								<h3>Add New <span>User</span></h3>
 							</div>
-						
+
 							<div class="style-msg2 errormsg add-form-error-container hidden">
 								<div class="msgtitle add-form-error-message-title">Fix the Following Errors:</div>
 								<div class="sb-msg">
@@ -108,7 +108,7 @@
 									</ul>
 								</div>
 							</div>
-						
+
 							<form id="add-form" name="add-form" class="nobottommargin">
 
 								<div class="col_half">
@@ -147,12 +147,12 @@
 					============================================= -->
 
 					<div id="edit-view" class="hidden">
-						<div class="col_two_third nobottommargin">	
+						<div class="col_two_third nobottommargin">
 
 							<div class="fancy-title title-border">
 								<h3>Update <span>User</span></h3>
 							</div>
-						
+
 							<div class="style-msg2 errormsg edit-form-error-container hidden">
 								<div class="msgtitle edit-form-error-message-title">Fix the Following Errors:</div>
 								<div class="sb-msg">
@@ -161,7 +161,7 @@
 									</ul>
 								</div>
 							</div>
-						
+
 							<form id="edit-form" name="edit-form" class="nobottommargin">
 
 								<input type="hidden" id="edit-form-employer-user-id" />
@@ -243,11 +243,11 @@
 	============================================= -->
 	<div id="gotoTop" class="icon-angle-up"></div>
 
-	<?php
-		include 'include/js.php';
-	?>
 
-	<script type="text/javascript" src="js/app/exam.js"></script>
+	<script>
+	location.origin = location.protocol + "//" + location.host;
+	console.log(location.origin);
+	</script>
 
 </body>
 </html>

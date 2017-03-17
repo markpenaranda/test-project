@@ -346,6 +346,7 @@ var candidateScreenManagement = (function($) {
         var message = "Your interview is now ready";
         if (!location.origin) {
            location.origin = location.protocol + "//" + location.host;
+           console.log(location.origin);
         }
         var link = location.origin + "/interview.php?openday=" + roomId;
 
