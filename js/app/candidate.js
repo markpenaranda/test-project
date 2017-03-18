@@ -6,6 +6,11 @@ var candidateScreenManagement = (function($) {
     var apiUrl = '/api/v1/public/index.php';
     var openday = null;
     var scheduleStatus = 0;
+    var leavePromptTrigger = false;
+    var localTrigger = true;
+    var peer = new Peer('openday-' + getCurrentUser(),  {host: 'openday.jobsglobal.com', secure:true, port:9000, key: 'peerjs'});
+     window.peer = peer;
+
     return {
         init: init
     };
@@ -17,6 +22,7 @@ var candidateScreenManagement = (function($) {
             socketIOEventHandlers();
             addEventHandlers();
             renderNecessaryTemplate();
+            peerJsEventHandler();
 
         });
     }
@@ -34,27 +40,73 @@ var candidateScreenManagement = (function($) {
         $(".fullscreen-toggle").on('click', fullscreen);
         $(".not-fullscreen-toggle" ).on('click',notFullscreen);
 
+        $("body").on("click", "a", leavePrompt);
+        $("body").on("click", ".approve", approve);
 
 
 
-        $(window).on("unload", function (e) {
-          var opendayId = $("#roomId").val();
-          var userId = getCurrentUser();
-
-          $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
-            scheduleStatus = parseInt(schedule.status);
-            if(!scheduleStatus) {
-              $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
-                alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
-                window.call.close();
 
 
-              });
-
+        $(window).on('beforeunload', function() {
+            if(leavePromptTrigger == false && scheduleStatus == 0 && localTrigger) {
+              return "You should keep this page open.";
             }
-
-          });
         });
+
+    }
+
+    function peerJsEventHandler() {
+
+          peer.on('call', function(call) {
+            window.call = call;
+            // var navGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+            navigator.getUserMedia({video: true, audio: true}, function(stream) {
+              var localVideo = document.getElementById('localVideo');
+              localVideo.srcObject = stream;
+              call.answer(stream); // Answer the call with an A/V stream.
+              call.on('close', function(){
+                // if()
+                localTrigger = false;
+                $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + getCurrentUser(), function(schedule) {
+                  scheduleStatus = parseInt(schedule.status);
+
+                  if(!scheduleStatus) {
+                    $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+
+                        alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
+
+                      location.reload();
+
+
+                    });
+
+                  }
+                  else {
+
+                    location.reload();
+
+                  }
+                });
+              });
+              call.on('stream', function(remoteStream) {
+                  var remoteVideo = document.getElementById('remoteVideo');
+                remoteVideo.srcObject = remoteStream;
+                 $("#remoteVideo").css("height", "100%");
+                 $("#remoteVideo").css("margin-left", "auto");
+                 $("#remoteVideo").css("margin-right", "auto");
+                 $("#remoteVideo").css("top", "50%");
+                 $("#remoteVideo").css("left", "50%");
+                 $("#remoteVideo").css("transform", "translate(-50%, -50%)");
+
+                   var display = $('#lapseTime');
+
+
+                 lapseTimer(0, display);
+              });
+            }, function(err) {
+              console.log('Failed to get local stream' ,err);
+            });
+          });
 
     }
 
@@ -101,6 +153,10 @@ var candidateScreenManagement = (function($) {
                 onInterview = false;
                 scheduleStatus = 2;
                 activateEndUnderscoreTemplate();
+             }
+
+             if(data.tag == "close") {
+               alert("left");
              }
 
         }
@@ -151,6 +207,27 @@ var candidateScreenManagement = (function($) {
 
       });
 
+    }
+
+    function leavePrompt (e) {
+      if(leavePromptTrigger == false && scheduleStatus == 0) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        if(href != "#") {
+          $("#leavePrompt").modal("show");
+
+          $("#modalApprove").data('link', href);
+
+        }
+
+      }
+
+    }
+
+    function approve() {
+      href = $("#modalApprove").data('link');
+      leavePromptTrigger = true;
+      window.location = href;
     }
 
     function getCurrentUser() {

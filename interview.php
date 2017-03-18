@@ -115,6 +115,26 @@
 			</div>
 		</section>
 
+
+		<!-- Modal -->
+		<div id="leavePrompt" tabindex="-1" role="dialog" data-backdrop="static"  class="modal fade">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Leave this interview?</h4>
+					</div>
+					<div class="modal-body">
+						<p>Are you sure you want to leave this page? You will be disconnected from this chat.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+						<button type="button" id="modalApprove" data-link="" data-dismiss="modal" class="approve btn btn-primary">Yes</button>
+					</div>
+					</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+		</div>
+
 		<footer>
 			<div class="container">
 				<div class="row">
