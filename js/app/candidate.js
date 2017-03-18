@@ -5,7 +5,7 @@ var candidateScreenManagement = (function($) {
     var onInterview = false;
     var apiUrl = '/api/v1/public/index.php';
     var openday = null;
-
+    var scheduleStatus = 0;
     return {
         init: init
     };
@@ -38,11 +38,15 @@ var candidateScreenManagement = (function($) {
 
 
         $(window).on("unload", function (e) {
-          $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
-            window.call.close();
-          
+          alert(scheduleStatus);
+          if(!scheduleStatus) {
+            $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+              window.call.close();
 
-          });
+
+            });
+
+          }
         });
 
     }
@@ -82,11 +86,13 @@ var candidateScreenManagement = (function($) {
                 renderNecessaryTemplate();
              }
              if(data.tag == "reject") {
+               scheduleStatus = 3;
                 activateRejectUnderscoreTemplate();
              }
 
              if(data.tag == "end") {
                 onInterview = false;
+                scheduleStatus = 2;
                 activateEndUnderscoreTemplate();
              }
 
@@ -168,7 +174,7 @@ var candidateScreenManagement = (function($) {
           var userId = getCurrentUser();
 
           $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
-            var scheduleStatus = parseInt(schedule.status);
+            scheduleStatus = parseInt(schedule.status);
             var isScheduled = (schedule.is_scheduled === '1');
             console.log("trigger inside openday load");
             console.log(schedule);

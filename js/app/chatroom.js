@@ -95,9 +95,11 @@ var candidateScreenManagement = (function($) {
 
 
          $(window).on('unload', function(e){
-           $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + currentApplicant, function() {
-             window.call.close();
-           });
+           if(currentApplicant) {
+             $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + currentApplicant, function() {
+               window.call.close();
+             });
+          }
          });
 
 
@@ -391,11 +393,12 @@ var candidateScreenManagement = (function($) {
         }
         var link = location.origin + "/interview.php?openday=" + roomId;
         $.post(apiUrl + '/openday/' + roomId + '/end', { user_id: userId }, function(res){
-
+          currentApplicant = 0;
+          peer.destroy();
           $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "end", message: message, link: link}, function (data){
               removeCandidate(userId);
               currentApplicant = 0;
-              call.close();
+              window.call.close();
               $(".send").prop("disabled", true);
                $(".inviteButton").removeClass( "disabled");
               $(".inviteButton").prop( "disabled", false );
