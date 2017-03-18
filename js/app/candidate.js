@@ -38,15 +38,21 @@ var candidateScreenManagement = (function($) {
 
 
         $(window).on("unload", function (e) {
-          alert(scheduleStatus);
-          if(!scheduleStatus) {
-            $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
-              window.call.close();
+          var opendayId = $("#roomId").val();
+          var userId = getCurrentUser();
+
+          $.get(apiUrl + '/openday/' + opendayId + '/schedule?user_id=' + userId, function(schedule) {
+            scheduleStatus = parseInt(schedule.status);
+            if(!scheduleStatus) {
+              $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+                window.call.close();
 
 
-            });
+              });
 
-          }
+            }
+
+          });
         });
 
     }
