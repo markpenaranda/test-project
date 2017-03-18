@@ -45,6 +45,7 @@ var candidateScreenManagement = (function($) {
             scheduleStatus = parseInt(schedule.status);
             if(!scheduleStatus) {
               $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+                alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
                 window.call.close();
 
 

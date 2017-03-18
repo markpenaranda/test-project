@@ -32,7 +32,6 @@ $(document).ready(function() {
         localVideo.srcObject = stream;
         call.answer(stream); // Answer the call with an A/V stream.
         call.on('close', function(){
-            alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
             location.reload();
         });
         call.on('stream', function(remoteStream) {
