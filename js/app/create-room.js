@@ -150,6 +150,7 @@ var createRoomScreenManagement = (function($) {
       var roomNumber = $(this).data('room-number');
       console.log("#room-form-" + roomNumber);
       $("#room-form-" + roomNumber).remove();
+      numberOfRooms -= 1;
     }
 
     function jobTypeChange() {
@@ -372,7 +373,9 @@ var createRoomScreenManagement = (function($) {
       // $(".room-form").fadeOut();
 
       dataStore = [];
+
       var validRooms = true;
+
       for (var i = 0; i < numberOfRooms; i++) {
         var validForm = true;
         var name = $("input[name='event\\["+ i +"\\]\\[\\'name\\'\\]").val();
