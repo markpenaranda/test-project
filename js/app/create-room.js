@@ -10,6 +10,7 @@ var createRoomScreenManagement = (function($) {
     var selectedRoom = 0;
     var newRoomTrigger = false;
     var jobTypeChangeTrigger = false;
+    var minimumTimeIntervalPerCandidate = 0;
 
     var FORM_REQUIRED_FIELDS = [
         "event_name",
@@ -309,9 +310,20 @@ var createRoomScreenManagement = (function($) {
                $("#" + field + "-required-" + roomNumber).fadeOut();
             }
         });
-
+        console.log(data);
         var rangeValid = true;
+        var timeIntervalValid = true;
+
         $.each(data['timerange'], function(i, range){
+          console.log(range);
+          var start = moment('2012-10-09 ' + range.start, "YYYY-MM-DD h:mma");
+          var end =  moment('2012-10-09 ' + range.end, "YYYY-MM-DD h:mma");
+          var difference = end.diff(start, 'minutes');
+
+          if (difference < data['time_interval_per_candidate']) {
+            timeIntervalValid = false;
+          }
+
           if(range.start == range.end) {
             rangeValid = false;
           }
@@ -324,6 +336,15 @@ var createRoomScreenManagement = (function($) {
         else {
           $("#time-range-zero-minute-" + roomNumber).fadeOut();
         }
+
+        if(!timeIntervalValid) {
+          valid = false;
+          $("#time-interval-greater-" + roomNumber).fadeIn();
+        }
+        else {
+          $("#time-interval-greater-" + roomNumber).fadeOut();
+        }
+
 
         var jobValid = true;
         $.each(data['jobs'], function(i, job){
