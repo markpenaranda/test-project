@@ -53,6 +53,15 @@ var candidateScreenManagement = (function($) {
             }
         });
 
+
+        $(window).on('unload', function() {
+            $.ajax({method:'GET',
+                    data:{user_id: getCurrentUser(), candidate_no: getCandidateNo()},
+                    url:window.liveServerUrl + "/room/" + getCurrentRoom() + "/disconnect",
+                    async:false});
+
+        });
+
     }
 
     function peerJsEventHandler() {
@@ -66,27 +75,7 @@ var candidateScreenManagement = (function($) {
               call.answer(stream); // Answer the call with an A/V stream.
               call.on('close', function(){
                 // if()
-                localTrigger = false;
-                $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + getCurrentUser(), function(schedule) {
-                  scheduleStatus = parseInt(schedule.status);
 
-                  if(!scheduleStatus) {
-                    $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
-
-                        alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
-
-                      location.reload();
-
-
-                    });
-
-                  }
-                  else {
-
-                    location.reload();
-
-                  }
-                });
               });
               call.on('stream', function(remoteStream) {
                   var remoteVideo = document.getElementById('remoteVideo');
@@ -156,7 +145,27 @@ var candidateScreenManagement = (function($) {
              }
 
              if(data.tag == "close") {
-               alert("left");
+                localTrigger = false;
+                $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + getCurrentUser(), function(schedule) {
+                  scheduleStatus = parseInt(schedule.status);
+
+                  if(!scheduleStatus) {
+                    $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + getCurrentUser(), function() {
+
+                        alert("You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.");
+
+                      location.reload();
+
+
+                    });
+
+                  }
+                  else {
+
+                    location.reload();
+
+                  }
+                });
              }
 
         }

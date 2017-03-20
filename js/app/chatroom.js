@@ -96,9 +96,16 @@ var candidateScreenManagement = (function($) {
 
          $(window).on('unload', function(e){
            if(currentApplicant) {
+             var link = location.origin + "/interview.php?openday=" + getCurrentRoom();
 
-             $.get(window.liveServerUrl + "/notifier/" + userId, {category: "candidate", tag: "close", message: message, link: link}, function (data){
-
+             $.ajax({
+                method: 'GET',
+                url: window.liveServerUrl + "/notifier/" + currentApplicant,
+                data: {category: "candidate", 
+                       tag: "close", 
+                       message: "You're interviewer has been disconnected from the chat. Kindly wait to be invited back again in the chatroom.", 
+                       link: link},
+                async: false
              });
           }
          });
@@ -186,6 +193,30 @@ var candidateScreenManagement = (function($) {
               addCandidate(candidate);
               updateListNumber();
             });
+
+         }
+
+         if(data.tag == "disconnect") {
+           if(currentApplicant == data.user_id) {
+            $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + currentApplicant, function(schedule) {
+              scheduleStatus = parseInt(schedule.status);
+              if(!scheduleStatus) {
+                $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + currentApplicant, function() {
+                  alert("Applicant has been disconnected from the chat. Press the 'Start Interview' button again to start the interview.");
+                  resetCandidateInterviewButton(currentApplicant);
+                  $(".startInterviewButton").fadeOut();
+                  $(".waitingButton").fadeIn();
+
+
+
+
+                });
+
+              }
+
+            });
+
+          }
 
          }
 
@@ -476,26 +507,7 @@ var candidateScreenManagement = (function($) {
     	  window.call = peer.call('openday-' + currentApplicant, stream);
         console.log(call);
         window.call.on('close', function (err) {
-          if(currentApplicant) {
-            $.get(apiUrl + '/openday/' + getCurrentRoom() + '/schedule?user_id=' + currentApplicant, function(schedule) {
-              scheduleStatus = parseInt(schedule.status);
-              if(!scheduleStatus) {
-                $.post(apiUrl + "/openday/" + getCurrentRoom() + "/set-waiting?user_id=" + currentApplicant, function() {
-                  alert("Applicant has been disconnected from the chat. Press the 'Start Interview' button again to start the interview.");
-                  resetCandidateInterviewButton(currentApplicant);
-                  $(".startInterviewButton").fadeOut();
-                  $(".waitingButton").fadeIn();
 
-
-
-
-                });
-
-              }
-
-            });
-
-          }
 
         });
     	  window.call.on('stream', function(remoteStream) {

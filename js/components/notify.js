@@ -64,7 +64,9 @@ socket.on("notifier-" + getCurrentUser(), function(data){
 socket.on("room-" + $("#roomId").val(), function(data){
 
   if(data.category == "candidate") {
+    if(data.tag != "close") {
      browserNotifyMe(data.message, data.link);
+    }
      // window.location.reload();
   }
 
