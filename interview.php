@@ -125,7 +125,7 @@
 						<h4 class="modal-title">Leave this interview?</h4>
 					</div>
 					<div class="modal-body">
-						<p>Are you sure you want to leave this page? Are you sure you want to leave this page? You will be disconnected to the interview.</p>
+						<p>Are you sure you want to leave this page? You will be disconnected to the interview.</p>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
