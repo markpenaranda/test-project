@@ -175,7 +175,11 @@ class OpenDayController extends BaseController
 
       }
 
-      return $response->withStatus(200)->withJson($items);
+      return $response->withStatus(200)
+                      ->withJson(array(
+                        'success' => true,
+                        'data'    => $items
+                      ));
 
    }
 
