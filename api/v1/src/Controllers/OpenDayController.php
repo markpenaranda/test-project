@@ -85,10 +85,6 @@ class OpenDayController extends BaseController
 
       $openday = $this->openDayResource->create($createParams, $timeRange, $jobs);
     
-      $this->openDayResource->saveChat(
-        $openday, 
-        $createParams['in_charge_user_id']
-      );
 
       return $response->withStatus(200)->withJson($openday);
    }
