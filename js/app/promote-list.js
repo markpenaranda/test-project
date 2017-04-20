@@ -69,9 +69,12 @@ var widgetManagement = (function($) {
 
     function loadOpenday() {
         $.get(apiUrl + '/openday/created?user_id=' + getCurrentUserId(), function(results) {
-            for(var x = 0; x < results.length; x++) {
-               var data = results[x];
-               renderOpenday(data);
+            if(results.success) {
+                for(var x = 0; x < results.data.length; x++) {
+                var data = results.data[x];
+                renderOpenday(data);
+                }
+
             }
         });
 

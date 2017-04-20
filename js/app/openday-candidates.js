@@ -77,10 +77,13 @@ var opendayCandidatesScreenManagement = (function($) {
 
     function loadOpendayList() {
         $.get(apiUrl + '/openday/created?user_id=' + getCurrentUserId(), function(results) {
-            for(var x = 0; x < results.length; x++) {
-                var event = results[x];
-                var html  = "<option value='" + event.openday_id  +"'>"+ event.event_name +"</option>";
-                $("#opendayList").append(html);
+            if(results.success) {
+                for(var x = 0; x < results.data.length; x++) {
+                    var event = results.data[x];
+                    var html  = "<option value='" + event.openday_id  +"'>"+ event.event_name +"</option>";
+                    $("#opendayList").append(html);
+                }
+
             }
         });
     }
@@ -124,19 +127,21 @@ var opendayCandidatesScreenManagement = (function($) {
            $("#candidateList").html("");
           $.get(apiUrl + '/openday/' + opendayId + '/candidates?with_ended=1&is_scheduled=' + is_scheduled, function(res){
               
-              if(res.length > 0) {
-                  $(".no-results").fadeOut();
-              }
-              else {
-                  $(".no-results").fadeIn();
-              }
-                for (var i = 0; i < res.length; i++) {
-                    
-                   personal_info = JSON.parse(res[i].personal_info);
-                   schedule = res[i];
-                   time = schedule;
-                   loadCandidateItem(schedule, personal_info);
+              if(res.success) {
+                if(res.data.length > 0) {
+                    $(".no-results").fadeOut();
                 }
+                else {
+                    $(".no-results").fadeIn();
+                }
+                    for (var i = 0; i < res.data.length; i++) {
+                        personal_info = JSON.parse(res.data[i].personal_info);
+                        schedule = res.data[i];
+                        time = schedule;
+                        loadCandidateItem(schedule, personal_info);
+                    }
+
+              }
           });
           
         }

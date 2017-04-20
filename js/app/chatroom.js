@@ -24,16 +24,27 @@ var candidateScreenManagement = (function($) {
         loadLiveOpenday(function(results) {
           var opendayId = $("#roomId").val();
           console.log(opendayId);
-          if(opendayId == "") {
+          if(opendayId == "" && results.length > 0) {
 
             $("#roomId").val(results[0].openday_id);
             window.reinitiateSocket(results[0].openday_id);
-          }
             loadCandidateQueue();
             renderNecessaryTemplate();
             socketIOEventHandlers();
             connectPeerJs();
             peerJs();
+          } else {
+            $(".disable-when-openday-null").prop('disabled', true);
+            $(".disable-when-openday-null").addClass('disabled');
+          }
+          if(opendayId) {
+            loadCandidateQueue();
+            renderNecessaryTemplate();
+            socketIOEventHandlers();
+            connectPeerJs();
+            peerJs();
+
+          } 
         });
 
 
@@ -269,13 +280,16 @@ var candidateScreenManagement = (function($) {
 
     function loadLiveOpenday(callback) {
       $.get(apiUrl + '/openday/live?user_id=' + getCurrentUser(), function(results){
-        liveOpenday = results;
-        for (var i = 0; i < results.length; i++) {
-          var op = results[i];
-          var html = "<option value='"+ op.openday_id +"'>" + op.event_name + "</option>";
-          $("#liveOpendaySelect").append(html);
+        if(results.success) {
+          liveOpenday = results.data;
+          for (var i = 0; i < results.data.length; i++) {
+            var op = results.data[i];
+            var html = "<option value='"+ op.openday_id +"'>" + op.event_name + "</option>";
+            $("#liveOpendaySelect").append(html);
+          }
+          callback(results.data);
+
         }
-        callback(results);
       });
 
     }
@@ -306,10 +320,10 @@ var candidateScreenManagement = (function($) {
 
     function getCurrentUser() {
         var userId = $('#userId').val();
-     var localStorageUser = localStorage.getItem('userId');
-        if(localStorageUser) {
-          return localStorageUser;
-        }
+        var localStorageUser = localStorage.getItem('userId');
+          if(localStorageUser) {
+            return localStorageUser;
+          }
         return userId;
     }
 
@@ -335,12 +349,14 @@ var candidateScreenManagement = (function($) {
       var is_scheduled = $("#scheduleFilter").val();
 
       $.get(apiUrl + '/openday/' + opendayId + '/candidates?with_ended=1&is_scheduled=' + is_scheduled, function(res){
+        if(res.success) {
+          for (var i = 0; i < res.data.length; i++) {
 
-        for (var i = 0; i < res.length; i++) {
+            var candidate = res.data[i]
+            addCandidate(candidate);
+            updateOnlineMarker();
+          }
 
-          var candidate = res[i]
-          addCandidate(candidate);
-          updateOnlineMarker();
         }
 
       });
@@ -535,6 +551,15 @@ var candidateScreenManagement = (function($) {
       if(currentApplicant) {
         sendMessage(message);
         $("#message").val('');
+        var data = {
+          user_id : currentApplicant,
+          is_recruiter: true,
+          recruiter_id: '',
+          message : message
+        };
+        $.post(apiUrl + "/openday/" + getCurrentRoom() + "/chat", data, function(){
+
+        });
       }
     }
 

@@ -62,10 +62,11 @@ var createSuccessManagement = (function($) {
 
     function loadSuggestedCandidate() {
         $.get(apiUrl + '/openday/' + getOpendayId() + '/suggested', function(res) {
-            for(var x = 0; x < res.length; x++) {
-                var candidate = res[x];
-                renderSuggestedCandidate(candidate);
-                
+            if(res.success) {
+                for(var x = 0; x < res.data.length; x++) {
+                    var candidate = res.data[x];
+                    renderSuggestedCandidate(candidate);                  
+                }
             }
         });
     }

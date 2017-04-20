@@ -56,7 +56,7 @@
 								</div>
 								<div class="col-lg-3">
 									<div class="row">
-										<button class="send chat_send_btn hvr-shutter-in-horizontal">SEND</button>
+										<button class="disable-when-openday-null send chat_send_btn hvr-shutter-in-horizontal">SEND</button>
 									</div>
 								</div>
 								<div class="message_template">
@@ -127,7 +127,7 @@
 								</div>
 							</li>
 							<li>
-								<button class="stop_queue_btn">Stop adding Queue</button>
+								<button class="disable-when-openday-null stop_queue_btn">Stop adding Queue</button>
 							</li>
 							<li>
 								<div class="row">
@@ -140,7 +140,7 @@
 										<p><text id="totalUsedTime">00 H: 00 M</text> <span>out of</span> <text id="totalDuration">0 H</text></p>
 									</div>
 									<div class="col-lg-3 col-sm-3 col-xs-12">
-										<button class="extend_more_btn hvr-shutter-in-horizontal">Extend More</button>
+										<button  class="disable-when-openday-null extend_more_btn hvr-shutter-in-horizontal">Extend More</button>
 									</div>
 								</div>
 							</li>

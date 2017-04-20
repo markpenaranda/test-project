@@ -69,9 +69,6 @@ class OpenDayController extends BaseController
 
    public function store($request, $response)
    {
-
-
-
       $createParams = array(
         'event_name' => $request->getParam('event_name'),
         'event_date' => $request->getParam('event_date'),
@@ -87,14 +84,17 @@ class OpenDayController extends BaseController
       $timeRange = $request->getParam("timerange");
 
       $openday = $this->openDayResource->create($createParams, $timeRange, $jobs);
+    
+      $this->openDayResource->saveChat(
+        $openday, 
+        $createParams['in_charge_user_id']
+      );
+
       return $response->withStatus(200)->withJson($openday);
    }
 
    public function update($request, $response, $args)
    {
-
-
-
      $updateParams = array(
         'event_name' => $request->getParam('event_name'),
         'event_date' => $request->getParam('event_date'),
@@ -158,7 +158,10 @@ class OpenDayController extends BaseController
 
      $result = $this->openDayResource->search($search, $paginate);
 
-     return $response->withStatus(200)->withJson($result);
+     return $response->withStatus(200)
+                     ->withJson(array(
+                        'success' => true,
+                        'data' => $result));
 
    }
 
@@ -189,7 +192,10 @@ class OpenDayController extends BaseController
 
      $items = $this->openDayResource->getSuggestedUsersByOpendayId($opendayId);
 
-     return $response->withStatus(200)->withJson($items);
+     return $response->withStatus(200)
+                     ->withJson(array(
+                        'success' => true,
+                        'data' => $items));
    }
 
    public function candidates($request, $response, $args)
@@ -198,17 +204,25 @@ class OpenDayController extends BaseController
       $opendayId       = $args['openday_id'];
       $withEnded       = $request->getParam('with_ended');
 
-      $items = $this->openDayResource->getCandidates($opendayId, $isScheduled, $withEnded);
+      $items = $this->openDayResource
+                    ->getCandidates($opendayId, $isScheduled, $withEnded);
 
 
-      return $response->withStatus(200)->withJson($items);
+      return $response->withStatus(200)
+                      ->withJson(array(
+                          'success' => true,
+                          'data' => $items));
    }
 
    public function createdOpenday($request, $response, $args)
    {
      $userId = $request->getParam('user_id');
      $items = $this->openDayResource->getOpendayCreatedByUserPage($userId);
-     return $response->withStatus(200)->withJson($items);
+     return $response->withStatus(200)
+                     ->withJson([
+                          'success' => true,
+                          'data' => $items
+                        ]);
    }
 
    public function currentRate($request, $response, $args)
@@ -323,7 +337,10 @@ class OpenDayController extends BaseController
 
       $items = $this->openDayResource->liveOpenday($userId);
 
-      return $response->withStatus(200)->withJson($items);
+      return $response->withStatus(200)
+                      ->withJson(array(
+                          'success' => true,
+                          'data' => $items));
 
    }
 
@@ -369,7 +386,8 @@ class OpenDayController extends BaseController
        return $response->withStatus(200)->withJson($items);
    }
 
-   public function extendHours($request, $response, $args) {
+   public function extendHours($request, $response, $args) 
+   {
 
       $numberOfHours = $request->getParam('numberOfHours');
       $opendayId = $args['openday_id'];
@@ -377,5 +395,27 @@ class OpenDayController extends BaseController
       $openday = $this->openDayResource->extendOpendayTime($numberOfHours, $opendayId);
       return $response->withStatus(200)->withJson($openday);
    }
+
+   public function saveChat ($request, $response, $args) 
+   {
+      $opendayId = $args['openday_id'];
+      $userId = $request->getParam('user_id');
+      $isRecruiter = $request->getParam('is_recruiter');
+      $recruiterId = $request->getParam('recruiter_id');
+      $message = $request->getParam('message');
+      $chat = $this->openDayResource
+                   ->getChatByOpendayAndUserId($opendayId, $userId);
+
+      if(!$chat) {
+        $this->openDayResource->saveChat($opendayId, $userId, $recruiterId);
+        $chat = $this->openDayResource
+                   ->getChatByOpendayAndUserId($opendayId, $userId);
+      }
+      
+
+      $this->openDayResource->saveChatConversation($chat['chat_id'], $isRecruiter, $message);
+
+      return $response->withStatus(200)->withJson(array('success' => true));
+   } 
 
 }

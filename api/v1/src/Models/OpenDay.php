@@ -1228,6 +1228,86 @@ class OpenDay
 
   }
 
+  public function saveChat ($opendayId, $userId, $recruiterId)
+  {
+    try {
+    $insertChatSql = "
+      INSERT INTO i_openday_chat (
+        `openday_id`,
+        `user_id`,
+        `user_id_recruiter`,
+        `date_created`,
+        `date_updated`
+      ) VALUES (
+        '" . $opendayId  . "',
+        '" . $userId  . "',
+        '" . $recruiterId  . "',
+        NOW(),
+        NOW()
+      )";
+
+
+      $chatInsertStatement  = $this->db->prepare($insertChatSql);
+      $chatInsertStatement->execute();
+
+      return true;
+      }
+      catch(PDOException $e){
+        return $e;
+      }
+
+
+
+  }
+
+  public function getChatByOpendayAndUserId($opendayId, $userId) 
+  {
+      try{
+        $resultSql = "
+        SELECT * FROM i_openday_chat
+        WHERE openday_id = '$opendayId'
+        AND user_id = '$userId'
+        ";
+
+        $statement = $this->db->prepare($resultSql);
+        $statement->execute();
+        $chat =  $statement->fetch();
+
+        return $chat;
+
+      }
+      catch(PDOException $e){
+        return $e;
+      }
+  }
+
+  public function saveChatConversation($chatId, $isRecruiter, $message)
+  {
+    try {
+    $insertChatSql = "
+      INSERT INTO i_openday_chat_conversation (
+        `chat_id`,
+        `is_recruiter`,
+        `message`,
+        `date_sent`
+      
+      ) VALUES (
+        '" . $chatId  . "',
+        " . $isRecruiter  . ",
+        '" . $message  . "',
+        NOW()
+      )";
+
+   
+      $chatInsertStatement  = $this->db->prepare($insertChatSql);
+      $chatInsertStatement->execute();
+
+      return true;
+      }
+      catch(PDOException $e){
+        return $e;
+      }
+  }
 
 
 

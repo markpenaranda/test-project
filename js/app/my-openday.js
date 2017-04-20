@@ -63,9 +63,9 @@ var myOpendayScreenManagement = (function ($) {
 
     $.get(apiUrl + '/openday/my?user_id=' + userId + '&status=active', function (res) {
       if (res.success) {
-        for (var i = 0; i < results.data.length; i++) {
+        for (var i = 0; i < res.data.length; i++) {
 
-          var result = results[i];
+          var result = res.data[i];
           renderOpenday(result, "#active_openday>ul", "active");
 
         }
@@ -95,7 +95,7 @@ var myOpendayScreenManagement = (function ($) {
     $.get(apiUrl + '/openday/my?user_id=' + userId + '&status=end', function (results) {
       if (result.success) {
         for (var i = 0; i < results.data.length; i++) {
-          var result = results[i];
+          var result = results.data[i];
           renderOpenday(result, "#end_openday>ul", "end");
         }
 

@@ -2194,7 +2194,15 @@ textarea.jg-placeholder-orange:-moz-placeholder { /* Firefox 4 - 18 */
     transform: translate(-50%, -50%) }
 
 
-.disabled { background: grey !important;  }
+.disabled { 
+	background: grey !important;  
+	border: 1px solid grey !important; 
+}
+
+.disabled:before {
+		background: grey !important; 
+		border: 1px solid grey !important; 
+}
 
 .hvr-remove {
 	border: 1px solid #009864;

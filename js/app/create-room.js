@@ -107,18 +107,19 @@ var createRoomScreenManagement = (function ($) {
 
   function initialTemplate() {
     addForm();
-
     loadPastCreated();
   }
 
   function loadPastCreated() {
 
     $.get(apiUrl + '/openday/created?user_id=' + getCurrentUserId(), function (res) {
-      // console.log(res);
-      for (var i = 0; i < res.length; i++) {
+      if(res.success) {
 
-        var html = "<option value='" + res[i].openday_id + "'>" + res[i].event_name + "</option>"
-        $("#createdList").append(html);
+        for (var i = 0; i < res.data.length; i++) {
+
+          var html = "<option value='" + res.data[i].openday_id + "'>" + res.data[i].event_name + "</option>"
+          $("#createdList").append(html);
+        }
       }
     });
   }
@@ -437,7 +438,8 @@ var createRoomScreenManagement = (function ($) {
       var interval = $("input[name='event\\[" + i + "\\]\\[\\'time_interval\\'\\]").val();
       var in_charge_user_id = $("select[name='event\\[" + i + "\\]\\[\\'in_charge_user_id\\'\\]").val();
       var in_charge_name = $(".in-charge-option-" + i + ":selected").html();
-      var job_type = $(".job-type-radio-" + i + ":checked").val();
+      var job_type_name = $(".job-type-radio-" + i + ":checked").val();
+      var job_type = jobListId[job_type_name];
       var jobs = $("select[name^='jobs[" + i + "]']").map(function () {
         var item = JSON.parse($(this).val());
         return item.id;
