@@ -58,6 +58,11 @@ socket.on("notifier-" + getCurrentUser(), function(data){
 		 // window.location.reload();
 	}
 
+  if(data.category == "update") {
+    $.notify(data.message);
+  }
+
+
 
 });
 
@@ -68,6 +73,8 @@ socket.on("room-" + $("#roomId").val(), function(data){
      browserNotifyMe(data.message, data.link);
     }
      // window.location.reload();
+
+
   }
 
 
@@ -111,4 +118,10 @@ window.socket.on("user-update", function(data){
 
     
 });
+
+
+// For Browser Notify
+
+
+
 

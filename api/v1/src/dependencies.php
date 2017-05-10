@@ -87,7 +87,9 @@ $container['OpenDayController'] = function($c) {
       $c->get('OpenDay'),
       $c->get('User'),
       $c->get('Paginate'),
-      $c->get('EmailHelper')
+      $c->get('EmailHelper'),
+      $c->get('SocketNotifier'),
+      $c->get('Notification')
     );
 };
 
@@ -102,6 +104,15 @@ $container['PromotionController'] = function($c) {
       $c->get('Promotion'),
       $c->get('User')
 
+
+    );
+};
+
+$container['NotificationController'] = function($c) {
+    return new \App\Controllers\NotificationController(
+      $c->get('Notification'),
+      $c->get('Paginate'),
+      $c->get('SocketNotifier')
     );
 };
 
@@ -125,6 +136,10 @@ $container['OpenDay'] = function($container) {
   return new App\Models\OpenDay($container->get('db'));
 };
 
+$container['Notification'] = function($container) {
+  return new App\Models\Notification($container->get('db'));
+};
+
 $container['Promotion'] = function($container) {
   return new App\Models\Promotion($container->get('db'));
 };
@@ -142,6 +157,10 @@ $container['Validation'] = function ($container) {
 
 $container['Paginate'] = function ($container) {
     return new App\Helpers\Paginate();
+};
+
+$container['SocketNotifier'] = function ($container) {
+    return new App\Helpers\SocketNotifier();
 };
 
 $container['EmailHelper'] = function ($container) {

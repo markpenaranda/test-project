@@ -1,5 +1,6 @@
 <html>
 	<head>
+			<data-title>Openday Candidates</data-title>
      <?php include 'include/css.php'; ?>
     </head>
 

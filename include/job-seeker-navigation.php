@@ -49,10 +49,19 @@
 		            <div class="col-lg-1 col-sm-1 col-xs-2">
 		            	<div class="row">
 		            		<ul class="nav_second_ul">
-								<li>
-									<a href="#">
-										<i class="fa fa-globe" aria-hidden="true"></i>
-									</a>
+								<li class="notification-button dropdown_wrapper">
+									
+		                	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+												<i class="fa fa-globe" aria-hidden="true"></i>
+												<span class="badge badge--notification">4</span>
+
+											</a>
+		                  <ul class="notification-list dropdown-menu">
+		      							
+		                  
+		                  </ul>
+
+		                
 								</li>
 								<li>
 									<a href="#">
@@ -70,7 +79,6 @@
 		                        <i class="fa fa-caret-down" aria-hidden="true"></i>
 		                	</a>
 		                  <ul class="dropdown-menu">
-		                    <li><a href="profile.php"><?= $_SESSION['user_fullname'] ?></a></li>
 		                    <!--li><a href="profile.php">Profile</a></li-->
 		                    <li><a href="preference.php">Preferences</a></li>
 		                    <li><a href="#" id="user_logout">Logout</a></li>

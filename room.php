@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<data-title>Openday Interview Room</data-title>
 		<?php include 'include/css.php'; ?>
 	</head>
 	<body class="inside">

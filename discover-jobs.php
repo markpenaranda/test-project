@@ -1,7 +1,8 @@
 <html>
 	<head>
+		<data-title>Discover Jobs</data-title>
     <?php include 'include/css.php'; ?>
-    </head>
+   </head>
 
 
 	<body class="rymd_bg">

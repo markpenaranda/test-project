@@ -4,11 +4,13 @@ namespace App\Controllers;
 
 use App\Models\OpenDay;
 use App\Models\User;
+use App\Models\Notification;
 use App\Validations\CreateOpenDayValidation;
 use App\Validations\UpdateOpenDayValidation;
 use App\Helpers\Request;
 use App\Helpers\Paginate;
 use App\Helpers\EmailHelper;
+use App\Helpers\SocketNotifier;
 
 
 /**
@@ -20,17 +22,24 @@ class OpenDayController extends BaseController
 {
    public $openDayResouce, $createOpenDayValidation;
 
+   public $notifier;
+
    public function __construct(
         OpenDay $openDayResource,
         User $userResource,
         Paginate $paginate,
-        EmailHelper $emailHelper
+        EmailHelper $emailHelper,
+        SocketNotifier $socketNotifier,
+        Notification $notificationResource
+
    ){
 
       $this->openDayResource = $openDayResource;
       $this->userResource = $userResource;
       $this->paginate = $paginate;
       $this->emailHelper = $emailHelper;
+      $this->notifier = $socketNotifier;
+      $this->notificationResource = $notificationResource;
    }
 
    public function index($request, $response)
@@ -284,6 +293,12 @@ class OpenDayController extends BaseController
       $userId    = $request->getParam('user_id');
 
       $schedule = $this->openDayResource->endInterview($opendayId, $userId);
+
+      $waitingCandidates = $this->openDayResource->getWaitingCandidates($opendayId);
+
+      $notificationStack = [];
+
+
       return $response->withStatus(200)->withJson($schedule);
 
    }
@@ -321,10 +336,47 @@ class OpenDayController extends BaseController
      $opendayId = $args['openday_id'];
      $userId    = $request->getParam('user_id');
 
-     $this->openDayResource->setInterviewing($opendayId, $userId);
+     $currentCandidate = $this->openDayResource->setInterviewing($opendayId, $userId);
 
+     $title= "Openday Interview: " . $currentCandidate['event_name'];
+     $link = "/interview.php?openday=" . $opendayId;
 
+     // Notify Current candidate
 
+     $this->notificationResource->save($userId,
+      "Your interview is now ready.", $title, $link);
+      $this->notifier->persistent($userId,"Your interview is now ready.", $title, $link);
+
+      $output = array (
+          'status' => 200,
+          'data' => $currentCandidate
+        );
+      return $response->withStatus(200)->withJson($output);
+   }
+
+   public function notifyCandidates($request, $response, $args)
+   {
+      $opendayId = $args['openday_id'];
+      $currentCandidate = $request->getParam('current_candidate');
+      $openday = $this->openDayResource->getById($opendayId);
+      $title= "Openday Interview: " . $openday['event_name'];
+      $link = "/interview.php?openday=" . $opendayId;
+
+        // Notify Waiting List
+     $waitingCandidates = $this->openDayResource->getWaitingCandidates($opendayId);
+     foreach ($waitingCandidates as $candidate) {
+     $message = "Interviewing: Candidate No. ". $currentCandidate . " \n You are Candidate No: " . $candidate['candidate_number'];
+       $this->notifier->flash($candidate['user_id'], $message, $title);
+
+       $difference = $candidate['candidate_number'] - $currentCandidate;
+
+       if($difference < 3 && $difference > 0) {
+        $message = "Your Interview is about to start.";
+        
+        $this->notificationResource->save($candidate['user_id'], $message, $title,$link);
+        $this->notifier->persistent($candidate['user_id'], $message, $title, $link);
+       }
+     }
    }
 
    public function getLiveOpenday($request, $response, $args)

@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<data-title>Create Openday Room</data-title>
 		<?php include 'include/css.php'; ?>
 	</head>
 

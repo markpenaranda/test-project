@@ -46,6 +46,7 @@
             <li>
               <a href="#">
                 <i class="fa fa-globe" aria-hidden="true"></i>
+                <span class="badge">4</span>
               </a>
             </li>
             <li>

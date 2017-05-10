@@ -84,3 +84,7 @@
 .icon-delete-jobs {
     margin-left: 90%;
 }
+
+.notifyjs-corner {
+    bottom: 50px !important;
+}

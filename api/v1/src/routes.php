@@ -37,6 +37,7 @@ $app->group('/openday', function(){
 			$this->map(['POST'], '/join', 'OpenDayController:join');
 			$this->map(['POST'], '/set-waiting', 'OpenDayController:setWaiting');
 			$this->map(['POST'], '/set-interviewing', 'OpenDayController:setInterviewing');
+			$this->map(['GET'], '/notify', 'OpenDayController:notifyCandidates');
 			$this->map(['POST'], '/stop', 'OpenDayController:stopQueue');
 			$this->map(['POST'], '/end', 'OpenDayController:endInterview');
 			$this->map(['POST'], '/reject', 'OpenDayController:rejectCandidate');
@@ -116,4 +117,16 @@ $app->group('/resources', function () {
 	$this->get('/educational-level', 'ResourcesController:getEducationalLevel');
 	$this->get('/experience-year', 'ResourcesController:getExperienceYear');
 	$this->get('/age-range', 'ResourcesController:getAgeRange');
+
+
 });
+
+	$app->group('/notifications', function() {
+		$this->map(['GET'], '', 'NotificationController:index');
+		$this->map(['POST'], '', 'NotificationController:store');
+		$this->map(['GET'], '/count', 'NotificationController:countNotifications');
+		$this->map(['GET'], '/read', 'NotificationController:setAsRead');
+
+		$this->map(['GET'], '/test', 'NotificationController:testNotify');
+
+	});

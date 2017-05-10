@@ -27,6 +27,7 @@ var discoverJobsManagement = (function($) {
     function init() {
         initialTemplate();
         addEventHandlers();
+
     }
 
     // Get Template

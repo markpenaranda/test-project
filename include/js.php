@@ -1,7 +1,7 @@
 <!-- External JavaScripts
 ============================================= -->
 <script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
-   <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script><script type="text/javascript" src="js/components/jquery.timepicker.min.js"></script>
+<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script><script type="text/javascript" src="js/components/jquery.timepicker.min.js"></script>
 <script type="text/javascript" src="js/jquery.easy-autocomplete.min.js"></script>
 <script type="text/javascript" src="js/components/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="js/components/datepair.min.js"></script>
@@ -9,6 +9,7 @@
 <script type="text/javascript" src="js/plugins.js"></script>
 <script type="text/javascript" src="js/plugins/adapter-latest.js"></script>
 <script type="text/javascript" src="js/plugins/peer.min.js"></script>
+<script type="text/javascript" src="js/plugins/notify.js"></script>
 <!-- <script type="text/javascript" src="http://45.76.115.245:3000/socket.io/socket.io.js"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
 
@@ -30,8 +31,9 @@
 ============================================= -->
 <script type="text/javascript">
   window.liveServerUrl = "https://openday.jobsglobal.com:3000";
+  // window.liveServerUrl = "http://localhost:3000";
 </script>
-<script type="text/javascript" src="js/components/notify.js"></script>
+<script type="text/javascript" src="js/components/notifications.js"></script>
 <script type="text/javascript" src="js/components/moneyfied.js"></script>
 <script type="text/javascript" src="js/functions.js"></script>
 <script type="text/javascript" src="js/components/chat.js"></script>

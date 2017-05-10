@@ -406,6 +406,10 @@ var candidateScreenManagement = (function($) {
                 pendingApplicant = userId;
             });
 
+            $.get(apiUrl + '/openday/' + roomId + '/notify?current_candidate=' + res.data.candidate_number, function(res){
+              
+            })
+
         })
 
     }

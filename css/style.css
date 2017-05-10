@@ -4,7 +4,9 @@ html {
     overflow-y: scroll;
     height: 100%;
 }
-
+data-title {
+  display: none;
+}
 body {
     height: 100%;
     padding-bottom: 114px;
@@ -6917,7 +6919,31 @@ z-index: 2;
 
 .local-vc-not-fullscreen {
   height: 100px;
-position: absolute;
-right: 0;
-bottom: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+
+.badge--notification {
+    margin-top: 10px;
+    margin-left: -10px;
+    font-size: 10px;
+    background-color: red;
+    visibility: hidden;
+
+}
+
+.notifyjs-corner {
+    bottom: 50px !important;
+    right: 10px !important;
+}
+
+.notification-list {
+  max-height: 300px;
+  overflow-y: scroll;
+   
+}
+.notification-list li {
+  width: 100%;
 }

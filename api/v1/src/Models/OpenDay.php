@@ -507,7 +507,8 @@ class OpenDay
     }
   }
 
-  public function getCandidates($opendayId, $isScheduled, $withEnded = false) {
+  public function getCandidates($opendayId, $isScheduled, $withEnded = false) 
+  {
     $status = 2;
     if($withEnded) {
       $status = 3;
@@ -602,6 +603,31 @@ class OpenDay
       return $e;
     }
 
+  }
+
+  public function getWaitingCandidates($opendayId)
+  {
+    $sql = "
+      SELECT * FROM i_openday_attendees 
+      WHERE openday_id = '$opendayId'
+      AND status < 2
+
+    ";
+
+   try {
+
+      $statement = $this->db->prepare($sql);
+
+      $statement->execute();
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+
+      $results = $statement->fetchAll();
+
+      return $results;
+    }
+    catch(PDOException $e){
+      return $e;
+    }
   }
 
   public function getWaitingListNumber($opendayId)
@@ -947,6 +973,8 @@ class OpenDay
 
   }
 
+
+
   public function getListofCandidateId($opendayId, $status, $scheduled)
   {
     $sql = "
@@ -1018,6 +1046,19 @@ class OpenDay
 
 
       $this->db->commit();
+      
+
+      $query_sql = "
+        SELECT * FROM i_openday_attendees as a
+        JOIN i_openday as o ON o.openday_id = a.openday_id
+        WHERE a.openday_id = '$opendayId'
+        AND a.user_id = '$userId' LIMIT 1
+        ";
+      $selectStatement = $this->db->prepare($query_sql);
+      $selectStatement->execute();
+      $item = $selectStatement->fetch();
+      
+      return $item;
     }
     catch(PDOException $e) {
       $this->db->rollBack();
