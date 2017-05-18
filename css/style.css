@@ -6935,9 +6935,18 @@ z-index: 2;
 }
 
 .notifyjs-corner {
-    bottom: 50px !important;
-    right: 10px !important;
+    left:35% !important;
 }
+
+.notifyjs-corner b {
+    font-size: 32px;
+}
+
+.notifyjs-corner span {
+    font-size: 26px;
+}
+
+
 
 .notification-list {
   max-height: 300px;

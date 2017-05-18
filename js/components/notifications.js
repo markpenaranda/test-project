@@ -26,13 +26,13 @@ var NotificationManagement = (function($){
 
       if(data.category == "flash") {
         $.notify({message: data.message, title: data.tag}, {style:"openday",
-          position: "bottom right"});
+          position: "top center"});
         
       }
 
       if(data.category == "persistent") {
         $.notify({message: data.message, title: data.tag}, {style:"openday",
-          position: "bottom right"});
+          position: "top center"});
         countNotification();
       }
 
@@ -192,12 +192,12 @@ var NotificationManagement = (function($){
       html: "<div><b data-notify-text='title'></b><br><span data-notify-text='message'/></div>",
       classes: {
         base: {
-          "max-width" : "300px",
           "border" : "1px solid #e56a00",
           "border-radius" : "5px",
-          "padding": "10px",
+          "padding": "20px",
           "background-color": "#ecb98c",
-          "font-size" : "12px"
+          "font-size" : "12px",
+          "text-align": "center"
         },
         superblue: {
           "color": "white",

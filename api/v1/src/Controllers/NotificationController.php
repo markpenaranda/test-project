@@ -91,7 +91,7 @@ class NotificationController extends BaseController
     $userId = $request->getParam("userId");
     $link = $request->getParam("link");
 
-    $this->notificationResource->save($userId, $message, $link);
+    $this->notificationResource->save($userId, $message, "TEST", $link);
     $this->notifier->flash($userId, $message, $title, $link);
 
 
